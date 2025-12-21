@@ -268,27 +268,15 @@
         
         // Load & save
         function loadData(){
-            try{
-                const raw = localStorage.getItem(STORAGE_KEY);
-                const ver = localStorage.getItem(STORAGE_KEY + "-version");
-                
-                if(!raw || ver !== DATA_VERSION){
-                    const d = defaultData();
-                    state.sections = d.sections;
-                    state.sites = d.sites;
-                    saveLocal();
-                    localStorage.setItem(STORAGE_KEY + "-version", DATA_VERSION);
-                } else {
-                    const parsed = JSON.parse(raw);
-                    state.sections = parsed.sections || [];
-                    state.sites = parsed.sites || [];
-                }
-            }catch(e){
-                console.error("loadData error", e);
-                const d = defaultData();
-                state.sections = d.sections;
-                state.sites = d.sites;
-            }
+            // 直接使用代码中的默认数据，不再从 localStorage 读取
+            // 这样你修改代码后刷新页面就会立即生效
+            const d = defaultData();
+            state.sections = d.sections;
+            state.sites = d.sites;
+            
+            // 如果你想保留“保存到本地”的功能以便将来扩展，可以保留这行，
+            // 但目前读取逻辑已经改为强制读取代码配置。
+            saveLocal(); 
         }
         
         function saveLocal(){
