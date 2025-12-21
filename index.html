@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tsinho导航站</title>
     <style>
         :root{ 
@@ -25,16 +25,26 @@
             -moz-osx-font-smoothing:grayscale; 
             padding:16px; 
         } 
-        /* 头部容器 - 合并标题和搜索栏并居中 */
+        
+        /* 布局容器：响应式布局 */
+        .app-container {
+            max-width: 1200px; /* 电脑端放宽限制 */
+            margin: 0 auto;   /* 居中显示 */
+            width: 100%;
+            padding: 0 16px;  /* 增加边距 */
+        }
+
+        /* 头部容器 */
         .header-container {
             background:var(--glass);
             backdrop-filter: blur(14px) saturate(1.2);
             box-shadow:var(--shadow);
             border-radius:var(--radius-lg);
             padding:20px;
-            margin:0 auto 16px;
+            margin-bottom:16px;
             text-align:center;
-            max-width:800px;
+            /* 宽度跟随父容器 */
+            width: 100%;
         }
         .app-title{
             font-size:24px;
@@ -51,7 +61,8 @@
             border-radius:999px;
             background:rgba(248,250,252,0.95);
             box-shadow:0 2px 6px rgba(0,0,0,0.04);
-            max-width:500px;
+            width: 100%; /* 占满容器 */
+            max-width: 600px; /* 电脑端搜索框不需要太宽 */
             margin:0 auto;
         } 
         .search-input{
@@ -65,12 +76,11 @@
         }
         /* Content */ 
         .content{
-            margin:0 auto;
-            max-width:1080px;
             display:flex;
             flex-direction:column;
             gap:14px;
             min-height:60vh;
+            width: 100%; /* 占满容器 */
         } 
         .section-card{ 
             border-radius:var(--radius-lg); 
@@ -97,31 +107,35 @@
             font-size:12px;
             color:var(--muted);
         } 
+        /* 网格布局 */
         .sites-grid{ 
             display:grid; 
-            gap:10px; /* 减小网格间距防止溢出 */
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap:16px; /* 增加间距 */
+            /* 电脑端自适应，每个卡片最小 220px */
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         } 
         .site-item{ 
             display:flex;
-            align-items:center;
+            flex-direction: row;
+            align-items: center; /* 垂直居中 */
+            text-align: left;
             gap:10px;
-            padding:10px; /* 减小内边距防止溢出 */
+            padding:12px;
             border-radius:12px;
             background:var(--card);
             cursor:pointer;
             box-shadow:0 2px 6px rgba(0,0,0,0.04); 
             transition:transform .16s ease,box-shadow .16s ease;
             width:100%;
-            box-sizing:border-box;
+            min-height:80px;
         } 
         .site-item:hover{
             transform:translateY(-4px);
             box-shadow:0 8px 20px rgba(16,24,40,0.08);
         } 
         .site-icon{
-            width:40px;
-            height:40px;
+            width:44px; /* 稍微加大图标 */
+            height:44px;
             border-radius:10px;
             background:linear-gradient(135deg,rgba(10,132,255,0.08),rgba(16,185,129,0.06));
             display:inline-flex;
@@ -130,70 +144,101 @@
             font-weight:700;
             color:var(--accent);
             flex-shrink:0;
-            overflow:hidden;
+            font-size: 18px;
+            margin-top:0; /* 取消 top margin，使用 align-items: center */
         } 
         .site-meta{
             min-width:0;
             flex:1;
         } 
         .site-name{
-            font-size:14px;
+            font-size:15px; /* 字体微调 */
             font-weight:600;
             white-space:nowrap;
             overflow:hidden;
             text-overflow:ellipsis;
+            margin-bottom:4px;
         } 
         .site-tags{
             margin-top:4px;
             display:flex;
-            gap:6px;
-            flex-wrap:nowrap;
-            overflow:hidden;
+            gap:4px;
+            flex-wrap:wrap;
         } 
         .tag{
-            font-size:11px;
-            padding:3px 8px;
+            font-size:10px;
+            padding:2px 6px;
             border-radius:999px;
             background:rgba(148,163,184,0.12);
             color:#374151;
             white-space:nowrap;
         } 
-        /* Responsive tweaks */ 
-        @media (max-width:640px){ 
-            .search-bar{
-                max-width:100%;
+        
+        /* 手机端适配 (小于 768px) */
+        @media (max-width:768px){
+            .app-container {
+                max-width: 100%;
+                padding: 0 12px;
             }
-            .sites-grid{
-                grid-template-columns:repeat(2,1fr);
-                gap:8px;
+            
+            .sites-grid {
+                gap: 10px;
+                /* 强制一行两个 */
+                grid-template-columns: repeat(2, 1fr); 
             }
-            .app-title{
-                font-size:20px;
+            
+            .site-item {
+                padding: 10px;
+                flex-direction: column; /* 图标在上，文字在下 */
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+                min-height: 100px;
             }
-            .site-item{
-                padding:8px;
+            
+            .site-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+                margin-bottom: 4px;
+            }
+            
+            .site-meta {
+                width: 100%;
+            }
+            
+            .site-name {
+                font-size: 13px;
+                margin-bottom: 2px;
+            }
+            
+            .site-tags {
+                justify-content: center; /* 标签居中 */
             }
         }
     </style>
 </head>
 <body>
-    <div class="header-container">
-        <div class="app-title">Tsinho导航站</div>
-        <div class="search-bar">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M21 21L16.65 16.65" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <input type="text" id="searchInput" class="search-input" placeholder="搜索站点或标签...">
+    <!-- 增加一个包裹层来限制宽度 -->
+    <div class="app-container">
+        <div class="header-container">
+            <div class="app-title">Tsinho导航站</div>
+            <div class="search-bar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 21L16.65 16.65" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索站点或标签...">
+            </div>
         </div>
-    </div>
 
-    <div id="contentArea" class="content"></div>
+        <div id="contentArea" class="content"></div>
+    </div>
 
     <script>
         // Storage & version
         const STORAGE_KEY = "tsinho-nav-home-v1";
-        const DATA_VERSION = "2025-12-21-v3";
+        const DATA_VERSION = "2025-12-21-v7";
         
         // App state
         let state = { sections: [], sites: [] };
@@ -249,6 +294,61 @@
         function saveLocal(){
             const payload = { sections: state.sections, sites: state.sites };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        }
+        
+        // 桌面模式打开链接
+        function openInDesktopMode(url) {
+            // 检测是否为移动设备
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // 创建中间页面，设置桌面模式viewport并重定向
+                const desktopPage = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, initial-scale=1.0, user-scalable=yes">
+    <title>正在跳转...</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+            background: #F2F2F7;
+        }
+        .loading {
+            text-align: center;
+            color: #6B7280;
+        }
+    </style>
+    <script>
+        // 立即重定向到目标URL
+        window.location.replace("${url.replace(/"/g, '&quot;')}");
+    <\/script>
+</head>
+<body>
+    <div class="loading">正在跳转...</div>
+</body>
+</html>`;
+                
+                // 使用blob URL创建中间页面
+                const blob = new Blob([desktopPage], { type: 'text/html' });
+                const blobUrl = URL.createObjectURL(blob);
+                const newWindow = window.open(blobUrl, '_blank');
+                
+                // 清理blob URL（延迟清理以确保页面加载）
+                setTimeout(() => {
+                    URL.revokeObjectURL(blobUrl);
+                }, 1000);
+            } else {
+                // 非移动设备直接打开
+                window.open(url, '_blank');
+            }
         }
         
         // Render
@@ -311,7 +411,7 @@
                     
                     const tagsWrap = document.createElement("div");
                     tagsWrap.className = "site-tags";
-                    (site.tags || []).slice(0,3).forEach(t => {
+                    (site.tags || []).forEach(t => {
                         const tag = document.createElement("div");
                         tag.className = "tag";
                         tag.textContent = t;
@@ -324,7 +424,7 @@
                     item.appendChild(meta);
                     
                     item.addEventListener("click", () => {
-                        if(site.url) window.open(site.url, "_blank");
+                        if(site.url) openInDesktopMode(site.url);
                     });
                     
                     grid.appendChild(item);
