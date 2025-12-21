@@ -2,14 +2,15 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>Tsinho-Nav 单文件版</title>
+  <title>Tsinho-Nav</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; margin:0; background:#F2F2F7; }
     .app-header { padding:12px; background:#fff; box-shadow:0 2px 4px rgba(0,0,0,0.1); display:flex; justify-content:space-between; }
     .app-title { font-weight:bold; }
     .section-card { margin:12px; padding:12px; background:#fff; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
-    .sites-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:8px; }
+    .section-card h3 { margin:0 0 8px 0; font-size:16px; }
+    .sites-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:8px; }
     .site-item { padding:8px; background:#f9f9f9; border-radius:8px; text-align:center; cursor:pointer; }
     .site-item:hover { background:#eee; }
   </style>
@@ -21,73 +22,50 @@
   </header>
   <main id="sectionsContainer"></main>
 
-  <!-- 配置数据直接嵌入 HTML -->
-  <script type="application/json" id="configData">
-  {
-    "libraries": [
-      {
-        "id": "lib-default",
-        "name": "默认资源库",
-        "description": "示例：内置一些常用站点，可按需修改或删除。",
-        "requirePassword": false,
-        "password": "",
-        "order": 1
-      }
-    ],
-    "sections": [
-      {
-        "id": "sec-1",
-        "libraryId": "lib-default",
-        "name": "常用工具",
-        "displayType": "title",
-        "visible": true,
-        "order": 1
-      },
-      {
-        "id": "sec-2",
-        "libraryId": "lib-default",
-        "name": "开发 & 社区",
-        "displayType": "title",
-        "visible": true,
-        "order": 2
-      }
-    ],
-    "sites": [
-      {
-        "id": "site-1",
-        "libraryId": "lib-default",
-        "sectionId": "sec-1",
-        "name": "百度",
-        "url": "https://www.baidu.com",
-        "icon": "",
-        "tags": ["搜索"],
-        "visible": true,
-        "order": 1
-      },
-      {
-        "id": "site-2",
-        "libraryId": "lib-default",
-        "sectionId": "sec-2",
-        "name": "GitHub",
-        "url": "https://github.com",
-        "icon": "",
-        "tags": ["开发","代码"],
-        "visible": true,
-        "order": 1
-      }
-    ]
-  }
-  </script>
-
   <script>
-    let state = { libraries:[], sections:[], sites:[] };
+    const STORAGE_KEY = "tsinho-nav-data";
+    const DATA_VERSION = "2025-12-21-v1"; // 每次修改默认数据时改这个版本号
+
+    let state = { sections:[], sites:[] };
 
     function loadData() {
-      const raw = document.getElementById("configData").textContent;
-      const data = JSON.parse(raw);
-      state.libraries = data.libraries || [];
-      state.sections = data.sections || [];
-      state.sites = data.sites || [];
+      const version = localStorage.getItem(STORAGE_KEY + "-version");
+      const raw = localStorage.getItem(STORAGE_KEY);
+
+      if (!raw || version !== DATA_VERSION) {
+        // 栏目定义
+        const defaultSections = [
+          { id: "sec-tsinho", name: "Tsinho资源库", displayType: "title", visible: true, order: 1 },
+          { id: "sec-netdisk", name: "网盘合集", displayType: "title", visible: true, order: 2 }
+        ];
+
+        // 站点定义
+        const defaultSites = [
+          // Tsinho资源库栏目
+          { id: "site-1", sectionId: "sec-tsinho", name: "全资源合集", url: "https://yun.139.com/shareweb/#/w/i/2s2yiTvk1Gwfg", tags: ["合集"], visible: true, order: 1 },
+          { id: "site-2", sectionId: "sec-tsinho", name: "实用软件", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJ9TZfu", tags: ["软件"], visible: true, order: 2 },
+          { id: "site-3", sectionId: "sec-tsinho", name: "老司机", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raFw08w", tags: ["资源"], visible: true, order: 3 },
+          { id: "site-4", sectionId: "sec-tsinho", name: "V2节点", url: "https://yun.139.com/shareweb/#/w/i/2s2xRbrCozatn", tags: ["网络"], visible: true, order: 4 },
+          { id: "site-5", sectionId: "sec-tsinho", name: "绅士壁纸", url: "https://yun.139.com/shareweb/#/w/i/2s2xR8rp0ysdz", tags: ["壁纸"], visible: true, order: 5 },
+          { id: "site-6", sectionId: "sec-tsinho", name: "网盘帮下目录", url: "https://yun.139.com/shareweb/#/w/i/2s2xRksiedhqv", tags: ["网盘"], visible: true, order: 6 },
+          { id: "site-7", sectionId: "sec-tsinho", name: "iOS签名证书", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raHuepx", tags: ["iOS"], visible: true, order: 7 },
+          { id: "site-8", sectionId: "sec-tsinho", name: "资源更新文档", url: "https://yun.139.com/shareweb/#/w/i/2s2xQJpAR7Vqw", tags: ["文档"], visible: true, order: 8 },
+
+          // 网盘合集栏目
+          { id: "site-9", sectionId: "sec-netdisk", name: "网盘工具", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJcfUm6", tags: ["工具"], visible: true, order: 1 },
+          { id: "site-10", sectionId: "sec-netdisk", name: "网盘教程", url: "https://dcnl6jstdzjw.feishu.cn/wiki/AgCBwxKSPinKYyko2qSc2SgmnMh", tags: ["教程"], visible: true, order: 2 }
+        ];
+
+        state.sections = defaultSections;
+        state.sites = defaultSites;
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({sections:state.sections,sites:state.sites}));
+        localStorage.setItem(STORAGE_KEY + "-version", DATA_VERSION);
+      } else {
+        const parsed = JSON.parse(raw);
+        state.sections = parsed.sections || [];
+        state.sites = parsed.sites || [];
+      }
     }
 
     function render() {
