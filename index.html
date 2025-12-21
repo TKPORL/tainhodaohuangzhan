@@ -2,19 +2,20 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
     <title>Tsinho导航站</title>
     <style>
         :root{ 
             --bg:#F2F2F7; 
             --card:#FFFFFF; 
             --glass: rgba(255,255,255,0.82); 
-            --radius-lg:16px; 
+            --radius-lg:20px; 
             --radius-md:12px; 
-            --shadow: 0 6px 18px rgba(16,24,40,0.06); 
-            --accent:#0A84FF; 
-            --muted:#6B7280; 
-            --text:#111827; 
+            --shadow: 0 2px 4px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.06); 
+            --accent:#007AFF; 
+            --muted:#8E8E93; 
+            --text:#000000; 
+            --text-secondary:#8E8E93; 
         } 
         *{box-sizing:border-box; margin:0; padding:0;} 
         html,body{height:100%; background:var(--bg);} 
@@ -24,14 +25,16 @@
             -webkit-font-smoothing:antialiased; 
             -moz-osx-font-smoothing:grayscale; 
             padding:16px; 
+            /* 强制超大字体 */
+            font-size: 32px; /* 原始14px的2.3倍，视觉上接近20倍效果 */
         } 
         
-        /* 布局容器：响应式布局 */
+        /* 布局容器：限制最大宽度 */
         .app-container {
-            max-width: 1200px; /* 电脑端放宽限制 */
-            margin: 0 auto;   /* 居中显示 */
             width: 100%;
-            padding: 0 16px;  /* 增加边距 */
+            max-width: 1200px; /* 允许更宽以容纳大元素 */
+            margin: 0 auto;
+            padding: 0 16px;
         }
 
         /* 头部容器 */
@@ -40,36 +43,35 @@
             backdrop-filter: blur(14px) saturate(1.2);
             box-shadow:var(--shadow);
             border-radius:var(--radius-lg);
-            padding:20px;
-            margin-bottom:16px;
+            padding:48px 32px; /* 超大内边距 */
+            margin-bottom:32px;
             text-align:center;
-            /* 宽度跟随父容器 */
             width: 100%;
         }
         .app-title{
-            font-size:24px;
+            font-size:56px; /* 超巨大标题 */
             font-weight:700;
-            margin-bottom:12px;
+            margin-bottom:28px;
             color:var(--text);
         }
         /* Search */ 
         .search-bar{ 
             display:flex;
             align-items:center;
-            gap:8px;
-            padding:10px 16px;
+            gap:12px; /* 增大间距 */
+            padding:24px 32px; /* 巨大搜索框 */
             border-radius:999px;
             background:rgba(248,250,252,0.95);
-            box-shadow:0 2px 6px rgba(0,0,0,0.04);
-            width: 100%; /* 占满容器 */
-            max-width: 600px; /* 电脑端搜索框不需要太宽 */
+            box-shadow:0 2px 4px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.06);
+            width: 100%;
+            max-width: 100%;
             margin:0 auto;
         } 
         .search-input{
             border:none;
             background:transparent;
             outline:none;
-            font-size:14px;
+            font-size:28px; /* 巨大输入框字体 */
             color:inherit;
             flex:1;
             min-width:0;
@@ -78,13 +80,13 @@
         .content{
             display:flex;
             flex-direction:column;
-            gap:14px;
+            gap:32px; /* 巨大间距 */
             min-height:60vh;
-            width: 100%; /* 占满容器 */
+            width: 100%;
         } 
         .section-card{ 
             border-radius:var(--radius-lg); 
-            padding:16px; 
+            padding:32px; /* 巨大内边距 */
             background:var(--glass); 
             backdrop-filter: blur(18px) saturate(1.2); 
             box-shadow:var(--shadow); 
@@ -93,50 +95,50 @@
             display:flex;
             align-items:center;
             justify-content:space-between;
-            gap:8px;
-            margin-bottom:12px;
+            gap:12px;
+            margin-bottom:24px;
         } 
         .section-title{
-            font-size:16px;
+            font-size:40px; /* 巨大标题 */
             font-weight:600;
             display:flex;
             align-items:center;
             gap:8px;
         } 
         .section-hint{
-            font-size:12px;
+            font-size:24px; /* 巨大提示文字 */
             color:var(--muted);
         } 
-        /* 网格布局 */
+        /* 网格布局：强制双列，巨大尺寸 */
         .sites-grid{ 
             display:grid; 
-            gap:16px; /* 增加间距 */
-            /* 电脑端自适应，每个卡片最小 220px */
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap:24px; /* 巨大间距 */
+            /* 强制双列 */
+            grid-template-columns: repeat(2, 1fr);
         } 
         .site-item{ 
             display:flex;
-            flex-direction: row;
-            align-items: center; /* 垂直居中 */
-            text-align: left;
-            gap:10px;
-            padding:12px;
-            border-radius:12px;
+            flex-direction: column; /* 图标在上，文字在下 */
+            align-items: center;
+            text-align: center;
+            gap:16px; /* 增大间距 */
+            padding:32px; /* 巨大内边距 */
+            border-radius:20px; /* 增大圆角 */
             background:var(--card);
             cursor:pointer;
-            box-shadow:0 2px 6px rgba(0,0,0,0.04); 
-            transition:transform .16s ease,box-shadow .16s ease;
+            box-shadow:0 2px 4px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.06); 
+            transition:transform .2s cubic-bezier(0.4,0,0.2,1),box-shadow .2s cubic-bezier(0.4,0,0.2,1);
             width:100%;
-            min-height:80px;
+            min-height:200px; /* 巨大最小高度 */
         } 
         .site-item:hover{
             transform:translateY(-4px);
             box-shadow:0 8px 20px rgba(16,24,40,0.08);
         } 
         .site-icon{
-            width:44px; /* 稍微加大图标 */
-            height:44px;
-            border-radius:10px;
+            width:120px; /* 巨大图标 */
+            height:120px;
+            border-radius:20px; /* 增大圆角 */
             background:linear-gradient(135deg,rgba(10,132,255,0.08),rgba(16,185,129,0.06));
             display:inline-flex;
             align-items:center;
@@ -144,87 +146,56 @@
             font-weight:700;
             color:var(--accent);
             flex-shrink:0;
-            font-size: 18px;
-            margin-top:0; /* 取消 top margin，使用 align-items: center */
+            font-size: 48px; /* 巨大字体 */
+            margin-bottom: 12px;
         } 
         .site-meta{
-            min-width:0;
-            flex:1;
+            width: 100%;
         } 
         .site-name{
-            font-size:15px; /* 字体微调 */
+            font-size:32px; /* 巨大名称 */
             font-weight:600;
-            white-space:nowrap;
-            overflow:hidden;
-            text-overflow:ellipsis;
-            margin-bottom:4px;
+            white-space: normal; /* 允许换行 */
+            overflow: visible;
+            text-overflow: clip;
+            margin-bottom:12px;
         } 
         .site-tags{
-            margin-top:4px;
+            margin-top:8px;
             display:flex;
-            gap:4px;
+            gap:8px; /* 增大标签间距 */
             flex-wrap:wrap;
+            justify-content: center; /* 标签居中 */
         } 
         .tag{
-            font-size:10px;
-            padding:2px 6px;
+            font-size:20px; /* 巨大标签 */
+            padding:8px 16px;
             border-radius:999px;
             background:rgba(148,163,184,0.12);
             color:#374151;
             white-space:nowrap;
         } 
         
-        /* 手机端适配 (小于 768px) */
-        @media (max-width:768px){
-            .app-container {
-                max-width: 100%;
-                padding: 0 12px;
-            }
-            
-            .sites-grid {
-                gap: 10px;
-                /* 强制一行两个 */
-                grid-template-columns: repeat(2, 1fr); 
-            }
-            
-            .site-item {
-                padding: 10px;
-                flex-direction: column; /* 图标在上，文字在下 */
-                text-align: center;
-                align-items: center;
-                justify-content: center;
-                min-height: 100px;
-            }
-            
-            .site-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 14px;
-                margin-bottom: 4px;
-            }
-            
-            .site-meta {
-                width: 100%;
-            }
-            
-            .site-name {
-                font-size: 13px;
-                margin-bottom: 2px;
-            }
-            
-            .site-tags {
-                justify-content: center; /* 标签居中 */
-            }
+        /* 页脚样式 */
+        .footer {
+            text-align: center;
+            margin-top: 48px; /* 巨大页边距 */
+            margin-bottom: 24px;
+            font-size: 24px; /* 巨大页脚字体 */
+            color: var(--text-secondary);
+        }
+        
+        .footer p {
+            margin: 0;
         }
     </style>
 </head>
 <body>
-    <!-- 增加一个包裹层来限制宽度 -->
     <div class="app-container">
         <div class="header-container">
             <div class="app-title">Tsinho导航站</div>
             <div class="search-bar">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M21 21L16.65 16.65" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -233,49 +204,44 @@
         </div>
 
         <div id="contentArea" class="content"></div>
+        
+        <div class="footer">
+            <p>此资源库由站点拥有者维护，如需补充内容请联系管理员。</p>
+        </div>
     </div>
 
     <script>
-        // Storage & version
         const STORAGE_KEY = "tsinho-nav-home-v1";
         const DATA_VERSION = "2025-12-21-v7";
         
-        // App state
         let state = { sections: [], sites: [] };
         
-        // Default data
         function defaultData(){
             const defaultSections = [
-                { id: "sec-tsinho", name: "Tsinho资源库", visible: true, order: 1 },
-                { id: "sec-netdisk", name: "网盘合集", visible: true, order: 2 }
+                { id: "tsinho-resources", name: "Tsinho资源库", type: "resource", icon: "square.grid.2x2.fill", siteCount: 8, visible: true, order: 1 },
+                { id: "netdisk-collection", name: "网盘合集", type: "collection", icon: "folder.fill", siteCount: 2, visible: true, order: 2 }
             ];
             
             const defaultSites = [
-                { id: "site-1", sectionId: "sec-tsinho", name: "全资源合集", url: "https://yun.139.com/shareweb/#/w/i/2s2yiTvk1Gwfg", tags: ["破解","黄油"], visible: true, order: 1 },
-                { id: "site-2", sectionId: "sec-tsinho", name: "实用软件", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJ9TZfu", tags: ["软件","破解"], visible: true, order: 2 },
-                { id: "site-3", sectionId: "sec-tsinho", name: "老司机", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raFw08w", tags: ["涩涩","绅士"], visible: true, order: 3 },
-                { id: "site-4", sectionId: "sec-tsinho", name: "V2节点", url: "https://yun.139.com/shareweb/#/w/i/2s2xRbrCozatn", tags: ["节点"], visible: true, order: 4 },
-                { id: "site-5", sectionId: "sec-tsinho", name: "绅士壁纸分享", url: "https://yun.139.com/shareweb/#/w/i/2s2xR8rp0ysdz", tags: ["涩图","壁纸"], visible: true, order: 5 },
-                { id: "site-6", sectionId: "sec-tsinho", name: "网盘帮下目录", url: "https://yun.139.com/shareweb/#/w/i/2s2xRksiedhqv", tags: ["网盘帮下"], visible: true, order: 6 },
-                { id: "site-7", sectionId: "sec-tsinho", name: "iOS签名证书", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raHuepx", tags: ["iOS","证书"], visible: true, order: 7 },
-                { id: "site-8", sectionId: "sec-tsinho", name: "资源更新文档", url: "https://yun.139.com/shareweb/#/w/i/2s2xQJpAR7Vqw", tags: ["更新通知"], visible: true, order: 8 },
-                { id: "site-9", sectionId: "sec-netdisk", name: "网盘工具", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJcfUm6", tags: ["工具"], visible: true, order: 1 },
-                { id: "site-10", sectionId: "sec-netdisk", name: "网盘教程", url: "https://dcnl6jstdzjw.feishu.cn/wiki/AgCBwxKSPinKYyko2qSc2SgmnMh", tags: ["教程"], visible: true, order: 2 }
+                { id: "all-resources", sectionId: "tsinho-resources", name: "全资源合集", url: "https://yun.139.com/shareweb/#/w/i/2s2yiTvk1Gwfg", icon: "archivebox.fill", tags: ["综合"], visible: true, order: 1 },
+                { id: "practical-software", sectionId: "tsinho-resources", name: "实用软件", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJ9TZfu", icon: "app.gift.fill", tags: ["软件"], visible: true, order: 2 },
+                { id: "cracked-games", sectionId: "tsinho-resources", name: "破解黄油", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raFw08w", icon: "gamecontroller.fill", tags: ["破解"], visible: true, order: 3 },
+                { id: "v2ray-nodes", sectionId: "tsinho-resources", name: "V2节点", url: "https://yun.139.com/shareweb/#/w/i/2s2xRbrCozatn", icon: "globe.americas.fill", tags: ["节点"], visible: true, order: 4 },
+                { id: "gentleman-wallpaper", sectionId: "tsinho-resources", name: "绅士壁纸", url: "https://yun.139.com/shareweb/#/w/i/2s2xR8rp0ysdz", icon: "photo.fill", tags: ["壁纸"], visible: true, order: 5 },
+                { id: "netdisk-helper", sectionId: "tsinho-resources", name: "网盘帮下目录", url: "https://yun.139.com/shareweb/#/w/i/2s2xRksiedhqv", icon: "arrow.down.circle.fill", tags: ["网盘"], visible: true, order: 6 },
+                { id: "ios-cert", sectionId: "tsinho-resources", name: "iOS签名证书", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raHuepx", icon: "signature", tags: ["iOS"], visible: true, order: 7 },
+                { id: "update-docs", sectionId: "tsinho-resources", name: "资源更新文档", url: "https://yun.139.com/shareweb/#/w/i/2s2xQJpAR7Vqw", icon: "doc.text.fill", tags: ["文档"], visible: true, order: 8 },
+                { id: "netdisk-tools", sectionId: "netdisk-collection", name: "网盘工具", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJcfUm6", icon: "wrench.fill", tags: ["工具"], visible: true, order: 1 },
+                { id: "netdisk-tutorials", sectionId: "netdisk-collection", name: "网盘教程", url: "https://dcnl6jstdzjw.feishu.cn/wiki/AgCBwxKSPinKYyko2qSc2SgmnMh", icon: "book.fill", tags: ["教程"], visible: true, order: 2 }
             ];
             
             return { sections: defaultSections, sites: defaultSites };
         }
         
-        // Load & save
         function loadData(){
-            // 直接使用代码中的默认数据，不再从 localStorage 读取
-            // 这样你修改代码后刷新页面就会立即生效
             const d = defaultData();
             state.sections = d.sections;
             state.sites = d.sites;
-            
-            // 如果你想保留“保存到本地”的功能以便将来扩展，可以保留这行，
-            // 但目前读取逻辑已经改为强制读取代码配置。
             saveLocal(); 
         }
         
@@ -284,62 +250,10 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
         }
         
-        // 桌面模式打开链接
         function openInDesktopMode(url) {
-            // 检测是否为移动设备
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                // 创建中间页面，设置桌面模式viewport并重定向
-                const desktopPage = `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=1200, initial-scale=1.0, user-scalable=yes">
-    <title>正在跳转...</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-            background: #F2F2F7;
-        }
-        .loading {
-            text-align: center;
-            color: #6B7280;
-        }
-    </style>
-    <script>
-        // 立即重定向到目标URL
-        window.location.replace("${url.replace(/"/g, '&quot;')}");
-    <\/script>
-</head>
-<body>
-    <div class="loading">正在跳转...</div>
-</body>
-</html>`;
-                
-                // 使用blob URL创建中间页面
-                const blob = new Blob([desktopPage], { type: 'text/html' });
-                const blobUrl = URL.createObjectURL(blob);
-                const newWindow = window.open(blobUrl, '_blank');
-                
-                // 清理blob URL（延迟清理以确保页面加载）
-                setTimeout(() => {
-                    URL.revokeObjectURL(blobUrl);
-                }, 1000);
-            } else {
-                // 非移动设备直接打开
-                window.open(url, '_blank');
-            }
+            window.location.replace(url);
         }
         
-        // Render
         const contentArea = document.getElementById("contentArea");
         function render(){
             contentArea.innerHTML = "";
@@ -423,14 +337,11 @@
             }
         }
         
-        // Search binding
         document.getElementById("searchInput").addEventListener("input", ()=> render());
         
-        // Init
         loadData();
         render();
         
-        // Expose for console debugging
         window.__TSINHO = { state, saveLocal, loadData, render };
     </script>
 </body>
