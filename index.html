@@ -1,0 +1,2311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tsinho-Nav 2.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1C1C1E" media="(prefers-color-scheme: dark)">
+  <style>
+    :root {
+      --bg-light: #F2F2F7;
+      --card-light: #FFFFFF;
+      --primary-light: #007AFF;
+      --bg-dark: #1C1C1E;
+      --card-dark: #000000;
+      --primary-dark: #0A84FF;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-1: 0 2px 4px rgba(0,0,0,0.15);
+      --shadow-2: 0 4px 8px rgba(0,0,0,0.10);
+      --shadow-3: 0 8px 16px rgba(0,0,0,0.08);
+      --easing: cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-fast: 0.2s var(--easing);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    }
+
+    body {
+      background: var(--bg-light);
+      color: #111827;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: var(--bg-dark);
+        color: #F9FAFB;
+      }
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0 0, rgba(0,122,255,0.18), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(10,132,255,0.18), transparent 50%);
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .blur-layer {
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(20px) saturate(1.8);
+      -webkit-backdrop-filter: blur(20px) saturate(1.8);
+      background: color-mix(in srgb, transparent 70%, rgba(255,255,255,0.7));
+      z-index: -3;
+    }
+    @media (prefers-color-scheme: dark) {
+      .blur-layer {
+        background: color-mix(in srgb, transparent 70%, rgba(0,0,0,0.8));
+      }
+    }
+
+    .app-shell {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 16px 16px calc(24px + env(safe-area-inset-bottom, 0));
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(16px) saturate(1.8);
+      -webkit-backdrop-filter: blur(16px) saturate(1.8);
+      box-shadow: var(--shadow-1), var(--shadow-2);
+      min-width: 0;
+    }
+    @media (prefers-color-scheme: dark) {
+      .app-header {
+        background: rgba(22,22,24,0.7);
+      }
+    }
+
+    .app-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .app-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .app-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .app-badge {
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      background: rgba(0,122,255,0.12);
+      color: var(--primary-light);
+      white-space: nowrap;
+    }
+    @media (prefers-color-scheme: dark) {
+      .app-badge {
+        background: rgba(10,132,255,0.18);
+        color: var(--primary-dark);
+      }
+    }
+
+    .app-subtitle {
+      font-size: 12px;
+      color: #6B7280;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @media (prefers-color-scheme: dark) {
+      .app-subtitle {
+        color: #9CA3AF;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .icon-button {
+      border: none;
+      outline: none;
+      padding: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-1), var(--shadow-2);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), opacity var(--transition-fast), filter var(--transition-fast);
+      flex-shrink: 0;
+    }
+    @media (prefers-color-scheme: dark) {
+      .icon-button {
+        background: rgba(22,22,24,0.9);
+      }
+    }
+
+    .icon-button:active {
+      transform: scale(0.96);
+      box-shadow: var(--shadow-1);
+      opacity: 0.9;
+    }
+
+    .icon-button svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(248,250,252,0.9);
+      box-shadow: var(--shadow-1);
+      min-width: 0;
+      flex: 1;
+    }
+    @media (prefers-color-scheme: dark) {
+      .search-bar {
+        background: rgba(31,41,55,0.9);
+      }
+    }
+
+    .search-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: #9CA3AF;
+    }
+
+    .search-input {
+      border: none;
+      outline: none;
+      background: transparent;
+      flex: 1;
+      font-size: 14px;
+      color: inherit;
+      min-width: 0;
+    }
+
+    .search-input::placeholder {
+      color: #9CA3AF;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 12px;
+      background: rgba(148,163,184,0.18);
+      color: #4B5563;
+      white-space: nowrap;
+    }
+    @media (prefers-color-scheme: dark) {
+      .chip {
+        background: rgba(55,65,81,0.9);
+        color: #E5E7EB;
+      }
+    }
+
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .section-card {
+      border-radius: var(--radius-lg);
+      padding: 10px 12px 12px;
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(18px) saturate(1.8);
+      -webkit-backdrop-filter: blur(18px) saturate(1.8);
+      box-shadow: var(--shadow-1), var(--shadow-2);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), opacity var(--transition-fast), filter var(--transition-fast);
+      margin-bottom: 4px;
+      will-change: transform;
+    }
+    @media (prefers-color-scheme: dark) {
+      .section-card {
+        background: rgba(17,24,39,0.90);
+      }
+    }
+
+    .section-card + .section-card {
+      margin-top: 12px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      min-width: 0;
+    }
+
+    .section-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .section-title span.name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .section-hint {
+      font-size: 11px;
+      color: #9CA3AF;
+      white-space: nowrap;
+    }
+    @media (prefers-color-scheme: dark) {
+      .section-hint {
+        color: #6B7280;
+      }
+    }
+
+    .section-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .sites-grid {
+      display: grid;
+      gap: 12px;
+      grid-auto-rows: minmax(0, auto);
+    }
+
+    @media (min-width: 0px) and (max-width: 374px) {
+      .sites-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 375px) and (max-width: 743px) {
+      .sites-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 744px) and (max-width: 1023px) {
+      .sites-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .sites-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+    }
+
+    .site-item {
+      position: relative;
+      border-radius: var(--radius-md);
+      padding: 8px 9px;
+      background: rgba(248,250,252,0.95);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: var(--shadow-1);
+      transition: transform var(--transition-fast), background var(--transition-fast), filter var(--transition-fast), opacity var(--transition-fast);
+      overflow: hidden;
+      will-change: transform;
+    }
+    @media (prefers-color-scheme: dark) {
+      .site-item {
+        background: rgba(31,41,55,0.96);
+      }
+    }
+
+    .site-item:hover {
+      transform: translate3d(0,-1px,0) scale(1.03);
+      filter: brightness(0.96);
+    }
+
+    .site-item:active {
+      transform: scale(0.97);
+      opacity: 0.95;
+    }
+
+    .site-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      background: linear-gradient(135deg, rgba(0,122,255,0.15), rgba(52,211,153,0.15));
+      overflow: hidden;
+    }
+
+    .site-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .site-meta {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .site-name {
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-tags {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 4px;
+      margin-top: 2px;
+      overflow: hidden;
+    }
+
+    .tag-pill {
+      border-radius: 999px;
+      padding: 1px 6px;
+      font-size: 10px;
+      background: rgba(148,163,184,0.24);
+      color: #4B5563;
+      white-space: nowrap;
+      max-width: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @media (prefers-color-scheme: dark) {
+      .tag-pill {
+        background: rgba(75,85,99,0.9);
+        color: #E5E7EB;
+      }
+    }
+
+    .site-admin-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      border-radius: 999px;
+      padding: 1px 4px;
+      font-size: 9px;
+      background: rgba(15,118,110,0.16);
+      color: #0F766E;
+    }
+    @media (prefers-color-scheme: dark) {
+      .site-admin-badge {
+        background: rgba(16,185,129,0.22);
+        color: #A7F3D0;
+      }
+    }
+
+    .floating-admin-bar {
+      position: sticky;
+      bottom: 0;
+      margin-top: 8px;
+      align-self: flex-end;
+      max-width: 320px;
+      width: 100%;
+      display: none;
+    }
+
+    .floating-admin-inner {
+      border-radius: 999px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(17,24,39,0.92);
+      backdrop-filter: blur(18px) saturate(1.8);
+      -webkit-backdrop-filter: blur(18px) saturate(1.8);
+      box-shadow: var(--shadow-2), var(--shadow-3);
+    }
+
+    .floating-admin-inner span {
+      flex: 1;
+      font-size: 11px;
+      color: #E5E7EB;
+      padding-left: 6px;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ios-pill-button {
+      border-radius: 999px;
+      padding: 6px 10px;
+      border: none;
+      outline: none;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: linear-gradient(135deg, #34D399, #10B981);
+      color: #ECFEFF;
+      box-shadow: 0 4px 10px rgba(16,185,129,0.35);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast), filter var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    .ios-pill-button.secondary {
+      background: rgba(31,41,55,0.98);
+      color: #E5E7EB;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.35);
+    }
+
+    .ios-pill-button:active {
+      transform: scale(0.96);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+      opacity: 0.9;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal {
+      width: min(380px, 92%);
+      border-radius: 16px;
+      background: rgba(242,242,247,0.96);
+      box-shadow: var(--shadow-2), var(--shadow-3);
+      padding: 14px 14px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      backdrop-filter: blur(22px) saturate(1.8);
+      -webkit-backdrop-filter: blur(22px) saturate(1.8);
+    }
+    @media (prefers-color-scheme: dark) {
+      .modal {
+        background: rgba(28,28,30,0.98);
+      }
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 2px;
+    }
+
+    .modal-message {
+      font-size: 13px;
+      color: #6B7280;
+      text-align: center;
+      padding: 0 4px;
+    }
+    @media (prefers-color-scheme: dark) {
+      .modal-message {
+        color: #9CA3AF;
+      }
+    }
+
+    .modal-input-group {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      color: #6B7280;
+    }
+    @media (prefers-color-scheme: dark) {
+      .form-label {
+        color: #9CA3AF;
+      }
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(255,255,255,0.9);
+      padding: 6px 9px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    }
+
+    .form-textarea {
+      min-height: 48px;
+      resize: vertical;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 1px rgba(0,122,255,0.3);
+      background: #FFFFFF;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .form-input, .form-select, .form-textarea {
+        border-color: rgba(55,65,81,0.9);
+        background: rgba(17,24,39,0.96);
+        color: #F9FAFB;
+      }
+      .form-input:focus, .form-select:focus, .form-textarea:focus {
+        border-color: var(--primary-dark);
+        box-shadow: 0 0 0 1px rgba(10,132,255,0.45);
+        background: rgba(15,23,42,0.98);
+      }
+    }
+
+    .modal-actions {
+      margin-top: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+    }
+
+    .ios-settings-panel {
+      margin-top: 4px;
+      border-radius: 14px;
+      background: rgba(248,250,252,0.96);
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    @media (prefers-color-scheme: dark) {
+      .ios-settings-panel {
+        background: rgba(17,24,39,0.96);
+      }
+    }
+
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      border-radius: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .settings-row:hover {
+      background: rgba(209,213,219,0.3);
+    }
+    @media (prefers-color-scheme: dark) {
+      .settings-row:hover {
+        background: rgba(55,65,81,0.9);
+      }
+    }
+
+    .settings-row:active {
+      transform: scale(0.97);
+      opacity: 0.9;
+    }
+
+    .settings-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .settings-subtle {
+      font-size: 11px;
+      color: #9CA3AF;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @media (prefers-color-scheme: dark) {
+      .settings-subtle {
+        color: #6B7280;
+      }
+    }
+
+    .jiggle {
+      animation: jiggle 0.3s infinite;
+      transform-origin: center;
+    }
+
+    @keyframes jiggle {
+      0% { transform: rotate(-1deg); }
+      50% { transform: rotate(1deg); }
+      100% { transform: rotate(-1deg); }
+    }
+
+    .draggable-handle {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.4);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 12px;
+      color: #374151;
+      cursor: grab;
+    }
+    @media (prefers-color-scheme: dark) {
+      .draggable-handle {
+        background: rgba(55,65,81,0.9);
+        color: #E5E7EB;
+      }
+    }
+
+    .view-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.16);
+      font-size: 11px;
+      color: #4B5563;
+      cursor: pointer;
+    }
+    @media (prefers-color-scheme: dark) {
+      .view-switch {
+        background: rgba(55,65,81,0.7);
+        color: #E5E7EB;
+      }
+    }
+
+    .library-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+
+    .library-card {
+      border-radius: var(--radius-lg);
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.86);
+      backdrop-filter: blur(20px) saturate(1.8);
+      -webkit-backdrop-filter: blur(20px) saturate(1.8);
+      box-shadow: var(--shadow-1), var(--shadow-2);
+      cursor: pointer;
+      transition: transform var(--transition-fast), filter var(--transition-fast), opacity var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      will-change: transform;
+      position: relative;
+      overflow: hidden;
+    }
+    @media (prefers-color-scheme: dark) {
+      .library-card {
+        background: rgba(17,24,39,0.95);
+      }
+    }
+
+    .library-card:hover {
+      transform: translate3d(0,-1px,0) scale(1.02);
+      filter: brightness(0.97);
+    }
+
+    .library-card:active {
+      transform: scale(0.97);
+      opacity: 0.95;
+    }
+
+    .library-name {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .library-desc {
+      font-size: 12px;
+      color: #6B7280;
+    }
+    @media (prefers-color-scheme: dark) {
+      .library-desc {
+        color: #9CA3AF;
+      }
+    }
+
+    .library-meta {
+      font-size: 11px;
+      color: #9CA3AF;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: space-between;
+    }
+
+    .library-lock {
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 2px 6px;
+      background: rgba(37,99,235,0.12);
+      color: #1D4ED8;
+    }
+    @media (prefers-color-scheme: dark) {
+      .library-lock {
+        background: rgba(37,99,235,0.28);
+        color: #BFDBFE;
+      }
+    }
+
+    .library-admin-badge {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-size: 10px;
+      background: rgba(15,118,110,0.18);
+      color: #0F766E;
+    }
+    @media (prefers-color-scheme: dark) {
+      .library-admin-badge {
+        background: rgba(16,185,129,0.22);
+        color: #A7F3D0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app-header {
+        flex-wrap: wrap;
+        align-items: stretch;
+      }
+      .header-actions {
+        width: 100%;
+      }
+    }
+
+    .empty-state {
+      margin-top: 12px;
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(248,250,252,0.96);
+      text-align: center;
+      font-size: 13px;
+      color: #6B7280;
+    }
+    @media (prefers-color-scheme: dark) {
+      .empty-state {
+        background: rgba(17,24,39,0.96);
+        color: #9CA3AF;
+      }
+    }
+
+    .hint-text {
+      font-size: 11px;
+      color: #9CA3AF;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .pill-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: rgba(148,163,184,0.22);
+      font-size: 11px;
+      color: #4B5563;
+      cursor: pointer;
+    }
+    .pill-toggle input {
+      margin: 0;
+    }
+    @media (prefers-color-scheme: dark) {
+      .pill-toggle {
+        background: rgba(55,65,81,0.9);
+        color: #E5E7EB;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="blur-layer"></div>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-title-wrap">
+        <div class="app-title-row">
+          <span class="app-title" id="headerTitle">Tsinho-Nav</span>
+          <span class="app-badge" id="headerBadge">资源库 · iOS 风格导航</span>
+        </div>
+        <div class="app-subtitle" id="headerSubtitle">轻量 · 本地存储 · 零后端</div>
+      </div>
+      <div class="header-actions">
+        <div class="search-bar" id="searchBar">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.5" />
+            <path d="M15 15L19 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          <input id="searchInput" class="search-input" type="search" placeholder="搜索站点或标签…" />
+        </div>
+        <button id="adminButton" class="icon-button" title="管理员">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.5" />
+            <path d="M6 19a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <div id="viewSwitchContainer" style="display:none;">
+        <div class="view-switch" id="backToLibrariesBtn">
+          ← 返回资源库列表
+        </div>
+      </div>
+
+      <div id="librariesContainer" style="display:none;"></div>
+
+      <div id="sectionsContainer" style="display:none;"></div>
+
+      <div id="emptyState" class="empty-state" style="display:none;">
+        这里还没有任何内容，登录管理员后即可创建资源库 / 栏目 / 站点。
+      </div>
+
+      <div id="hintText" class="hint-text"></div>
+
+      <div id="adminBar" class="floating-admin-bar">
+        <div class="floating-admin-inner">
+          <span id="adminStatusText">已进入管理模式</span>
+          <button id="toggleJiggleBtn" class="ios-pill-button secondary">排序</button>
+          <button id="addSectionBtn" class="ios-pill-button">+ 栏目</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 管理员登录弹窗 -->
+  <div id="loginModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-title">管理员登录</div>
+      <div class="modal-message">请输入管理员密码以管理资源库 / 栏目 / 站点。</div>
+      <div class="modal-input-group">
+        <div class="form-row">
+          <label class="form-label">密码</label>
+          <input id="adminPasswordInput" type="password" class="form-input" placeholder="请输入密码…" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="cancelLoginBtn" class="ios-pill-button secondary">取消</button>
+        <button id="confirmLoginBtn" class="ios-pill-button">登录</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 资源库访问密码弹窗 -->
+  <div id="libraryAccessModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-title" id="libraryAccessTitle">访问资源库</div>
+      <div class="modal-message" id="libraryAccessMessage">该资源库已设置访问密码，请输入以继续。</div>
+      <div class="modal-input-group">
+        <div class="form-row">
+          <label class="form-label">访问密码</label>
+          <input id="libraryAccessPasswordInput" type="password" class="form-input" placeholder="请输入访问密码…" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="cancelLibraryAccessBtn" class="ios-pill-button secondary">取消</button>
+        <button id="confirmLibraryAccessBtn" class="ios-pill-button">进入</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 资源库管理弹窗 -->
+  <div id="libraryModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-title" id="libraryModalTitle">新增资源库</div>
+      <div class="modal-input-group">
+        <div class="form-row">
+          <label class="form-label">资源库名称</label>
+          <input id="libraryNameInput" class="form-input" placeholder="例如：设计资源库 / 开发资源库" />
+        </div>
+        <div class="form-row">
+          <label class="form-label">简介说明（可选）</label>
+          <textarea id="libraryDescInput" class="form-textarea" placeholder="用于说明该资源库的用途…"></textarea>
+        </div>
+        <div class="form-row">
+          <label class="form-label">访问控制</label>
+          <label class="pill-toggle">
+            <input type="checkbox" id="libraryRequirePasswordCheckbox" />
+            启用访问密码
+          </label>
+        </div>
+        <div class="form-row" id="libraryPasswordRow">
+          <label class="form-label">访问密码</label>
+          <input id="libraryPasswordInput" class="form-input" placeholder="访客打开该资源库需要输入的密码" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="deleteLibraryBtn" class="ios-pill-button secondary" style="display:none;">删除</button>
+        <button id="saveLibraryBtn" class="ios-pill-button">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 栏目管理弹窗 -->
+  <div id="sectionModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-title" id="sectionModalTitle">新增栏目</div>
+      <div class="modal-input-group">
+        <div class="form-row">
+          <label class="form-label">栏目名称</label>
+          <input id="sectionNameInput" class="form-input" placeholder="例如：常用工具" />
+        </div>
+        <div class="form-row">
+          <label class="form-label">显示类型</label>
+          <select id="sectionTypeSelect" class="form-select">
+            <option value="title">标题型（卡片）</option>
+            <option value="button">按钮型（轻量）</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-label">可见性</label>
+          <select id="sectionVisibleSelect" class="form-select">
+            <option value="1">可见</option>
+            <option value="0">隐藏</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="deleteSectionBtn" class="ios-pill-button secondary" style="display:none;">删除</button>
+        <button id="saveSectionBtn" class="ios-pill-button">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 站点管理弹窗 -->
+  <div id="siteModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-title" id="siteModalTitle">新增站点</div>
+      <div class="modal-input-group">
+        <div class="form-row">
+          <label class="form-label">站点名称</label>
+          <input id="siteNameInput" class="form-input" placeholder="例如：GitHub" />
+        </div>
+        <div class="form-row">
+          <label class="form-label">URL</label>
+          <input id="siteUrlInput" class="form-input" placeholder="https://example.com" />
+        </div>
+        <div class="form-row">
+          <label class="form-label">图标 URL（可选）</label>
+          <input id="siteIconInput" class="form-input" placeholder="https://example.com/favicon.ico" />
+        </div>
+        <div class="form-row">
+          <label class="form-label">标签（逗号分隔）</label>
+          <input id="siteTagsInput" class="form-input" placeholder="开发, 工具, 常用" />
+        </div>
+        <div class="form-row">
+          <label class="form-label">所属栏目</label>
+          <select id="siteSectionSelect" class="form-select"></select>
+        </div>
+        <div class="form-row">
+          <label class="form-label">可见性</label>
+          <select id="siteVisibleSelect" class="form-select">
+            <option value="1">可见</option>
+            <option value="0">隐藏</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="deleteSiteBtn" class="ios-pill-button secondary" style="display:none;">删除</button>
+        <button id="saveSiteBtn" class="ios-pill-button">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 管理中心弹窗 -->
+  <div id="adminPanelModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-title">管理中心</div>
+      <div class="modal-message">资源库 / 栏目 / 站点管理，排序与数据备份。</div>
+
+      <div class="ios-settings-panel">
+        <div id="manageLibrariesRow" class="settings-row">
+          <div class="settings-label">
+            <span>资源库管理</span>
+            <span class="settings-subtle">新增 / 编辑 / 删除资源库，设置访问密码</span>
+          </div>
+          <span>›</span>
+        </div>
+        <div id="manageSectionsRow" class="settings-row">
+          <div class="settings-label">
+            <span>栏目管理</span>
+            <span class="settings-subtle">当前资源库内新增 / 编辑 / 删除栏目</span>
+          </div>
+          <span>›</span>
+        </div>
+        <div id="manageSitesRow" class="settings-row">
+          <div class="settings-label">
+            <span>站点管理</span>
+            <span class="settings-subtle">当前资源库内新增 / 编辑 / 删除站点</span>
+          </div>
+          <span>›</span>
+        </div>
+      </div>
+
+      <div class="ios-settings-panel">
+        <div id="exportDataRow" class="settings-row">
+          <div class="settings-label">
+            <span>导出数据</span>
+            <span class="settings-subtle">生成 Tsinho-Backup-YYYY-MM-DD.json</span>
+          </div>
+          <span>⤓</span>
+        </div>
+        <div id="importDataRow" class="settings-row">
+          <div class="settings-label">
+            <span>导入数据</span>
+            <span class="settings-subtle">从 JSON 备份恢复</span>
+          </div>
+          <span>⤒</span>
+        </div>
+      </div>
+
+      <div class="ios-settings-panel">
+        <div id="jiggleModeRow" class="settings-row">
+          <div class="settings-label">
+            <span>排序模式</span>
+            <span class="settings-subtle">长按拖拽资源库 / 栏目 / 站点顺序</span>
+          </div>
+          <span>⇅</span>
+        </div>
+        <div id="logoutRow" class="settings-row">
+          <div class="settings-label">
+            <span>退出管理</span>
+            <span class="settings-subtle">恢复访客视图</span>
+          </div>
+          <span>⟲</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="closeAdminPanelBtn" class="ios-pill-button secondary">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <input id="hiddenFileInput" type="file" accept="application/json" style="display:none;" />
+
+  <script>
+    const ADMIN_PASSWORD = "admin123";
+    const STORAGE_KEY = "tsinho-nav-2-data-v1";
+
+    let state = {
+      libraries: [],
+      sections: [],
+      sites: [],
+      currentLibraryId: null,
+      isAdmin: false,
+      jiggleMode: false,
+      editingLibraryId: null,
+      editingSectionId: null,
+      editingSiteId: null,
+      searchQuery: "",
+      unlockedLibraries: new Set()
+    };
+
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          const defaultLibraryId = "lib-default";
+          const defaultSections = [
+            { id: "sec-1", libraryId: defaultLibraryId, name: "常用工具", displayType: "title", visible: true, order: 1 },
+            { id: "sec-2", libraryId: defaultLibraryId, name: "开发 & 社区", displayType: "title", visible: true, order: 2 }
+          ];
+          const defaultSites = [
+            { id: "site-1", libraryId: defaultLibraryId, sectionId: "sec-1", name: "百度", url: "https://www.baidu.com", icon: "", tags: ["搜索"], visible: true, order: 1 },
+            { id: "site-2", libraryId: defaultLibraryId, sectionId: "sec-1", name: "Bing", url: "https://www.bing.com", icon: "", tags: ["搜索"], visible: true, order: 2 },
+            { id: "site-3", libraryId: defaultLibraryId, sectionId: "sec-2", name: "GitHub", url: "https://github.com", icon: "", tags: ["开发","代码"], visible: true, order: 1 }
+          ];
+          state.libraries = [
+            {
+              id: defaultLibraryId,
+              name: "默认资源库",
+              description: "示例：内置一些常用站点，可按需修改或删除。",
+              requirePassword: false,
+              password: "",
+              order: 1
+            }
+          ];
+          state.sections = defaultSections;
+          state.sites = defaultSites;
+          state.currentLibraryId = null;
+          saveData();
+          return;
+        }
+        const parsed = JSON.parse(raw);
+        state.libraries = parsed.libraries || [];
+        state.sections = parsed.sections || [];
+        state.sites = parsed.sites || [];
+        state.currentLibraryId = null;
+      } catch (e) {
+        console.error("加载数据失败:", e);
+        state.libraries = [];
+        state.sections = [];
+        state.sites = [];
+        state.currentLibraryId = null;
+      }
+    }
+
+    function saveData() {
+      const data = {
+        libraries: state.libraries,
+        sections: state.sections,
+        sites: state.sites
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function generateId(prefix) {
+      return prefix + "-" + Math.random().toString(36).slice(2, 9);
+    }
+
+    function getCurrentLibrary() {
+      if (!state.currentLibraryId) return null;
+      return state.libraries.find(lib => lib.id === state.currentLibraryId) || null;
+    }
+
+    function render() {
+      const librariesContainer = document.getElementById("librariesContainer");
+      const sectionsContainer = document.getElementById("sectionsContainer");
+      const emptyState = document.getElementById("emptyState");
+      const hintText = document.getElementById("hintText");
+      const searchBar = document.getElementById("searchBar");
+      const viewSwitchContainer = document.getElementById("viewSwitchContainer");
+
+      const headerTitle = document.getElementById("headerTitle");
+      const headerSubtitle = document.getElementById("headerSubtitle");
+      const headerBadge = document.getElementById("headerBadge");
+
+      const currentLibrary = getCurrentLibrary();
+      const q = state.searchQuery.trim().toLowerCase();
+
+      if (!currentLibrary) {
+        headerTitle.textContent = "Tsinho-Nav";
+        headerSubtitle.textContent = "轻量 · 本地存储 · 多资源库";
+        headerBadge.textContent = "资源库列表";
+        viewSwitchContainer.style.display = "none";
+        searchBar.style.display = "none";
+
+        librariesContainer.style.display = "block";
+        sectionsContainer.style.display = "none";
+
+        renderLibraries();
+        emptyState.style.display = state.libraries.length ? "none" : "block";
+        hintText.textContent = state.isAdmin
+          ? "提示：在管理中心中可以创建多个资源库，并为敏感资源库设置访问密码。"
+          : "这是所有资源库列表，如需新增或修改，请使用右上角管理员入口。";
+      } else {
+        headerTitle.textContent = currentLibrary.name || "Tsinho-Nav";
+        headerSubtitle.textContent = currentLibrary.description || "当前资源库导航";
+        headerBadge.textContent = "资源库 · 导航视图";
+        viewSwitchContainer.style.display = "block";
+        searchBar.style.display = "flex";
+
+        librariesContainer.style.display = "none";
+        sectionsContainer.style.display = "block";
+
+        renderSectionsInCurrentLibrary();
+        const hasSitesInLibrary = state.sites.some(
+          s => s.libraryId === currentLibrary.id && (state.isAdmin || s.visible)
+        );
+        emptyState.style.display = hasSitesInLibrary ? "none" : "block";
+        hintText.textContent = state.isAdmin
+          ? "提示：可在管理中心中新增栏目和站点，或启用排序模式调整顺序。"
+          : "此资源库由站点拥有者维护，如需补充内容请联系管理员。";
+      }
+
+      const adminBar = document.getElementById("adminBar");
+      adminBar.style.display = state.isAdmin && currentLibrary ? "block" : "none";
+      document.getElementById("adminStatusText").textContent = state.isAdmin
+        ? (state.jiggleMode ? "排序模式（长按拖拽）" : "已进入管理模式")
+        : "访客模式";
+      document.getElementById("toggleJiggleBtn").textContent = state.jiggleMode ? "完成" : "排序";
+    }
+
+    function renderLibraries() {
+      const container = document.getElementById("librariesContainer");
+      container.innerHTML = "";
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "library-grid";
+
+      const libs = [...state.libraries].sort((a,b) => (a.order || 0) - (b.order || 0));
+
+      for (const lib of libs) {
+        const card = document.createElement("div");
+        card.className = "library-card";
+        card.dataset.libraryId = lib.id;
+
+        if (state.jiggleMode) {
+          card.classList.add("jiggle");
+          card.draggable = true;
+          card.addEventListener("dragstart", onLibraryDragStart);
+          card.addEventListener("dragover", e => e.preventDefault());
+          card.addEventListener("drop", onLibraryDrop);
+        }
+
+        const nameRow = document.createElement("div");
+        nameRow.className = "library-name";
+
+        if (state.isAdmin && state.jiggleMode) {
+          const handle = document.createElement("div");
+          handle.className = "draggable-handle";
+          handle.textContent = "≡";
+          handle.title = "拖拽排序资源库";
+          nameRow.appendChild(handle);
+        }
+
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = lib.name || "未命名资源库";
+        nameRow.appendChild(nameSpan);
+
+        if (!lib.name) {
+          const chip = document.createElement("span");
+          chip.className = "chip";
+          chip.textContent = "未命名";
+          nameRow.appendChild(chip);
+        }
+
+        card.appendChild(nameRow);
+
+        if (lib.description) {
+          const desc = document.createElement("div");
+          desc.className = "library-desc";
+          desc.textContent = lib.description;
+          card.appendChild(desc);
+        }
+
+        const meta = document.createElement("div");
+        meta.className = "library-meta";
+
+        const counts = document.createElement("span");
+        const secCount = state.sections.filter(s => s.libraryId === lib.id).length;
+        const siteCount = state.sites.filter(s => s.libraryId === lib.id).length;
+        counts.textContent = `${secCount} 个栏目 · ${siteCount} 个站点`;
+        meta.appendChild(counts);
+
+        if (lib.requirePassword) {
+          const lock = document.createElement("span");
+          lock.className = "library-lock";
+          lock.textContent = "已加密";
+          meta.appendChild(lock);
+        }
+
+        card.appendChild(meta);
+
+        if (state.isAdmin) {
+          const badge = document.createElement("span");
+          badge.className = "library-admin-badge";
+          badge.textContent = "管理";
+          card.appendChild(badge);
+        }
+
+        card.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (state.isAdmin && !state.jiggleMode) {
+            openLibraryModal(lib.id);
+          } else if (!state.isAdmin || state.jiggleMode) {
+            enterLibrary(lib);
+          }
+        });
+
+        wrapper.appendChild(card);
+      }
+
+      container.appendChild(wrapper);
+    }
+
+    function enterLibrary(lib) {
+      if (!lib) return;
+      if (lib.requirePassword) {
+        if (state.unlockedLibraries.has(lib.id)) {
+          state.currentLibraryId = lib.id;
+          render();
+          return;
+        }
+        openLibraryAccessModal(lib.id);
+      } else {
+        state.currentLibraryId = lib.id;
+        render();
+      }
+    }
+
+    function renderSectionsInCurrentLibrary() {
+      const container = document.getElementById("sectionsContainer");
+      container.innerHTML = "";
+
+      const currentLibrary = getCurrentLibrary();
+      if (!currentLibrary) return;
+
+      const q = state.searchQuery.trim().toLowerCase();
+
+      const filteredSections = [...state.sections]
+        .filter(sec => sec.libraryId === currentLibrary.id)
+        .filter(sec => state.isAdmin || sec.visible)
+        .sort((a,b) => (a.order || 0) - (b.order || 0));
+
+      const filteredSitesBySection = {};
+      for (const site of state.sites) {
+        if (site.libraryId !== currentLibrary.id) continue;
+        if (!state.isAdmin && !site.visible) continue;
+        if (q) {
+          const inName = site.name.toLowerCase().includes(q);
+          const inTags = (site.tags || []).some(tag => (tag || "").toLowerCase().includes(q));
+          if (!inName && !inTags) continue;
+        }
+        if (!filteredSitesBySection[site.sectionId]) {
+          filteredSitesBySection[site.sectionId] = [];
+        }
+        filteredSitesBySection[site.sectionId].push(site);
+      }
+
+      let hasVisibleSite = false;
+
+      for (const sec of filteredSections) {
+        const sites = (filteredSitesBySection[sec.id] || []).sort((a,b) => (a.order || 0) - (b.order || 0));
+        if (!state.isAdmin && sites.length === 0) continue;
+
+        const sectionEl = document.createElement("section");
+        sectionEl.className = "section-card";
+        sectionEl.dataset.sectionId = sec.id;
+
+        if (state.jiggleMode) {
+          sectionEl.classList.add("jiggle");
+        }
+
+        const header = document.createElement("div");
+        header.className = "section-header";
+
+        const left = document.createElement("div");
+        left.className = "section-left";
+
+        if (state.isAdmin && state.jiggleMode) {
+          const handle = document.createElement("div");
+          handle.className = "draggable-handle";
+          handle.textContent = "≡";
+          handle.title = "拖拽排序栏目";
+          handle.draggable = true;
+          handle.addEventListener("dragstart", onSectionDragStart);
+          handle.addEventListener("dragover", e => e.preventDefault());
+          handle.addEventListener("drop", onSectionDrop);
+          left.appendChild(handle);
+        }
+
+        const title = document.createElement("div");
+        title.className = "section-title";
+
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "name";
+        nameSpan.textContent = sec.name;
+        title.appendChild(nameSpan);
+
+        if (!sec.visible) {
+          const hiddenChip = document.createElement("span");
+          hiddenChip.className = "chip";
+          hiddenChip.textContent = "已隐藏";
+          title.appendChild(hiddenChip);
+        } else if (sec.displayType === "button") {
+          const typeChip = document.createElement("span");
+          typeChip.className = "chip";
+          typeChip.textContent = "按钮型";
+          title.appendChild(typeChip);
+        }
+
+        left.appendChild(title);
+        header.appendChild(left);
+
+        const right = document.createElement("div");
+        right.className = "section-right";
+
+        const hint = document.createElement("span");
+        hint.className = "section-hint";
+        hint.textContent = `${sites.length} 个站点`;
+        right.appendChild(hint);
+
+        if (state.isAdmin) {
+          const addBtn = document.createElement("button");
+          addBtn.className = "ios-pill-button secondary";
+          addBtn.style.padding = "4px 8px";
+          addBtn.style.fontSize = "11px";
+          addBtn.textContent = "+ 站点";
+          addBtn.addEventListener("click", () => openSiteModal(null, sec.id));
+          right.appendChild(addBtn);
+
+          const editBtn = document.createElement("button");
+          editBtn.className = "icon-button";
+          editBtn.style.padding = "6px";
+          editBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 19h2.586a1 1 0 0 0 .707-.293l9.414-9.414a2 2 0 0 0-2.828-2.828L5.465 15.879A1 1 0 0 0 5 16.586V19Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M13 6l5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+          editBtn.addEventListener("click", () => openSectionModal(sec.id));
+          right.appendChild(editBtn);
+        }
+
+        header.appendChild(right);
+        sectionEl.appendChild(header);
+
+        const grid = document.createElement("div");
+        grid.className = "sites-grid";
+
+        for (const site of sites) {
+          hasVisibleSite = true;
+
+          const item = document.createElement("div");
+          item.className = "site-item";
+          item.dataset.siteId = site.id;
+
+          if (state.jiggleMode) {
+            item.classList.add("jiggle");
+            item.draggable = true;
+            item.addEventListener("dragstart", onSiteDragStart);
+            item.addEventListener("dragover", e => e.preventDefault());
+            item.addEventListener("drop", onSiteDrop);
+          }
+
+          const iconBox = document.createElement("div");
+          iconBox.className = "site-icon";
+
+          if (site.icon) {
+            const img = document.createElement("img");
+            img.src = site.icon;
+            img.alt = site.name;
+            img.onerror = () => {
+              img.remove();
+              iconBox.textContent = site.name[0]?.toUpperCase() || "S";
+            };
+            iconBox.appendChild(img);
+          } else {
+            iconBox.textContent = site.name[0]?.toUpperCase() || "S";
+          }
+          item.appendChild(iconBox);
+
+          const meta = document.createElement("div");
+          meta.className = "site-meta";
+
+          const name = document.createElement("div");
+          name.className = "site-name";
+          name.textContent = site.name;
+          meta.appendChild(name);
+
+          const tagsWrap = document.createElement("div");
+          tagsWrap.className = "site-tags";
+          (site.tags || []).slice(0, 2).forEach(tag => {
+            const pill = document.createElement("span");
+            pill.className = "tag-pill";
+            pill.textContent = tag;
+            tagsWrap.appendChild(pill);
+          });
+          meta.appendChild(tagsWrap);
+
+          item.appendChild(meta);
+
+          if (!site.visible) {
+            const badge = document.createElement("span");
+            badge.className = "site-admin-badge";
+            badge.textContent = "隐藏";
+            item.appendChild(badge);
+          } else if (state.isAdmin) {
+            const badge = document.createElement("span");
+            badge.className = "site-admin-badge";
+            badge.textContent = "管理";
+            item.appendChild(badge);
+          }
+
+          if (state.isAdmin && !state.jiggleMode) {
+            item.addEventListener("click", (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              openSiteModal(site.id, site.sectionId);
+            });
+          } else if (!state.isAdmin || (state.isAdmin && state.jiggleMode)) {
+            item.addEventListener("click", () => {
+              if (!site.url) return;
+              window.open(site.url, "_blank");
+            });
+          }
+
+          grid.appendChild(item);
+        }
+
+        sectionEl.appendChild(grid);
+        container.appendChild(sectionEl);
+      }
+
+      if (!hasVisibleSite && !state.isAdmin) {
+        document.getElementById("emptyState").style.display = "block";
+      }
+    }
+
+    let dragLibrarySourceId = null;
+    function onLibraryDragStart(e) {
+      const card = e.target.closest(".library-card");
+      if (!card) return;
+      dragLibrarySourceId = card.dataset.libraryId;
+      e.dataTransfer.effectAllowed = "move";
+    }
+    function onLibraryDrop(e) {
+      e.preventDefault();
+      const targetCard = e.target.closest(".library-card");
+      if (!targetCard) return;
+      const targetId = targetCard.dataset.libraryId;
+      if (!dragLibrarySourceId || dragLibrarySourceId === targetId) return;
+
+      const libs = state.libraries;
+      const sourceIndex = libs.findIndex(s => s.id === dragLibrarySourceId);
+      const targetIndex = libs.findIndex(s => s.id === targetId);
+      if (sourceIndex === -1 || targetIndex === -1) return;
+
+      const [moved] = libs.splice(sourceIndex, 1);
+      libs.splice(targetIndex, 0, moved);
+
+      libs.forEach((s, idx) => s.order = idx + 1);
+      saveData();
+      render();
+    }
+
+    let dragSectionSourceId = null;
+    function onSectionDragStart(e) {
+      const card = e.target.closest(".section-card");
+      if (!card) return;
+      dragSectionSourceId = card.dataset.sectionId;
+      e.dataTransfer.effectAllowed = "move";
+    }
+    function onSectionDrop(e) {
+      e.preventDefault();
+      const targetCard = e.target.closest(".section-card");
+      if (!targetCard) return;
+      const targetId = targetCard.dataset.sectionId;
+      if (!dragSectionSourceId || dragSectionSourceId === targetId) return;
+
+      const sections = state.sections;
+      const sourceIndex = sections.findIndex(s => s.id === dragSectionSourceId);
+      const targetIndex = sections.findIndex(s => s.id === targetId);
+      if (sourceIndex === -1 || targetIndex === -1) return;
+
+      const currentLibrary = getCurrentLibrary();
+      if (!currentLibrary) return;
+
+      const libSections = sections.filter(s => s.libraryId === currentLibrary.id)
+        .sort((a,b) => (a.order || 0) - (b.order || 0));
+
+      const sourceInLibIdx = libSections.findIndex(s => s.id === dragSectionSourceId);
+      const targetInLibIdx = libSections.findIndex(s => s.id === targetId);
+      if (sourceInLibIdx === -1 || targetInLibIdx === -1) return;
+
+      libSections.splice(sourceInLibIdx, 1);
+      libSections.splice(targetInLibIdx, 0, sections.find(s => s.id === dragSectionSourceId));
+
+      libSections.forEach((s, idx) => s.order = idx + 1);
+      saveData();
+      render();
+    }
+
+    let dragSiteSourceId = null;
+    function onSiteDragStart(e) {
+      const item = e.target.closest(".site-item");
+      if (!item) return;
+      dragSiteSourceId = item.dataset.siteId;
+      e.dataTransfer.effectAllowed = "move";
+    }
+    function onSiteDrop(e) {
+      e.preventDefault();
+      const targetItem = e.target.closest(".site-item");
+      if (!targetItem) return;
+      const targetId = targetItem.dataset.siteId;
+      if (!dragSiteSourceId || dragSiteSourceId === targetId) return;
+
+      const sites = state.sites;
+      const sourceIndex = sites.findIndex(s => s.id === dragSiteSourceId);
+      const targetIndex = sites.findIndex(s => s.id === targetId);
+      if (sourceIndex === -1 || targetIndex === -1) return;
+
+      const sourceSite = sites[sourceIndex];
+      const targetSite = sites[targetIndex];
+
+      if (sourceSite.sectionId !== targetSite.sectionId) {
+        const sourceSectionSites = sites.filter(s => s.sectionId === sourceSite.sectionId)
+          .sort((a,b) => (a.order || 0) - (b.order || 0));
+        const targetSectionSites = sites.filter(s => s.sectionId === targetSite.sectionId)
+          .sort((a,b) => (a.order || 0) - (b.order || 0));
+
+        const sourceListIndex = sourceSectionSites.findIndex(s => s.id === sourceSite.id);
+        sourceSectionSites.splice(sourceListIndex, 1);
+        sourceSectionSites.forEach((s, idx) => s.order = idx + 1);
+
+        const targetListIndex = targetSectionSites.findIndex(s => s.id === targetSite.id);
+        sourceSite.sectionId = targetSite.sectionId;
+        sourceSite.libraryId = targetSite.libraryId;
+        targetSectionSites.splice(targetListIndex, 0, sourceSite);
+        targetSectionSites.forEach((s, idx) => s.order = idx + 1);
+
+        saveData();
+        render();
+        return;
+      }
+
+      const sameSectionSites = sites.filter(s => s.sectionId === sourceSite.sectionId)
+        .sort((a,b) => (a.order || 0) - (b.order || 0));
+      const sourceListIndex2 = sameSectionSites.findIndex(s => s.id === sourceSite.id);
+      const targetListIndex2 = sameSectionSites.findIndex(s => s.id === targetSite.id);
+
+      sameSectionSites.splice(sourceListIndex2, 1);
+      sameSectionSites.splice(targetListIndex2, 0, sourceSite);
+      sameSectionSites.forEach((s, idx) => s.order = idx + 1);
+
+      saveData();
+      render();
+    }
+
+    function openLoginModal() {
+      document.getElementById("loginModalBackdrop").style.display = "flex";
+      const input = document.getElementById("adminPasswordInput");
+      input.value = "";
+      setTimeout(() => input.focus(), 30);
+    }
+    function closeLoginModal() {
+      document.getElementById("loginModalBackdrop").style.display = "none";
+    }
+
+    let pendingLibraryAccessId = null;
+    function openLibraryAccessModal(libraryId) {
+      pendingLibraryAccessId = libraryId;
+      const lib = state.libraries.find(l => l.id === libraryId);
+      document.getElementById("libraryAccessTitle").textContent = lib ? lib.name : "访问资源库";
+      document.getElementById("libraryAccessMessage").textContent =
+        "该资源库已设置访问密码，请输入以继续。";
+      document.getElementById("libraryAccessPasswordInput").value = "";
+      document.getElementById("libraryAccessModalBackdrop").style.display = "flex";
+      setTimeout(() => document.getElementById("libraryAccessPasswordInput").focus(), 30);
+    }
+    function closeLibraryAccessModal() {
+      document.getElementById("libraryAccessModalBackdrop").style.display = "none";
+      pendingLibraryAccessId = null;
+    }
+
+    function openLibraryModal(libraryId) {
+      state.editingLibraryId = libraryId;
+      const backdrop = document.getElementById("libraryModalBackdrop");
+      const titleEl = document.getElementById("libraryModalTitle");
+      const nameInput = document.getElementById("libraryNameInput");
+      const descInput = document.getElementById("libraryDescInput");
+      const requireCheckbox = document.getElementById("libraryRequirePasswordCheckbox");
+      const pwdRow = document.getElementById("libraryPasswordRow");
+      const pwdInput = document.getElementById("libraryPasswordInput");
+      const deleteBtn = document.getElementById("deleteLibraryBtn");
+
+      if (libraryId) {
+        const lib = state.libraries.find(l => l.id === libraryId);
+        if (!lib) return;
+        titleEl.textContent = "编辑资源库";
+        nameInput.value = lib.name || "";
+        descInput.value = lib.description || "";
+        requireCheckbox.checked = !!lib.requirePassword;
+        pwdInput.value = lib.password || "";
+        deleteBtn.style.display = "inline-flex";
+      } else {
+        titleEl.textContent = "新增资源库";
+        nameInput.value = "";
+        descInput.value = "";
+        requireCheckbox.checked = false;
+        pwdInput.value = "";
+        deleteBtn.style.display = "none";
+      }
+
+      pwdRow.style.display = requireCheckbox.checked ? "block" : "none";
+      backdrop.style.display = "flex";
+      setTimeout(() => nameInput.focus(), 30);
+    }
+    function closeLibraryModal() {
+      document.getElementById("libraryModalBackdrop").style.display = "none";
+      state.editingLibraryId = null;
+    }
+
+    function openSectionModal(sectionId) {
+      if (!getCurrentLibrary()) {
+        alert("请先选择一个资源库。");
+        return;
+      }
+      state.editingSectionId = sectionId;
+      const backdrop = document.getElementById("sectionModalBackdrop");
+      const titleEl = document.getElementById("sectionModalTitle");
+      const nameInput = document.getElementById("sectionNameInput");
+      const typeSelect = document.getElementById("sectionTypeSelect");
+      const visibleSelect = document.getElementById("sectionVisibleSelect");
+      const deleteBtn = document.getElementById("deleteSectionBtn");
+
+      if (sectionId) {
+        const sec = state.sections.find(s => s.id === sectionId);
+        if (!sec) return;
+        titleEl.textContent = "编辑栏目";
+        nameInput.value = sec.name;
+        typeSelect.value = sec.displayType || "title";
+        visibleSelect.value = sec.visible ? "1" : "0";
+        deleteBtn.style.display = "inline-flex";
+      } else {
+        titleEl.textContent = "新增栏目";
+        nameInput.value = "";
+        typeSelect.value = "title";
+        visibleSelect.value = "1";
+        deleteBtn.style.display = "none";
+      }
+
+      backdrop.style.display = "flex";
+      setTimeout(() => nameInput.focus(), 30);
+    }
+    function closeSectionModal() {
+      document.getElementById("sectionModalBackdrop").style.display = "none";
+      state.editingSectionId = null;
+    }
+
+    function openSiteModal(siteId, sectionId) {
+      const currentLibrary = getCurrentLibrary();
+      if (!currentLibrary) {
+        alert("请先选择一个资源库。");
+        return;
+      }
+      state.editingSiteId = siteId;
+      const backdrop = document.getElementById("siteModalBackdrop");
+      const titleEl = document.getElementById("siteModalTitle");
+
+      const nameInput = document.getElementById("siteNameInput");
+      const urlInput = document.getElementById("siteUrlInput");
+      const iconInput = document.getElementById("siteIconInput");
+      const tagsInput = document.getElementById("siteTagsInput");
+      const sectionSelect = document.getElementById("siteSectionSelect");
+      const visibleSelect = document.getElementById("siteVisibleSelect");
+      const deleteBtn = document.getElementById("deleteSiteBtn");
+
+      sectionSelect.innerHTML = "";
+      state.sections
+        .filter(s => s.libraryId === currentLibrary.id)
+        .sort((a,b) => (a.order || 0) - (b.order || 0))
+        .forEach(sec => {
+          const opt = document.createElement("option");
+          opt.value = sec.id;
+          opt.textContent = sec.name;
+          sectionSelect.appendChild(opt);
+        });
+
+      if (siteId) {
+        const site = state.sites.find(s => s.id === siteId);
+        if (!site) return;
+        titleEl.textContent = "编辑站点";
+        nameInput.value = site.name;
+        urlInput.value = site.url;
+        iconInput.value = site.icon || "";
+        tagsInput.value = (site.tags || []).join(", ");
+        sectionSelect.value = site.sectionId;
+        visibleSelect.value = site.visible ? "1" : "0";
+        deleteBtn.style.display = "inline-flex";
+      } else {
+        titleEl.textContent = "新增站点";
+        nameInput.value = "";
+        urlInput.value = "";
+        iconInput.value = "";
+        tagsInput.value = "";
+        sectionSelect.value = sectionId || (state.sections.find(s => s.libraryId === currentLibrary.id)?.id || "");
+        visibleSelect.value = "1";
+        deleteBtn.style.display = "none";
+      }
+
+      backdrop.style.display = "flex";
+      setTimeout(() => nameInput.focus(), 30);
+    }
+    function closeSiteModal() {
+      document.getElementById("siteModalBackdrop").style.display = "none";
+      state.editingSiteId = null;
+    }
+
+    function exportData() {
+      const data = {
+        libraries: state.libraries,
+        sections: state.sections,
+        sites: state.sites
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      const filename = `Tsinho-Backup-${yyyy}-${mm}-${dd}.json`;
+
+      if (navigator.share && navigator.canShare) {
+        try {
+          const file = new File([blob], filename, { type: "application/json" });
+          if (navigator.canShare({ files: [file] })) {
+            navigator.share({
+              files: [file],
+              title: "Tsinho-Nav 备份",
+              text: "Tsinho-Nav 数据备份"
+            }).catch(err => console.warn("分享失败:", err));
+            return;
+          }
+        } catch (e) {
+          console.warn("系统不支持文件分享:", e);
+        }
+      }
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function importData(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (!parsed.libraries || !parsed.sections || !parsed.sites) {
+            alert("备份文件格式不正确。");
+            return;
+          }
+          state.libraries = parsed.libraries;
+          state.sections = parsed.sections;
+          state.sites = parsed.sites;
+          state.currentLibraryId = null;
+          state.unlockedLibraries = new Set();
+          saveData();
+          render();
+          alert("数据导入成功。");
+        } catch (err) {
+          console.error(err);
+          alert("解析备份文件失败。");
+        }
+      };
+      reader.readAsText(file, "utf-8");
+    }
+
+    function initEvents() {
+      document.getElementById("adminButton").addEventListener("click", () => {
+        if (state.isAdmin) {
+          openAdminPanel();
+        } else {
+          openLoginModal();
+        }
+      });
+
+      document.getElementById("cancelLoginBtn").addEventListener("click", closeLoginModal);
+      document.getElementById("confirmLoginBtn").addEventListener("click", () => {
+        const input = document.getElementById("adminPasswordInput");
+        if (input.value === ADMIN_PASSWORD) {
+          state.isAdmin = true;
+          closeLoginModal();
+          openAdminPanel();
+          render();
+        } else {
+          alert("密码错误");
+        }
+      });
+      document.getElementById("loginModalBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "loginModalBackdrop") {
+          closeLoginModal();
+        }
+      });
+
+      document.getElementById("cancelLibraryAccessBtn").addEventListener("click", closeLibraryAccessModal);
+      document.getElementById("confirmLibraryAccessBtn").addEventListener("click", () => {
+        if (!pendingLibraryAccessId) return;
+        const input = document.getElementById("libraryAccessPasswordInput");
+        const lib = state.libraries.find(l => l.id === pendingLibraryAccessId);
+        if (!lib) {
+          closeLibraryAccessModal();
+          return;
+        }
+        if (input.value === lib.password) {
+          state.unlockedLibraries.add(lib.id);
+          state.currentLibraryId = lib.id;
+          closeLibraryAccessModal();
+          render();
+        } else {
+          alert("密码错误");
+        }
+      });
+      document.getElementById("libraryAccessModalBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "libraryAccessModalBackdrop") {
+          closeLibraryAccessModal();
+        }
+      });
+
+      document.getElementById("libraryRequirePasswordCheckbox").addEventListener("change", (e) => {
+        document.getElementById("libraryPasswordRow").style.display = e.target.checked ? "block" : "none";
+      });
+
+      document.getElementById("saveLibraryBtn").addEventListener("click", () => {
+        const name = document.getElementById("libraryNameInput").value.trim();
+        const desc = document.getElementById("libraryDescInput").value.trim();
+        const requirePwd = document.getElementById("libraryRequirePasswordCheckbox").checked;
+        const pwd = document.getElementById("libraryPasswordInput").value.trim();
+
+        if (!name) {
+          alert("资源库名称不能为空");
+          return;
+        }
+        if (requirePwd && !pwd) {
+          alert("启用访问密码时，密码不能为空");
+          return;
+        }
+
+        if (state.editingLibraryId) {
+          const lib = state.libraries.find(l => l.id === state.editingLibraryId);
+          if (lib) {
+            lib.name = name;
+            lib.description = desc;
+            lib.requirePassword = requirePwd;
+            lib.password = requirePwd ? pwd : "";
+          }
+        } else {
+          const maxOrder = state.libraries.reduce((max, s) => Math.max(max, s.order || 0), 0);
+          state.libraries.push({
+            id: generateId("lib"),
+            name,
+            description: desc,
+            requirePassword: requirePwd,
+            password: requirePwd ? pwd : "",
+            order: maxOrder + 1
+          });
+        }
+        saveData();
+        closeLibraryModal();
+        render();
+      });
+
+      document.getElementById("deleteLibraryBtn").addEventListener("click", () => {
+        if (!state.editingLibraryId) return;
+        const lib = state.libraries.find(l => l.id === state.editingLibraryId);
+        if (!lib) return;
+        if (!confirm(`确定要删除资源库「${lib.name || "未命名"}」及其下所有栏目和站点吗？`)) return;
+
+        state.sections = state.sections.filter(s => s.libraryId !== lib.id);
+        state.sites = state.sites.filter(s => s.libraryId !== lib.id);
+        state.libraries = state.libraries.filter(l => l.id !== lib.id);
+        if (state.currentLibraryId === lib.id) {
+          state.currentLibraryId = null;
+        }
+        saveData();
+        closeLibraryModal();
+        render();
+      });
+
+      document.getElementById("libraryModalBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "libraryModalBackdrop") {
+          closeLibraryModal();
+        }
+      });
+
+      function openAdminPanel() {
+        document.getElementById("adminPanelModalBackdrop").style.display = "flex";
+      }
+      function closeAdminPanel() {
+        document.getElementById("adminPanelModalBackdrop").style.display = "none";
+      }
+
+      document.getElementById("closeAdminPanelBtn").addEventListener("click", closeAdminPanel);
+      document.getElementById("adminPanelModalBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "adminPanelModalBackdrop") {
+          closeAdminPanel();
+        }
+      });
+
+      document.getElementById("manageLibrariesRow").addEventListener("click", () => {
+        closeAdminPanel();
+        openLibraryModal(null);
+      });
+      document.getElementById("manageSectionsRow").addEventListener("click", () => {
+        closeAdminPanel();
+        if (!getCurrentLibrary()) {
+          alert("请先从资源库列表中选择一个资源库。");
+          return;
+        }
+        openSectionModal(null);
+      });
+      document.getElementById("manageSitesRow").addEventListener("click", () => {
+        closeAdminPanel();
+        if (!getCurrentLibrary()) {
+          alert("请先从资源库列表中选择一个资源库。");
+          return;
+        }
+        openSiteModal(null, state.sections.find(s => s.libraryId === getCurrentLibrary().id)?.id);
+      });
+
+      document.getElementById("exportDataRow").addEventListener("click", exportData);
+      document.getElementById("importDataRow").addEventListener("click", () => {
+        const fileInput = document.getElementById("hiddenFileInput");
+        fileInput.value = "";
+        fileInput.click();
+      });
+      document.getElementById("hiddenFileInput").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) importData(file);
+      });
+
+      document.getElementById("jiggleModeRow").addEventListener("click", () => {
+        state.jiggleMode = !state.jiggleMode;
+        document.getElementById("adminPanelModalBackdrop").style.display = "none";
+        render();
+      });
+
+      document.getElementById("logoutRow").addEventListener("click", () => {
+        state.isAdmin = false;
+        state.jiggleMode = false;
+        document.getElementById("adminPanelModalBackdrop").style.display = "none";
+        render();
+      });
+
+      document.getElementById("saveSectionBtn").addEventListener("click", () => {
+        const currentLibrary = getCurrentLibrary();
+        if (!currentLibrary) {
+          alert("请先选择一个资源库。");
+          return;
+        }
+        const name = document.getElementById("sectionNameInput").value.trim();
+        const displayType = document.getElementById("sectionTypeSelect").value;
+        const visible = document.getElementById("sectionVisibleSelect").value === "1";
+        if (!name) {
+          alert("栏目名称不能为空");
+          return;
+        }
+        if (state.editingSectionId) {
+          const sec = state.sections.find(s => s.id === state.editingSectionId);
+          if (sec) {
+            sec.name = name;
+            sec.displayType = displayType;
+            sec.visible = visible;
+          }
+        } else {
+          const maxOrder = state.sections
+            .filter(s => s.libraryId === currentLibrary.id)
+            .reduce((max, s) => Math.max(max, s.order || 0), 0);
+          state.sections.push({
+            id: generateId("sec"),
+            libraryId: currentLibrary.id,
+            name,
+            displayType,
+            visible,
+            order: maxOrder + 1
+          });
+        }
+        saveData();
+        closeSectionModal();
+        render();
+      });
+
+      document.getElementById("deleteSectionBtn").addEventListener("click", () => {
+        if (!state.editingSectionId) return;
+        if (!confirm("确定要删除该栏目及其下所有站点吗？")) return;
+        state.sites = state.sites.filter(s => s.sectionId !== state.editingSectionId);
+        state.sections = state.sections.filter(s => s.id !== state.editingSectionId);
+        saveData();
+        closeSectionModal();
+        render();
+      });
+
+      document.getElementById("sectionModalBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "sectionModalBackdrop") {
+          closeSectionModal();
+        }
+      });
+
+      document.getElementById("saveSiteBtn").addEventListener("click", () => {
+        const currentLibrary = getCurrentLibrary();
+        if (!currentLibrary) {
+          alert("请先选择一个资源库。");
+          return;
+        }
+        const name = document.getElementById("siteNameInput").value.trim();
+        const url = document.getElementById("siteUrlInput").value.trim();
+        const icon = document.getElementById("siteIconInput").value.trim();
+        const tagsRaw = document.getElementById("siteTagsInput").value.trim();
+        const sectionId = document.getElementById("siteSectionSelect").value;
+        const visible = document.getElementById("siteVisibleSelect").value === "1";
+
+        if (!name) {
+          alert("站点名称不能为空");
+          return;
+        }
+        if (!url) {
+          alert("URL 不能为空");
+          return;
+        }
+
+        const tags = tagsRaw ? tagsRaw.split(",").map(t => t.trim()).filter(Boolean) : [];
+
+        if (state.editingSiteId) {
+          const site = state.sites.find(s => s.id === state.editingSiteId);
+          if (site) {
+            site.name = name;
+            site.url = url;
+            site.icon = icon;
+            site.tags = tags;
+            site.sectionId = sectionId;
+            site.libraryId = currentLibrary.id;
+            site.visible = visible;
+          }
+        } else {
+          const maxOrder = state.sites
+            .filter(s => s.sectionId === sectionId)
+            .reduce((max, s) => Math.max(max, s.order || 0), 0);
+          state.sites.push({
+            id: generateId("site"),
+            libraryId: currentLibrary.id,
+            sectionId,
+            name,
+            url,
+            icon,
+            tags,
+            visible,
+            order: maxOrder + 1
+          });
+        }
+
+        saveData();
+        closeSiteModal();
+        render();
+      });
+
+      document.getElementById("deleteSiteBtn").addEventListener("click", () => {
+        if (!state.editingSiteId) return;
+        if (!confirm("确定要删除该站点吗？")) return;
+        state.sites = state.sites.filter(s => s.id !== state.editingSiteId);
+        saveData();
+        closeSiteModal();
+        render();
+      });
+
+      document.getElementById("siteModalBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "siteModalBackdrop") {
+          closeSiteModal();
+        }
+      });
+
+      document.getElementById("toggleJiggleBtn").addEventListener("click", () => {
+        state.jiggleMode = !state.jiggleMode;
+        render();
+      });
+
+      document.getElementById("addSectionBtn").addEventListener("click", () => {
+        openSectionModal(null);
+      });
+
+      const searchInput = document.getElementById("searchInput");
+      searchInput.addEventListener("input", () => {
+        state.searchQuery = searchInput.value;
+        render();
+      });
+
+      document.getElementById("backToLibrariesBtn").addEventListener("click", () => {
+        state.currentLibraryId = null;
+        state.searchQuery = "";
+        document.getElementById("searchInput").value = "";
+        render();
+      });
+    }
+
+    function initPWA() {
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("sw.js").catch(err => {
+          console.warn("Service Worker 注册失败:", err);
+        });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadData();
+      initEvents();
+      render();
+      initPWA();
+    });
+  </script>
+</body>
+</html>
