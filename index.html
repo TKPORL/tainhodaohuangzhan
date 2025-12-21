@@ -1,696 +1,168 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <title>Tsinho-Nav 2.0 — 首页展示版</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#F2F2F7" />
+  <meta charset="UTF-8" />
+  <title>Tsinho-Nav 2.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <style>
-    :root{
-      --bg:#F2F2F7;
-      --card:#FFFFFF;
-      --glass: rgba(255,255,255,0.82);
-      --radius-lg:16px;
-      --radius-md:12px;
-      --shadow: 0 6px 18px rgba(16,24,40,0.06);
-      --accent:#0A84FF;
-      --muted:#6B7280;
-      --text:#111827;
-      --glass-dark: rgba(17,24,39,0.9);
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      background: #F2F2F7;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
-      background:var(--bg);
-      color:var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      padding-bottom:env(safe-area-inset-bottom);
+    .app-header {
+      padding: 12px;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(16px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-
-    /* Header */
-    .app-shell{
-      max-width:1080px;
-      margin:0 auto;
-      padding:16px;
+    .app-title {
+      font-weight: bold;
+      font-size: 18px;
     }
-    .app-header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:10px 14px;
-      border-radius:14px;
-      background:var(--glass);
-      backdrop-filter: blur(14px) saturate(1.2);
-      box-shadow:var(--shadow);
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      padding: 6px 12px;
+      border-radius: 999px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    .title-wrap{display:flex;flex-direction:column;min-width:0}
-    .title-row{display:flex;align-items:center;gap:8px;min-width:0}
-    .app-title{font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .app-badge{padding:3px 8px;border-radius:999px;font-size:12px;background:rgba(10,132,255,0.12);color:var(--accent)}
-    .app-sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-    /* Search & actions */
-    .header-actions{display:flex;align-items:center;gap:8px}
-    .search-bar{
-      display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;background:rgba(248,250,252,0.95);
-      min-width:220px;box-shadow:0 2px 6px rgba(0,0,0,0.04)
+    .search-bar input {
+      border: none;
+      outline: none;
+      font-size: 14px;
+      flex: 1;
     }
-    .search-input{border:none;background:transparent;outline:none;font-size:14px;color:inherit;width:220px}
-    .icon-btn{border:none;background:rgba(255,255,255,0.8);padding:8px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
-    .icon-btn:active{transform:scale(0.97)}
-
-    /* Sections */
-    .content{margin-top:16px;display:flex;flex-direction:column;gap:14px;min-height:60vh}
-    .section-card{
-      border-radius:var(--radius-lg);
-      padding:12px;
-      background:var(--glass);
-      backdrop-filter: blur(18px) saturate(1.2);
-      box-shadow:var(--shadow);
+    .section-card {
+      margin: 16px;
+      padding: 12px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 16px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    .section-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
-    .section-title{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
-    .section-hint{font-size:12px;color:var(--muted)}
-
-    .sites-grid{
-      display:grid;
-      gap:12px;
+    .section-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+    }
+    .sites-grid {
+      display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
     }
-    .site-item{
-      display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:var(--card);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.04);
-      transition:transform .16s ease,box-shadow .16s ease;
+    .site-item {
+      padding: 10px;
+      background: #fff;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
     }
-    .site-item:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(16,24,40,0.08)}
-    .site-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,rgba(10,132,255,0.08),rgba(16,185,129,0.06));display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);flex-shrink:0}
-    .site-meta{min-width:0;flex:1}
-    .site-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .site-tags{margin-top:6px;display:flex;gap:6px;flex-wrap:nowrap;overflow:hidden}
-    .tag{font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(148,163,184,0.12);color:#374151;white-space:nowrap}
-
-    /* Admin floating bar */
-    .admin-bar{position:sticky;bottom:12px;display:flex;justify-content:flex-end}
-    .pill{border-radius:999px;padding:8px 12px;background:linear-gradient(135deg,#34D399,#10B981);color:#fff;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(16,185,129,0.18)}
-    .pill.secondary{background:rgba(31,41,55,0.96);color:#E5E7EB}
-
-    /* Modal backdrop */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,0.35);display:none;align-items:center;justify-content:center;z-index:60}
-    .modal{width:min(520px,94%);border-radius:14px;padding:14px;background:var(--card);box-shadow:0 10px 30px rgba(0,0,0,0.18)}
-    .modal-title{font-size:16px;font-weight:700;margin-bottom:6px}
-    .modal-message{font-size:13px;color:var(--muted);margin-bottom:8px}
-    .form-row{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
-    .form-label{font-size:13px;color:var(--muted)}
-    .form-input{padding:8px;border-radius:10px;border:1px solid rgba(148,163,184,0.35);outline:none;font-size:14px}
-    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
-
-    /* small */
-    @media (max-width:640px){
-      .search-input{width:120px}
-      .sites-grid{grid-template-columns:repeat(2,1fr)}
+    .site-item:hover {
+      transform: scale(1.03);
+      background: #f9f9f9;
+    }
+    .site-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .site-tags {
+      font-size: 12px;
+      color: #888;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="app-header">
-      <div class="title-wrap">
-        <div class="title-row">
-          <div class="app-title">Tsinho-Nav 2.0</div>
-          <div class="app-badge">首页 · 导航</div>
-        </div>
-        <div class="app-sub">直接展示栏目与站点 · iOS 风格</div>
-      </div>
-
-      <div class="header-actions">
-        <div class="search-bar" title="搜索站点或标签">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:#9CA3AF"><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          <input id="searchInput" class="search-input" placeholder="搜索站点或标签…" />
-        </div>
-        <button id="adminBtn" class="icon-btn" title="管理员">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:#111827"><path d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.4"/><path d="M6 19a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-    </header>
-
-    <main class="content" id="contentArea">
-      <!-- Sections will be injected here -->
-    </main>
-
-    <div class="admin-bar" id="adminBar" style="display:none">
-      <button id="openAdminPanel" class="pill secondary">管理中心</button>
-      <button id="addSectionBtn" class="pill" style="margin-left:8px">+ 栏目</button>
+  <header class="app-header">
+    <div class="app-title">Tsinho-Nav 2.0</div>
+    <div class="search-bar">
+      🔍 <input id="searchInput" type="text" placeholder="搜索站点或标签..." />
     </div>
-  </div>
+    <button id="adminButton">👤 管理员</button>
+  </header>
 
-  <!-- Admin Login Modal -->
-  <div id="loginModal" class="modal-backdrop">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="modal-title">管理员登录</div>
-      <div class="modal-message">请输入管理员密码以进入管理模式。</div>
-      <div class="form-row">
-        <label class="form-label">密码</label>
-        <input id="adminPassword" class="form-input" type="password" />
-      </div>
-      <div class="modal-actions">
-        <button id="cancelLogin" class="pill secondary">取消</button>
-        <button id="confirmLogin" class="pill">登录</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Admin Panel Modal -->
-  <div id="adminPanelModal" class="modal-backdrop">
-    <div class="modal">
-      <div class="modal-title">管理中心</div>
-      <div class="modal-message">新增 / 编辑 / 删除栏目与站点；导出配置用于发布。</div>
-
-      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button id="manageSectionsBtn" class="pill secondary">栏目管理</button>
-          <button id="manageSitesBtn" class="pill secondary">站点管理</button>
-          <button id="exportBtn" class="pill">导出配置</button>
-          <button id="importBtn" class="pill secondary">导入配置</button>
-          <input id="fileInput" type="file" accept="application/json" style="display:none" />
-        </div>
-
-        <div style="display:flex;gap:8px;justify-content:flex-end">
-          <button id="closeAdminPanel" class="pill secondary">关闭</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section Modal -->
-  <div id="sectionModal" class="modal-backdrop">
-    <div class="modal">
-      <div class="modal-title" id="sectionModalTitle">新增栏目</div>
-      <div class="form-row">
-        <label class="form-label">栏目名称</label>
-        <input id="sectionName" class="form-input" />
-      </div>
-      <div class="modal-actions">
-        <button id="deleteSection" class="pill secondary" style="display:none">删除</button>
-        <button id="saveSection" class="pill">保存</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Site Modal -->
-  <div id="siteModal" class="modal-backdrop">
-    <div class="modal">
-      <div class="modal-title" id="siteModalTitle">新增站点</div>
-      <div class="form-row">
-        <label class="form-label">站点名称</label>
-        <input id="siteName" class="form-input" />
-      </div>
-      <div class="form-row">
-        <label class="form-label">URL</label>
-        <input id="siteUrl" class="form-input" />
-      </div>
-      <div class="form-row">
-        <label class="form-label">标签（逗号分隔）</label>
-        <input id="siteTags" class="form-input" placeholder="例如：工具, 教程" />
-      </div>
-      <div class="form-row">
-        <label class="form-label">所属栏目</label>
-        <select id="siteSectionSelect" class="form-input"></select>
-      </div>
-      <div class="modal-actions">
-        <button id="deleteSite" class="pill secondary" style="display:none">删除</button>
-        <button id="saveSite" class="pill">保存</button>
-      </div>
-    </div>
-  </div>
+  <main id="sectionsContainer"></main>
 
   <script>
-    // -------------------------
-    // Configuration & Storage
-    // -------------------------
-    const ADMIN_PASSWORD = "admin123"; // 如需更改请直接修改此处
-    const STORAGE_KEY = "tsinho-nav-home-v1";
-    const DATA_VERSION = "2025-12-21-v1"; // 修改默认数据后请更新版本号以强制覆盖旧 localStorage
+    const STORAGE_KEY = "tsinho-nav-data";
+    const DATA_VERSION = "2025-12-21-v1";
 
-    // App state
-    let state = {
-      sections: [],
-      sites: [],
-      isAdmin: false,
-      editingSectionId: null,
-      editingSiteId: null
-    };
+    let state = { sections: [], sites: [] };
 
-    // Utility
-    function generateId(prefix="id"){ return prefix + "-" + Math.random().toString(36).slice(2,9); }
+    function loadData() {
+      const version = localStorage.getItem(STORAGE_KEY + "-version");
+      const raw = localStorage.getItem(STORAGE_KEY);
 
-    // -------------------------
-    // Default data (edit here)
-    // -------------------------
-    function defaultData(){
-      const defaultSections = [
-        { id: "sec-tsinho", name: "Tsinho资源库", visible: true, order: 1 },
-        { id: "sec-netdisk", name: "网盘合集", visible: true, order: 2 }
-      ];
-      const defaultSites = [
-        { id: "site-1", sectionId: "sec-tsinho", name: "全资源合集", url: "https://yun.139.com/shareweb/#/w/i/2s2yiTvk1Gwfg", tags: ["合集"], visible: true, order: 1 },
-        { id: "site-2", sectionId: "sec-tsinho", name: "实用软件", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJ9TZfu", tags: ["软件"], visible: true, order: 2 },
-        { id: "site-3", sectionId: "sec-tsinho", name: "老司机", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raFw08w", tags: ["绅士"], visible: true, order: 3 },
-        { id: "site-4", sectionId: "sec-tsinho", name: "V2节点", url: "https://yun.139.com/shareweb/#/w/i/2s2xRbrCozatn", tags: ["节点"], visible: true, order: 4 },
-        { id: "site-5", sectionId: "sec-tsinho", name: "绅士壁纸", url: "https://yun.139.com/shareweb/#/w/i/2s2xR8rp0ysdz", tags: ["壁纸"], visible: true, order: 5 },
-        { id: "site-6", sectionId: "sec-tsinho", name: "网盘帮下目录", url: "https://yun.139.com/shareweb/#/w/i/2s2xRksiedhqv", tags: ["网盘帮下"], visible: true, order: 6 },
-        { id: "site-7", sectionId: "sec-tsinho", name: "iOS签名证书", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raHuepx", tags: ["证书"], visible: true, order: 7 },
-        { id: "site-8", sectionId: "sec-tsinho", name: "资源更新文档", url: "https://yun.139.com/shareweb/#/w/i/2s2xQJpAR7Vqw", tags: ["更新通知"], visible: true, order: 8 },
+      if (!raw || version !== DATA_VERSION) {
+        const defaultSections = [
+          { id: "sec-tsinho", name: "Tsinho资源库", order: 1 },
+          { id: "sec-netdisk", name: "网盘合集", order: 2 }
+        ];
 
-        { id: "site-9", sectionId: "sec-netdisk", name: "网盘工具", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJcfUm6", tags: ["工具"], visible: true, order: 1 },
-        { id: "site-10", sectionId: "sec-netdisk", name: "网盘教程", url: "https://dcnl6jstdzjw.feishu.cn/wiki/AgCBwxKSPinKYyko2qSc2SgmnMh", tags: ["教程"], visible: true, order: 2 }
-      ];
-      return { sections: defaultSections, sites: defaultSites };
-    }
+        const defaultSites = [
+          { id: "site-1", sectionId: "sec-tsinho", name: "全资源合集", url: "https://yun.139.com/shareweb/#/w/i/2s2yiTvk1Gwfg", tags: ["合集"], order: 1 },
+          { id: "site-2", sectionId: "sec-tsinho", name: "实用软件", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJ9TZfu", tags: ["软件"], order: 2 },
+          { id: "site-3", sectionId: "sec-tsinho", name: "老司机", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raFw08w", tags: ["绅士"], order: 3 },
+          { id: "site-4", sectionId: "sec-tsinho", name: "V2节点", url: "https://yun.139.com/shareweb/#/w/i/2s2xRbrCozatn", tags: ["节点"], order: 4 },
+          { id: "site-5", sectionId: "sec-tsinho", name: "绅士壁纸", url: "https://yun.139.com/shareweb/#/w/i/2s2xR8rp0ysdz", tags: ["壁纸"], order: 5 },
+          { id: "site-6", sectionId: "sec-tsinho", name: "网盘帮下目录", url: "https://yun.139.com/shareweb/#/w/i/2s2xRksiedhqv", tags: ["网盘帮下"], order: 6 },
+          { id: "site-7", sectionId: "sec-tsinho", name: "iOS签名证书", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raHuepx", tags: ["证书"], order: 7 },
+          { id: "site-8", sectionId: "sec-tsinho", name: "资源更新文档", url: "https://yun.139.com/shareweb/#/w/i/2s2xQJpAR7Vqw", tags: ["更新通知"], order: 8 },
+          { id: "site-9", sectionId: "sec-netdisk", name: "网盘工具", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJcfUm6", tags: ["工具"], order: 1 },
+          { id: "site-10", sectionId: "sec-netdisk", name: "网盘教程", url: "https://dcnl6jstdzjw.feishu.cn/wiki/AgCBwxKSPinKYyko2qSc2SgmnMh", tags: ["教程"], order: 2 }
+        ];
 
-    // -------------------------
-    // Load & Save
-    // -------------------------
-    function loadData(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        const ver = localStorage.getItem(STORAGE_KEY + "-version");
-        if(!raw || ver !== DATA_VERSION){
-          const d = defaultData();
-          state.sections = d.sections;
-          state.sites = d.sites;
-          saveLocal();
-          localStorage.setItem(STORAGE_KEY + "-version", DATA_VERSION);
-        } else {
-          const parsed = JSON.parse(raw);
-          state.sections = parsed.sections || [];
-          state.sites = parsed.sites || [];
-        }
-      }catch(e){
-        console.error("loadData error", e);
-        const d = defaultData();
-        state.sections = d.sections;
-        state.sites = d.sites;
+        state.sections = defaultSections;
+        state.sites = defaultSites;
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ sections: state.sections, sites: state.sites }));
+        localStorage.setItem(STORAGE_KEY + "-version", DATA_VERSION);
+      } else {
+        const parsed = JSON.parse(raw);
+        state.sections = parsed.sections || [];
+        state.sites = parsed.sites || [];
       }
     }
 
-    function saveLocal(){
-      const payload = { sections: state.sections, sites: state.sites };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-    }
-
-    // Export config (for publishing to config.json if desired)
-    function exportConfig(){
-      const data = { sections: state.sections, sites: state.sites };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "tsinho-config.json";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function importConfigFile(file){
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try{
-          const parsed = JSON.parse(e.target.result);
-          if(!parsed.sections || !parsed.sites){ alert("文件格式不正确"); return; }
-          state.sections = parsed.sections;
-          state.sites = parsed.sites;
-          saveLocal();
-          render();
-          alert("导入成功，已更新本地配置。若要让所有人看到，请将导出的 JSON 覆盖仓库中的 config.json 并部署。");
-        }catch(err){
-          alert("解析失败：" + err.message);
-        }
-      };
-      reader.readAsText(file, "utf-8");
-    }
-
-    // -------------------------
-    // Rendering
-    // -------------------------
-    const contentArea = document.getElementById("contentArea");
-    function render(){
-      contentArea.innerHTML = "";
+    function render() {
+      const container = document.getElementById("sectionsContainer");
+      container.innerHTML = "";
       const q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
 
-      const sections = [...state.sections].sort((a,b)=> (a.order||0)-(b.order||0));
+      const sections = state.sections.sort((a,b)=>a.order-b.order);
       for(const sec of sections){
-        if(!sec.visible) continue;
-        const secCard = document.createElement("section");
-        secCard.className = "section-card";
-
-        const header = document.createElement("div");
-        header.className = "section-header";
-        const left = document.createElement("div");
-        left.className = "section-title";
-        left.textContent = sec.name;
-        header.appendChild(left);
-
-        const right = document.createElement("div");
-        right.className = "section-hint";
-        const count = state.sites.filter(s => s.sectionId === sec.id && s.visible).length;
-        right.textContent = `${count} 个站点`;
-        header.appendChild(right);
-
-        secCard.appendChild(header);
-
-        const grid = document.createElement("div");
-        grid.className = "sites-grid";
-
-        const sites = state.sites
-          .filter(s => s.sectionId === sec.id && s.visible)
-          .filter(s => {
-            if(!q) return true;
-            const inName = (s.name || "").toLowerCase().includes(q);
-            const inTags = (s.tags || []).some(t => (t||"").toLowerCase().includes(q));
-            return inName || inTags;
-          })
-          .sort((a,b)=> (a.order||0)-(b.order||0));
-
+        const card = document.createElement("div");
+        card.className="section-card";
+        card.innerHTML=`<h3>${sec.name}</h3>`;
+        const grid=document.createElement("div");
+        grid.className="sites-grid";
+        const sites=state.sites.filter(s=>s.sectionId===sec.id).sort((a,b)=>a.order-b.order);
         for(const site of sites){
-          const item = document.createElement("div");
-          item.className = "site-item";
-          item.dataset.siteId = site.id;
-
-          const icon = document.createElement("div");
-          icon.className = "site-icon";
-          if(site.icon){
-            const img = document.createElement("img");
-            img.src = site.icon;
-            img.alt = site.name;
-            img.style.width = "100%";
-            img.style.height = "100%";
-            img.style.objectFit = "cover";
-            icon.innerHTML = "";
-            icon.appendChild(img);
-          } else {
-            icon.textContent = (site.name || "S").slice(0,1).toUpperCase();
-          }
-
-          const meta = document.createElement("div");
-          meta.className = "site-meta";
-          const name = document.createElement("div");
-          name.className = "site-name";
-          name.textContent = site.name;
-          const tagsWrap = document.createElement("div");
-          tagsWrap.className = "site-tags";
-          (site.tags || []).slice(0,2).forEach(t => {
-            const tag = document.createElement("div");
-            tag.className = "tag";
-            tag.textContent = t;
-            tagsWrap.appendChild(tag);
-          });
-
-          meta.appendChild(name);
-          meta.appendChild(tagsWrap);
-
-          item.appendChild(icon);
-          item.appendChild(meta);
-
-          // Click behavior
-          if(state.isAdmin){
-            item.addEventListener("click", (e) => {
-              e.stopPropagation();
-              openSiteModal(site.id);
-            });
-          } else {
-            item.addEventListener("click", () => {
-              if(site.url) window.open(site.url, "_blank");
-            });
-          }
-
+          if(q && !site.name.toLowerCase().includes(q) && !(site.tags||[]).some(t=>t.toLowerCase().includes(q))) continue;
+          const item=document.createElement("div");
+          item.className="site-item";
+          item.innerHTML=`<div class='site-name'>${site.name}</div><div class='site-tags'>${site.tags.join(" · ")}</div>`;
+          item.onclick=()=>window.open(site.url,"_blank");
           grid.appendChild(item);
         }
-
-        secCard.appendChild(grid);
-        contentArea.appendChild(secCard);
+        card.appendChild(grid);
+        container.appendChild(card);
       }
-
-      // Admin bar visibility
-      document.getElementById("adminBar").style.display = state.isAdmin ? "flex" : "none";
     }
 
-    // -------------------------
-    // Admin UI handlers
-    // -------------------------
-    const loginModal = document.getElementById("loginModal");
-    const adminPanelModal = document.getElementById("adminPanelModal");
-    const sectionModal = document.getElementById("sectionModal");
-    const siteModal = document.getElementById("siteModal");
+    document.getElementById("searchInput").addEventListener("input", ()=>render());
 
-    document.getElementById("adminBtn").addEventListener("click", () => {
-      if(state.isAdmin){
-        // toggle admin panel
-        adminPanelModal.style.display = "flex";
-      } else {
-        loginModal.style.display = "flex";
-        setTimeout(()=>document.getElementById("adminPassword").focus(),50);
-      }
-    });
-
-    document.getElementById("cancelLogin").addEventListener("click", ()=> loginModal.style.display = "none");
-    document.getElementById("confirmLogin").addEventListener("click", ()=>{
-      const val = document.getElementById("adminPassword").value;
-      if(val === ADMIN_PASSWORD){
-        state.isAdmin = true;
-        loginModal.style.display = "none";
-        render();
-        adminPanelModal.style.display = "flex";
-      } else {
-        alert("密码错误");
-      }
-    });
-
-    document.getElementById("closeAdminPanel").addEventListener("click", ()=> adminPanelModal.style.display = "none");
-    document.getElementById("openAdminPanel").addEventListener("click", ()=> adminPanelModal.style.display = "flex");
-
-    // Manage sections
-    document.getElementById("manageSectionsBtn").addEventListener("click", ()=>{
-      adminPanelModal.style.display = "none";
-      openSectionList();
-    });
-
-    function openSectionList(){
-      // reuse section modal for listing: show a simple prompt to add or edit via existing UI
-      // For simplicity, open add modal
-      openSectionModal(null);
-    }
-
-    // Manage sites
-    document.getElementById("manageSitesBtn").addEventListener("click", ()=>{
-      adminPanelModal.style.display = "none";
-      openSiteModal(null);
-    });
-
-    // Add section button
-    document.getElementById("addSectionBtn").addEventListener("click", ()=> openSectionModal(null));
-
-    // Section modal handlers
-    function openSectionModal(sectionId){
-      state.editingSectionId = sectionId;
-      const title = document.getElementById("sectionModalTitle");
-      const nameInput = document.getElementById("sectionName");
-      const deleteBtn = document.getElementById("deleteSection");
-      if(sectionId){
-        const sec = state.sections.find(s=>s.id===sectionId);
-        if(!sec) return;
-        title.textContent = "编辑栏目";
-        nameInput.value = sec.name || "";
-        deleteBtn.style.display = "inline-flex";
-      } else {
-        title.textContent = "新增栏目";
-        nameInput.value = "";
-        deleteBtn.style.display = "none";
-      }
-      sectionModal.style.display = "flex";
-      setTimeout(()=>nameInput.focus(),50);
-    }
-
-    document.getElementById("saveSection").addEventListener("click", ()=>{
-      const name = document.getElementById("sectionName").value.trim();
-      if(!name){ alert("栏目名称不能为空"); return; }
-      if(state.editingSectionId){
-        const sec = state.sections.find(s=>s.id===state.editingSectionId);
-        if(sec){ sec.name = name; }
-      } else {
-        const maxOrder = state.sections.reduce((m,s)=>Math.max(m,s.order||0),0);
-        state.sections.push({ id: generateId("sec"), name, visible:true, order: maxOrder+1 });
-      }
-      saveLocal();
-      sectionModal.style.display = "none";
+    document.addEventListener("DOMContentLoaded",()=>{
+      loadData();
       render();
     });
-
-    document.getElementById("deleteSection").addEventListener("click", ()=>{
-      if(!state.editingSectionId) return;
-      if(!confirm("确定删除该栏目及其下所有站点吗？")) return;
-      state.sites = state.sites.filter(s=>s.sectionId !== state.editingSectionId);
-      state.sections = state.sections.filter(s=>s.id !== state.editingSectionId);
-      saveLocal();
-      sectionModal.style.display = "none";
-      render();
-    });
-
-    // Site modal handlers
-    function openSiteModal(siteId){
-      state.editingSiteId = siteId;
-      const title = document.getElementById("siteModalTitle");
-      const nameInput = document.getElementById("siteName");
-      const urlInput = document.getElementById("siteUrl");
-      const tagsInput = document.getElementById("siteTags");
-      const sectionSelect = document.getElementById("siteSectionSelect");
-      const deleteBtn = document.getElementById("deleteSite");
-
-      // populate section select
-      sectionSelect.innerHTML = "";
-      state.sections.sort((a,b)=> (a.order||0)-(b.order||0)).forEach(sec=>{
-        const opt = document.createElement("option");
-        opt.value = sec.id;
-        opt.textContent = sec.name;
-        sectionSelect.appendChild(opt);
-      });
-
-      if(siteId){
-        const site = state.sites.find(s=>s.id===siteId);
-        if(!site) return;
-        title.textContent = "编辑站点";
-        nameInput.value = site.name || "";
-        urlInput.value = site.url || "";
-        tagsInput.value = (site.tags || []).join(", ");
-        sectionSelect.value = site.sectionId || (state.sections[0] && state.sections[0].id);
-        deleteBtn.style.display = "inline-flex";
-      } else {
-        title.textContent = "新增站点";
-        nameInput.value = "";
-        urlInput.value = "";
-        tagsInput.value = "";
-        sectionSelect.value = state.sections[0] && state.sections[0].id;
-        deleteBtn.style.display = "none";
-      }
-      siteModal.style.display = "flex";
-      setTimeout(()=>nameInput.focus(),50);
-    }
-
-    document.getElementById("saveSite").addEventListener("click", ()=>{
-      const name = document.getElementById("siteName").value.trim();
-      const url = document.getElementById("siteUrl").value.trim();
-      const tagsRaw = document.getElementById("siteTags").value.trim();
-      const sectionId = document.getElementById("siteSectionSelect").value;
-      if(!name){ alert("站点名称不能为空"); return; }
-      if(!url){ alert("URL 不能为空"); return; }
-      const tags = tagsRaw ? tagsRaw.split(",").map(t=>t.trim()).filter(Boolean) : [];
-      if(state.editingSiteId){
-        const site = state.sites.find(s=>s.id===state.editingSiteId);
-        if(site){
-          site.name = name; site.url = url; site.tags = tags; site.sectionId = sectionId;
-        }
-      } else {
-        const maxOrder = state.sites.filter(s=>s.sectionId===sectionId).reduce((m,s)=>Math.max(m,s.order||0),0);
-        state.sites.push({ id: generateId("site"), sectionId, name, url, tags, visible:true, order: maxOrder+1 });
-      }
-      saveLocal();
-      siteModal.style.display = "none";
-      render();
-    });
-
-    document.getElementById("deleteSite").addEventListener("click", ()=>{
-      if(!state.editingSiteId) return;
-      if(!confirm("确定删除该站点吗？")) return;
-      state.sites = state.sites.filter(s=>s.id !== state.editingSiteId);
-      saveLocal();
-      siteModal.style.display = "none";
-      render();
-    });
-
-    // Export / Import
-    document.getElementById("exportBtn").addEventListener("click", ()=> exportConfig());
-    document.getElementById("importBtn").addEventListener("click", ()=> document.getElementById("fileInput").click());
-    document.getElementById("fileInput").addEventListener("change", (e)=>{
-      const f = e.target.files[0];
-      if(f) importConfigFile(f);
-      e.target.value = "";
-    });
-
-    // Close modals on backdrop click
-    document.querySelectorAll('.modal-backdrop').forEach(mb=>{
-      mb.addEventListener('click', (e)=>{
-        if(e.target === mb) mb.style.display = 'none';
-      });
-    });
-
-    // Search input
-    document.getElementById("searchInput").addEventListener("input", ()=> render());
-
-    // Initial load
-    loadData();
-    render();
-
-    // Expose some helpers for quick testing in console (optional)
-    window.__TSINHO = {
-      state,
-      saveLocal,
-      exportConfig,
-      loadData,
-      render
-    };
-  </script>
-</body>
-</html>
-```Listener("input", ()=> render());
-
-    // Initial load
-    loadData();
-    render();
-
-    // Expose some helpers for quick testing in console (optional)
-    window.__TSINHO = {
-      state,
-      saveLocal,
-      exportConfig,
-      loadData,
-      render
-    };
-  </script>
-</body>
-</html>
-```exportBtn").addEventListener("click", ()=> exportConfig());
-    document.getElementById("importBtn").addEventListener("click", ()=> document.getElementById("fileInput").click());
-    document.getElementById("fileInput").addEventListener("change", (e)=>{
-      const f = e.target.files[0];
-      if(f) importConfigFile(f);
-      e.target.value = "";
-    });
-
-    // Close modals on backdrop click
-    document.querySelectorAll('.modal-backdrop').forEach(mb=>{
-      mb.addEventListener('click', (e)=>{
-        if(e.target === mb) mb.style.display = 'none';
-      });
-    });
-
-    // Search input
-    document.getElementById("searchInput").addEventListener("input", ()=> render());
-
-    // Initial load
-    loadData();
-    render();
-
-    // Expose some helpers for quick testing in console (optional)
-    window.__TSINHO = {
-      state,
-      saveLocal,
-      exportConfig,
-      loadData,
-      render
-    };
   </script>
 </body>
 </html>
