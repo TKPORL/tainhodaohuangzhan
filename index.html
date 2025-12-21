@@ -1,267 +1,349 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <title>Tsinho导航站</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#F2F2F7" />
-  <style>
-    :root{
-      --bg:#F2F2F7;
-      --card:#FFFFFF;
-      --glass: rgba(255,255,255,0.82);
-      --radius-lg:16px;
-      --radius-md:12px;
-      --shadow: 0 6px 18px rgba(16,24,40,0.06);
-      --accent:#0A84FF;
-      --muted:#6B7280;
-      --text:#111827;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
-      background:var(--bg);
-      color:var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      padding-bottom:env(safe-area-inset-bottom);
-    }
-
-    /* Shell */
-    .app-shell{
-      max-width:1080px;
-      margin:0 auto;
-      padding:16px;
-    }
-
-    /* Header */
-    .app-header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:12px 14px;
-      border-radius:14px;
-      background:var(--glass);
-      backdrop-filter: blur(14px) saturate(1.2);
-      box-shadow:var(--shadow);
-    }
-    .title-wrap{display:flex;flex-direction:column;min-width:0}
-    .app-title{font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .app-sub{font-size:12px;color:var(--muted)}
-
-    /* Search */
-    .search-bar{
-      display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(248,250,252,0.95);
-      min-width:220px;box-shadow:0 2px 6px rgba(0,0,0,0.04)
-    }
-    .search-input{border:none;background:transparent;outline:none;font-size:14px;color:inherit;width:220px}
-
-    /* Content */
-    .content{margin-top:16px;display:flex;flex-direction:column;gap:14px;min-height:60vh}
-    .section-card{
-      border-radius:var(--radius-lg);
-      padding:12px;
-      background:var(--glass);
-      backdrop-filter: blur(18px) saturate(1.2);
-      box-shadow:var(--shadow);
-    }
-    .section-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
-    .section-title{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
-    .section-hint{font-size:12px;color:var(--muted)}
-
-    .sites-grid{
-      display:grid;
-      gap:12px;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    }
-    .site-item{
-      display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:var(--card);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.04);
-      transition:transform .16s ease,box-shadow .16s ease;
-    }
-    .site-item:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(16,24,40,0.08)}
-    .site-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,rgba(10,132,255,0.08),rgba(16,185,129,0.06));display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);flex-shrink:0}
-    .site-meta{min-width:0;flex:1}
-    .site-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .site-tags{margin-top:6px;display:flex;gap:6px;flex-wrap:nowrap;overflow:hidden}
-    .tag{font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(148,163,184,0.12);color:#374151;white-space:nowrap}
-
-    /* Responsive tweaks */
-    @media (max-width:640px){
-      .search-input{width:120px}
-      .sites-grid{grid-template-columns:repeat(2,1fr)}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tsinho导航站</title>
+    <style>
+        :root{ 
+            --bg:#F2F2F7; 
+            --card:#FFFFFF; 
+            --glass: rgba(255,255,255,0.82); 
+            --radius-lg:16px; 
+            --radius-md:12px; 
+            --shadow: 0 6px 18px rgba(16,24,40,0.06); 
+            --accent:#0A84FF; 
+            --muted:#6B7280; 
+            --text:#111827; 
+        } 
+        *{box-sizing:border-box; margin:0; padding:0;} 
+        html,body{height:100%; background:var(--bg);} 
+        body{ 
+            font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial; 
+            color:var(--text); 
+            -webkit-font-smoothing:antialiased; 
+            -moz-osx-font-smoothing:grayscale; 
+            padding:16px; 
+        } 
+        /* 头部容器 - 合并标题和搜索栏并居中 */
+        .header-container {
+            background:var(--glass);
+            backdrop-filter: blur(14px) saturate(1.2);
+            box-shadow:var(--shadow);
+            border-radius:var(--radius-lg);
+            padding:20px;
+            margin:0 auto 16px;
+            text-align:center;
+            max-width:800px;
+        }
+        .app-title{
+            font-size:24px;
+            font-weight:700;
+            margin-bottom:12px;
+            color:var(--text);
+        }
+        /* Search */ 
+        .search-bar{ 
+            display:flex;
+            align-items:center;
+            gap:8px;
+            padding:10px 16px;
+            border-radius:999px;
+            background:rgba(248,250,252,0.95);
+            box-shadow:0 2px 6px rgba(0,0,0,0.04);
+            max-width:500px;
+            margin:0 auto;
+        } 
+        .search-input{
+            border:none;
+            background:transparent;
+            outline:none;
+            font-size:14px;
+            color:inherit;
+            flex:1;
+            min-width:0;
+        }
+        /* Content */ 
+        .content{
+            margin:0 auto;
+            max-width:1080px;
+            display:flex;
+            flex-direction:column;
+            gap:14px;
+            min-height:60vh;
+        } 
+        .section-card{ 
+            border-radius:var(--radius-lg); 
+            padding:16px; 
+            background:var(--glass); 
+            backdrop-filter: blur(18px) saturate(1.2); 
+            box-shadow:var(--shadow); 
+        } 
+        .section-header{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:8px;
+            margin-bottom:12px;
+        } 
+        .section-title{
+            font-size:16px;
+            font-weight:600;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        } 
+        .section-hint{
+            font-size:12px;
+            color:var(--muted);
+        } 
+        .sites-grid{ 
+            display:grid; 
+            gap:10px; /* 减小网格间距防止溢出 */
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+        } 
+        .site-item{ 
+            display:flex;
+            align-items:center;
+            gap:10px;
+            padding:10px; /* 减小内边距防止溢出 */
+            border-radius:12px;
+            background:var(--card);
+            cursor:pointer;
+            box-shadow:0 2px 6px rgba(0,0,0,0.04); 
+            transition:transform .16s ease,box-shadow .16s ease;
+            width:100%;
+            box-sizing:border-box;
+        } 
+        .site-item:hover{
+            transform:translateY(-4px);
+            box-shadow:0 8px 20px rgba(16,24,40,0.08);
+        } 
+        .site-icon{
+            width:40px;
+            height:40px;
+            border-radius:10px;
+            background:linear-gradient(135deg,rgba(10,132,255,0.08),rgba(16,185,129,0.06));
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:700;
+            color:var(--accent);
+            flex-shrink:0;
+            overflow:hidden;
+        } 
+        .site-meta{
+            min-width:0;
+            flex:1;
+        } 
+        .site-name{
+            font-size:14px;
+            font-weight:600;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        } 
+        .site-tags{
+            margin-top:4px;
+            display:flex;
+            gap:6px;
+            flex-wrap:nowrap;
+            overflow:hidden;
+        } 
+        .tag{
+            font-size:11px;
+            padding:3px 8px;
+            border-radius:999px;
+            background:rgba(148,163,184,0.12);
+            color:#374151;
+            white-space:nowrap;
+        } 
+        /* Responsive tweaks */ 
+        @media (max-width:640px){ 
+            .search-bar{
+                max-width:100%;
+            }
+            .sites-grid{
+                grid-template-columns:repeat(2,1fr);
+                gap:8px;
+            }
+            .app-title{
+                font-size:20px;
+            }
+            .site-item{
+                padding:8px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="app-header" role="banner">
-      <div class="title-wrap">
+    <div class="header-container">
         <div class="app-title">Tsinho导航站</div>
-        <div class="app-sub">直接展示栏目与站点 · 简洁导航</div>
-      </div>
+        <div class="search-bar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 21L16.65 16.65" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="搜索站点或标签...">
+        </div>
+    </div>
 
-      <div class="search-bar" title="搜索站点或标签">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:#9CA3AF"><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-        <input id="searchInput" class="search-input" placeholder="搜索站点或标签…" />
-      </div>
-    </header>
+    <div id="contentArea" class="content"></div>
 
-    <main class="content" id="contentArea">
-      <!-- Sections injected by JS -->
-    </main>
-  </div>
-
-  <script>
-    // Storage & version
-    const STORAGE_KEY = "tsinho-nav-home-v1";
-    const DATA_VERSION = "2025-12-21-v1"; // 更新默认数据后请修改版本号以覆盖旧 localStorage
-
-    // App state
-    let state = { sections: [], sites: [] };
-
-    // Default data (edit here if needed)
-    function defaultData(){
-      const defaultSections = [
-        { id: "sec-tsinho", name: "Tsinho资源库", visible: true, order: 1 },
-        { id: "sec-netdisk", name: "网盘合集", visible: true, order: 2 }
-      ];
-      const defaultSites = [
-        { id: "site-1", sectionId: "sec-tsinho", name: "全资源合集", url: "https://yun.139.com/shareweb/#/w/i/2s2yiTvk1Gwfg", tags: ["破解","黄油"], visible: true, order: 1 },
-        { id: "site-2", sectionId: "sec-tsinho", name: "实用软件", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJ9TZfu", tags: ["软件","破解"], visible: true, order: 2 },
-        { id: "site-3", sectionId: "sec-tsinho", name: "老司机", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raFw08w", tags: ["涩涩","绅士"], visible: true, order: 3 },
-        { id: "site-4", sectionId: "sec-tsinho", name: "V2节点", url: "https://yun.139.com/shareweb/#/w/i/2s2xRbrCozatn", tags: ["节点"], visible: true, order: 4 },
-        { id: "site-5", sectionId: "sec-tsinho", name: "绅士壁纸分享", url: "https://yun.139.com/shareweb/#/w/i/2s2xR8rp0ysdz", tags: ["涩图","壁纸"], visible: true, order: 5 },
-        { id: "site-6", sectionId: "sec-tsinho", name: "网盘帮下目录", url: "https://yun.139.com/shareweb/#/w/i/2s2xRksiedhqv", tags: ["网盘帮下"], visible: true, order: 6 },
-        { id: "site-7", sectionId: "sec-tsinho", name: "iOS签名证书", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raHuepx", tags: ["iOS","证书"], visible: true, order: 7 },
-        { id: "site-8", sectionId: "sec-tsinho", name: "资源更新文档", url: "https://yun.139.com/shareweb/#/w/i/2s2xQJpAR7Vqw", tags: ["更新通知"], visible: true, order: 8 },
-
-        { id: "site-9", sectionId: "sec-netdisk", name: "网盘工具", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJcfUm6", tags: ["工具"], visible: true, order: 1 },
-        { id: "site-10", sectionId: "sec-netdisk", name: "网盘教程", url: "https://dcnl6jstdzjw.feishu.cn/wiki/AgCBwxKSPinKYyko2qSc2SgmnMh", tags: ["教程"], visible: true, order: 2 }
-      ];
-      return { sections: defaultSections, sites: defaultSites };
-    }
-
-    // Load & save
-    function loadData(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        const ver = localStorage.getItem(STORAGE_KEY + "-version");
-        if(!raw || ver !== DATA_VERSION){
-          const d = defaultData();
-          state.sections = d.sections;
-          state.sites = d.sites;
-          saveLocal();
-          localStorage.setItem(STORAGE_KEY + "-version", DATA_VERSION);
-        } else {
-          const parsed = JSON.parse(raw);
-          state.sections = parsed.sections || [];
-          state.sites = parsed.sites || [];
+    <script>
+        // Storage & version
+        const STORAGE_KEY = "tsinho-nav-home-v1";
+        const DATA_VERSION = "2025-12-21-v3";
+        
+        // App state
+        let state = { sections: [], sites: [] };
+        
+        // Default data
+        function defaultData(){
+            const defaultSections = [
+                { id: "sec-tsinho", name: "Tsinho资源库", visible: true, order: 1 },
+                { id: "sec-netdisk", name: "网盘合集", visible: true, order: 2 }
+            ];
+            
+            const defaultSites = [
+                { id: "site-1", sectionId: "sec-tsinho", name: "全资源合集", url: "https://yun.139.com/shareweb/#/w/i/2s2yiTvk1Gwfg", tags: ["破解","黄油"], visible: true, order: 1 },
+                { id: "site-2", sectionId: "sec-tsinho", name: "实用软件", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJ9TZfu", tags: ["软件","破解"], visible: true, order: 2 },
+                { id: "site-3", sectionId: "sec-tsinho", name: "老司机", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raFw08w", tags: ["涩涩","绅士"], visible: true, order: 3 },
+                { id: "site-4", sectionId: "sec-tsinho", name: "V2节点", url: "https://yun.139.com/shareweb/#/w/i/2s2xRbrCozatn", tags: ["节点"], visible: true, order: 4 },
+                { id: "site-5", sectionId: "sec-tsinho", name: "绅士壁纸分享", url: "https://yun.139.com/shareweb/#/w/i/2s2xR8rp0ysdz", tags: ["涩图","壁纸"], visible: true, order: 5 },
+                { id: "site-6", sectionId: "sec-tsinho", name: "网盘帮下目录", url: "https://yun.139.com/shareweb/#/w/i/2s2xRksiedhqv", tags: ["网盘帮下"], visible: true, order: 6 },
+                { id: "site-7", sectionId: "sec-tsinho", name: "iOS签名证书", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raHuepx", tags: ["iOS","证书"], visible: true, order: 7 },
+                { id: "site-8", sectionId: "sec-tsinho", name: "资源更新文档", url: "https://yun.139.com/shareweb/#/w/i/2s2xQJpAR7Vqw", tags: ["更新通知"], visible: true, order: 8 },
+                { id: "site-9", sectionId: "sec-netdisk", name: "网盘工具", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJcfUm6", tags: ["工具"], visible: true, order: 1 },
+                { id: "site-10", sectionId: "sec-netdisk", name: "网盘教程", url: "https://dcnl6jstdzjw.feishu.cn/wiki/AgCBwxKSPinKYyko2qSc2SgmnMh", tags: ["教程"], visible: true, order: 2 }
+            ];
+            
+            return { sections: defaultSections, sites: defaultSites };
         }
-      }catch(e){
-        console.error("loadData error", e);
-        const d = defaultData();
-        state.sections = d.sections;
-        state.sites = d.sites;
-      }
-    }
-
-    function saveLocal(){
-      const payload = { sections: state.sections, sites: state.sites };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-    }
-
-    // Render
-    const contentArea = document.getElementById("contentArea");
-    function render(){
-      contentArea.innerHTML = "";
-      const q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
-
-      const sections = state.sections.slice().sort((a,b)=> (a.order||0)-(b.order||0));
-      for(const sec of sections){
-        if(!sec.visible) continue;
-        const secCard = document.createElement("section");
-        secCard.className = "section-card";
-
-        const header = document.createElement("div");
-        header.className = "section-header";
-        const left = document.createElement("div");
-        left.className = "section-title";
-        left.textContent = sec.name;
-        header.appendChild(left);
-
-        const right = document.createElement("div");
-        right.className = "section-hint";
-        const count = state.sites.filter(s => s.sectionId === sec.id && s.visible).length;
-        right.textContent = `${count} 个站点`;
-        header.appendChild(right);
-
-        secCard.appendChild(header);
-
-        const grid = document.createElement("div");
-        grid.className = "sites-grid";
-
-        const sites = state.sites
-          .filter(s => s.sectionId === sec.id && s.visible)
-          .filter(s => {
-            if(!q) return true;
-            const inName = (s.name || "").toLowerCase().includes(q);
-            const inTags = (s.tags || []).some(t => (t||"").toLowerCase().includes(q));
-            return inName || inTags;
-          })
-          .sort((a,b)=> (a.order||0)-(b.order||0));
-
-        for(const site of sites){
-          const item = document.createElement("div");
-          item.className = "site-item";
-
-          const icon = document.createElement("div");
-          icon.className = "site-icon";
-          icon.textContent = (site.name || "S").slice(0,1).toUpperCase();
-
-          const meta = document.createElement("div");
-          meta.className = "site-meta";
-          const name = document.createElement("div");
-          name.className = "site-name";
-          name.textContent = site.name;
-          const tagsWrap = document.createElement("div");
-          tagsWrap.className = "site-tags";
-          (site.tags || []).slice(0,3).forEach(t => {
-            const tag = document.createElement("div");
-            tag.className = "tag";
-            tag.textContent = t;
-            tagsWrap.appendChild(tag);
-          });
-
-          meta.appendChild(name);
-          meta.appendChild(tagsWrap);
-
-          item.appendChild(icon);
-          item.appendChild(meta);
-
-          item.addEventListener("click", () => {
-            if(site.url) window.open(site.url, "_blank");
-          });
-
-          grid.appendChild(item);
+        
+        // Load & save
+        function loadData(){
+            try{
+                const raw = localStorage.getItem(STORAGE_KEY);
+                const ver = localStorage.getItem(STORAGE_KEY + "-version");
+                
+                if(!raw || ver !== DATA_VERSION){
+                    const d = defaultData();
+                    state.sections = d.sections;
+                    state.sites = d.sites;
+                    saveLocal();
+                    localStorage.setItem(STORAGE_KEY + "-version", DATA_VERSION);
+                } else {
+                    const parsed = JSON.parse(raw);
+                    state.sections = parsed.sections || [];
+                    state.sites = parsed.sites || [];
+                }
+            }catch(e){
+                console.error("loadData error", e);
+                const d = defaultData();
+                state.sections = d.sections;
+                state.sites = d.sites;
+            }
         }
-
-        secCard.appendChild(grid);
-        contentArea.appendChild(secCard);
-      }
-    }
-
-    // Search binding
-    document.getElementById("searchInput").addEventListener("input", ()=> render());
-
-    // Init
-    loadData();
-    render();
-
-    // Expose for console debugging (optional)
-    window.__TSINHO = { state, saveLocal, loadData, render };
-  </script>
+        
+        function saveLocal(){
+            const payload = { sections: state.sections, sites: state.sites };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        }
+        
+        // Render
+        const contentArea = document.getElementById("contentArea");
+        function render(){
+            contentArea.innerHTML = "";
+            const q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+            
+            const sections = state.sections.slice().sort((a,b)=> (a.order||0)-(b.order||0));
+            
+            for(const sec of sections){
+                if(!sec.visible) continue;
+                
+                const secCard = document.createElement("section");
+                secCard.className = "section-card";
+                
+                const header = document.createElement("div");
+                header.className = "section-header";
+                
+                const left = document.createElement("div");
+                left.className = "section-title";
+                left.textContent = sec.name;
+                header.appendChild(left);
+                
+                const right = document.createElement("div");
+                right.className = "section-hint";
+                const count = state.sites.filter(s => s.sectionId === sec.id && s.visible).length;
+                right.textContent = `${count} 个站点`;
+                header.appendChild(right);
+                
+                secCard.appendChild(header);
+                
+                const grid = document.createElement("div");
+                grid.className = "sites-grid";
+                
+                const sites = state.sites
+                    .filter(s => s.sectionId === sec.id && s.visible)
+                    .filter(s => {
+                        if(!q) return true;
+                        const inName = (s.name || "").toLowerCase().includes(q);
+                        const inTags = (s.tags || []).some(t => (t||"").toLowerCase().includes(q));
+                        return inName || inTags;
+                    })
+                    .sort((a,b)=> (a.order||0)-(b.order||0));
+                
+                for(const site of sites){
+                    const item = document.createElement("div");
+                    item.className = "site-item";
+                    
+                    const icon = document.createElement("div");
+                    icon.className = "site-icon";
+                    icon.textContent = (site.name || "S").slice(0,1).toUpperCase();
+                    
+                    const meta = document.createElement("div");
+                    meta.className = "site-meta";
+                    
+                    const name = document.createElement("div");
+                    name.className = "site-name";
+                    name.textContent = site.name;
+                    
+                    const tagsWrap = document.createElement("div");
+                    tagsWrap.className = "site-tags";
+                    (site.tags || []).slice(0,3).forEach(t => {
+                        const tag = document.createElement("div");
+                        tag.className = "tag";
+                        tag.textContent = t;
+                        tagsWrap.appendChild(tag);
+                    });
+                    
+                    meta.appendChild(name);
+                    meta.appendChild(tagsWrap);
+                    item.appendChild(icon);
+                    item.appendChild(meta);
+                    
+                    item.addEventListener("click", () => {
+                        if(site.url) window.open(site.url, "_blank");
+                    });
+                    
+                    grid.appendChild(item);
+                }
+                
+                secCard.appendChild(grid);
+                contentArea.appendChild(secCard);
+            }
+        }
+        
+        // Search binding
+        document.getElementById("searchInput").addEventListener("input", ()=> render());
+        
+        // Init
+        loadData();
+        render();
+        
+        // Expose for console debugging
+        window.__TSINHO = { state, saveLocal, loadData, render };
+    </script>
 </body>
 </html>
