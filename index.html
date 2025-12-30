@@ -2,800 +2,360 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Tsinho导航站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Tsinho导航站 - 全网资源极速版</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== 舒适尺寸（约1.6倍放大） ===== */
-        :root {
-            /* iOS色彩系统 */
-            --ios-bg: #F2F2F7;
-            --ios-card-bg: #FFFFFF;
-            --ios-card-bg-dark: rgba(255, 255, 255, 0.8);
-            --ios-primary: #007AFF;
-            --ios-primary-light: #409CFF;
-            --ios-secondary: #8E8E93;
-            --ios-green: #34C759;
-            --ios-orange: #FF9500;
-            --ios-red: #FF3B30;
-            --ios-purple: #AF52DE;
-            --ios-pink: #FF2D55;
-            
-            /* iOS文字系统 */
-            --ios-text-primary: #000000;
-            --ios-text-secondary: #3C3C43;
-            --ios-text-tertiary: #8E8E93;
-            --ios-text-quaternary: #C7C7CC;
-            
-            /* 尺寸系统 */
-            --ios-radius-sm: 14px;
-            --ios-radius-md: 20px;
-            --ios-radius-lg: 28px;
-            --ios-radius-xl: 38px;
-            --ios-radius-circle: 50%;
-            
-            /* 间距系统 - 适当减小以适配单屏 */
-            --ios-space-xs: 6px;
-            --ios-space-sm: 10px;
-            --ios-space-md: 18px;
-            --ios-space-lg: 24px;
-            --ios-space-xl: 30px;
-            --ios-space-xxl: 36px;
-            
-            /* iOS阴影系统 */
-            --ios-shadow-subtle: 0 6px 18px rgba(0, 0, 0, 0.08);
-            --ios-shadow-medium: 0 12px 36px rgba(0, 0, 0, 0.12);
-            --ios-shadow-strong: 0 18px 54px rgba(0, 0, 0, 0.16);
-            
-            /* iOS动画曲线 */
-            --ios-ease-in: cubic-bezier(0.42, 0, 1, 1);
-            --ios-ease-out: cubic-bezier(0, 0, 0.58, 1);
-            --ios-ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
-            --ios-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            
-            /* 安全区域 */
-            --safe-area-inset-top: env(safe-area-inset-top, 0px);
-            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
-        }
-        
-        /* 全局重置 */
+        /* ===== 全局重置与宽屏适配 ===== */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
         }
         
-        html, body {
-            height: 100%;
-            width: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Segoe UI", sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            background-color: var(--ios-bg);
-            color: var(--ios-text-primary);
-            overflow: hidden; /* 禁止滚动 */
-            font-size: 22px;
+        body {
+            background-color: #F8F9FB;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
         }
-        
-        /* 主容器 */
-        .ios-container {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            position: relative;
+
+        .app-container {
+            width: 96%; 
+            max-width: 1300px; 
+            min-height: 100vh;
+            padding: 80px 20px;
             display: flex;
             flex-direction: column;
         }
         
-        /* 主滚动区域 - 改为普通容器，移除滚动 */
-        .ios-scroll-view {
-            flex: 1;
+        /* 标题区域 */
+        .app-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+        
+        .app-title {
+            font-size: 85px; 
+            font-weight: 900;
+            letter-spacing: -3px;
+            margin-bottom: 25px;
+            color: #1c1c1e;
+        }
+        
+        .app-subtitle {
+            font-size: 38px;
+            color: #636366;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        
+        /* 搜索框 */
+        .search-container {
+            margin: 0 auto 80px;
             width: 100%;
-            padding: var(--ios-space-md);
-            padding-top: calc(var(--ios-space-xl) + var(--safe-area-inset-top));
-            padding-bottom: var(--safe-area-inset-bottom);
-            overflow: hidden; /* 禁止滚动 */
+            max-width: 900px; 
         }
         
-        /* iOS标题栏 */
-        .ios-header {
-            padding: 0 var(--ios-space-md) var(--ios-space-lg);
-            position: relative;
-            margin-bottom: var(--ios-space-md);
-        }
-        
-        .ios-header-title {
-            font-size: 60px;
-            font-weight: 800;
-            color: var(--ios-text-primary);
-            letter-spacing: -0.5px;
-            line-height: 1.1;
-        }
-        
-        .ios-header-subtitle {
-            font-size: 32px;
-            font-weight: 400;
-            color: var(--ios-text-tertiary);
-            margin-top: var(--ios-space-xs);
-        }
-        
-        /* iOS搜索框 */
-        .ios-search-container {
-            padding: 0 var(--ios-space-md) var(--ios-space-xl);
-        }
-        
-        .ios-search-bar {
-            background-color: var(--ios-card-bg-dark);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--ios-radius-xl);
-            padding: var(--ios-space-lg) var(--ios-space-xl);
+        .search-box {
+            background: #FFFFFF;
+            border-radius: 45px;
+            padding: 40px 60px;
             display: flex;
             align-items: center;
-            box-shadow: var(--ios-shadow-subtle);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            min-height: 82px;
+            gap: 35px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.03);
         }
         
-        .ios-search-icon {
-            color: var(--ios-text-tertiary);
-            margin-right: var(--ios-space-md);
-            font-size: 32px;
-        }
-        
-        .ios-search-input {
+        .search-icon { font-size: 48px; color: #007AFF; }
+        .search-input {
             flex: 1;
             border: none;
-            background: transparent;
-            font-size: 30px;
-            color: var(--ios-text-primary);
             outline: none;
-            font-weight: 400;
+            font-size: 42px;
+            font-weight: 500;
+            color: #1c1c1e;
         }
-        
-        .ios-search-input::placeholder {
-            color: var(--ios-text-tertiary);
-        }
-        
-        /* iOS卡片 */
-        .ios-card {
-            background-color: var(--ios-card-bg);
-            border-radius: var(--ios-radius-lg);
-            margin-bottom: var(--ios-space-lg); /* 减小间距 */
-            overflow: hidden;
-            box-shadow: var(--ios-shadow-subtle);
-            transition: all 0.25s var(--ios-ease-out);
-            position: relative;
-        }
-        
-        .ios-card:active {
-            transform: scale(0.98);
-            opacity: 0.9;
-        }
-        
-        .ios-card-header {
-            padding: var(--ios-space-lg);
-            border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+
+        /* 分类标题 */
+        .card-title {
+            font-size: 54px;
+            font-weight: 800;
+            margin-bottom: 45px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
+            padding: 0 25px;
+            border-left: 18px solid #007AFF;
         }
-        
-        .ios-card-title {
-            font-size: 40px;
-            font-weight: 700;
-            color: var(--ios-text-primary);
-            display: flex;
-            align-items: center;
-            gap: var(--ios-space-sm);
+
+        .card-count {
+            font-size: 36px;
+            background: rgba(0,122,255,0.12);
+            color: #007AFF;
+            padding: 12px 35px;
+            border-radius: 50px;
         }
-        
-        .ios-card-badge {
-            background-color: var(--ios-primary);
-            color: white;
-            font-size: 24px;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: var(--ios-radius-circle);
-            min-width: 42px;
-            text-align: center;
-        }
-        
-        /* iOS网格布局 */
-        .ios-grid {
+
+        /* 核心 1 行 2 列 */
+        .grid-layout {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1px;
-            background-color: rgba(0, 0, 0, 0.05);
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 35px; 
+            margin-bottom: 90px;
         }
         
-        /* 百度解析站特殊样式 - 整行居中 */
-        .ios-app-item-fullwidth {
-            grid-column: span 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: var(--ios-space-lg);
-            min-height: 160px;
-        }
-        
-        .ios-app-fullwidth-content {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: var(--ios-space-md);
-        }
-        
-        /* iOS应用图标样式 */
-        .ios-app-item {
-            background-color: var(--ios-card-bg);
-            padding: var(--ios-space-lg);
+        .big-button {
+            background: #FFFFFF;
+            border-radius: 55px;
+            padding: 70px 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            position: relative;
-            transition: all 0.2s var(--ios-ease-out);
+            justify-content: center;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
             cursor: pointer;
-            -webkit-tap-highlight-color: rgba(0, 122, 255, 0.1);
-            min-height: 240px;
+        }
+
+        .big-button:active {
+            transform: scale(0.96);
         }
         
-        /* 移除了点击时的蓝色背景效果 */
-        .ios-app-item:active {
-            /* 完全移除或改为透明 */
-            background-color: transparent;
-        }
-        
-        .ios-app-icon {
-            width: 110px;
-            height: 110px;
-            border-radius: var(--ios-radius-md);
-            background: linear-gradient(135deg, var(--ios-primary), var(--ios-primary-light));
+        .button-icon {
+            width: 160px;
+            height: 160px;
+            border-radius: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            font-size: 75px;
+            margin-bottom: 40px;
+        }
+        
+        .button-name {
+            font-size: 48px;
             font-weight: 700;
-            font-size: 40px;
-            margin-bottom: var(--ios-space-md);
-            box-shadow: 0 10px 28px rgba(0, 122, 255, 0.2);
-            transition: all 0.3s var(--ios-spring);
+            color: #1c1c1e;
+            margin-bottom: 20px;
         }
-        
-        .ios-app-item:active .ios-app-icon {
-            transform: scale(0.92);
+
+        .button-tag {
+            font-size: 30px;
+            background: #F2F2F7;
+            color: #8E8E93;
+            padding: 12px 28px;
+            border-radius: 18px;
         }
-        
-        .ios-app-name {
-            font-size: 32px; /* 应用名称更大 */
-            font-weight: 600;
-            color: var(--ios-text-primary);
-            margin-bottom: var(--ios-space-xs);
-            line-height: 1.2;
+
+        .blue { background: linear-gradient(135deg, #007AFF, #0056b3); }
+        .green { background: linear-gradient(135deg, #34C759, #28a745); }
+        .orange { background: linear-gradient(135deg, #FF9500, #e67e00); }
+        .purple { background: linear-gradient(135deg, #AF52DE, #8e44ad); }
+        .pink { background: linear-gradient(135deg, #FF2D55, #d81b43); }
+        .dark-blue { background: linear-gradient(135deg, #5856D6, #4834d4); }
+        .red { background: linear-gradient(135deg, #FF3B30, #c0392b); }
+
+        .app-footer {
+            padding: 100px 0;
+            text-align: center;
+            font-size: 34px;
+            color: #AEAEB2;
+            line-height: 2;
+            border-top: 2px solid #E5E5EA;
         }
-        
-        .ios-app-tags {
-            display: flex;
-            gap: var(--ios-space-xs);
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .ios-app-tag {
-            font-size: 20px; /* 标签文字更大 */
-            padding: 6px 14px;
-            border-radius: var(--ios-radius-circle);
-            background-color: rgba(142, 142, 147, 0.12);
-            color: var(--ios-text-tertiary);
-            font-weight: 500;
-        }
-        
-        /* iOS模态框 */
-        .ios-modal-overlay {
+
+        /* 巨大化弹窗 */
+        .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.4);
-            z-index: 2000;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s var(--ios-ease-out);
-        }
-        
-        .ios-modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        
-        .ios-modal {
-            background-color: var(--ios-card-bg);
-            border-radius: var(--ios-radius-lg) var(--ios-radius-lg) 0 0;
-            width: 100%;
-            max-width: 600px;
-            transform: translateY(100%);
-            transition: transform 0.4s var(--ios-spring);
-            box-shadow: 0 -12px 72px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        
-        .ios-modal-overlay.active .ios-modal {
-            transform: translateY(0);
-        }
-        
-        .ios-modal-header {
-            padding: var(--ios-space-lg);
-            text-align: center;
-            border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        
-        .ios-modal-title {
-            font-size: 40px; /* 模态标题更大 */
-            font-weight: 700;
-            color: var(--ios-text-primary);
-        }
-        
-        .ios-modal-close {
-            position: absolute;
-            top: var(--ios-space-lg);
-            right: var(--ios-space-lg);
-            width: 60px;
-            height: 60px;
-            border-radius: var(--ios-radius-circle);
-            background-color: rgba(0, 0, 0, 0.05);
-            display: flex;
+            inset: 0;
+            background: rgba(0,0,0,0.75); 
+            display: none;
             align-items: center;
             justify-content: center;
-            color: var(--ios-text-secondary);
-            font-size: 30px;
-            cursor: pointer;
-            transition: background-color 0.2s;
+            padding: 30px;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+        }
+        .modal-overlay.active { display: flex; }
+        
+        .modal-content {
+            background: white;
+            width: 95%;
+            max-width: 950px; 
+            border-radius: 80px;
+            padding: 90px 70px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+        }
+
+        .modal-title { 
+            font-size: 65px; 
+            font-weight: 900; 
+            margin-bottom: 70px; 
+            text-align: center; 
         }
         
-        .ios-modal-close:active {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-        
-        .ios-modal-body {
-            padding: var(--ios-space-lg);
-        }
-        
-        .ios-modal-option {
-            padding: var(--ios-space-lg);
-            border-radius: var(--ios-radius-md);
+        .modal-option {
+            background: #F8F9FB;
+            padding: 70px; 
+            border-radius: 55px;
             display: flex;
             align-items: center;
-            gap: var(--ios-space-md);
-            transition: background-color 0.2s;
+            gap: 60px;
+            margin-bottom: 40px;
             cursor: pointer;
-            margin-bottom: var(--ios-space-sm);
         }
-        
-        .ios-modal-option:active {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-        
-        .ios-modal-option:last-child {
-            margin-bottom: 0;
-        }
-        
-        .ios-modal-option-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: var(--ios-radius-md);
-            background: linear-gradient(135deg, var(--ios-green), #30D158);
+
+        .modal-option-name { font-size: 52px; font-weight: 700; margin-bottom: 15px; }
+        .modal-option-desc { font-size: 34px; color: #8E8E93; }
+
+        .modal-icon-box {
+            width: 140px;
+            height: 140px;
+            border-radius: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 600;
-            font-size: 30px;
-        }
-        
-        .ios-modal-option-icon.blue {
-            background: linear-gradient(135deg, var(--ios-primary), #5AC8FA);
-        }
-        
-        .ios-modal-option-content {
-            flex: 1;
-        }
-        
-        .ios-modal-option-title {
-            font-size: 32px; /* 选项标题更大 */
-            font-weight: 600;
-            color: var(--ios-text-primary);
-            margin-bottom: 4px;
-        }
-        
-        .ios-modal-option-subtitle {
-            font-size: 24px; /* 选项副标题更大 */
-            color: var(--ios-text-tertiary);
-        }
-        
-        /* 底部空间 */
-        .ios-footer {
-            padding: var(--ios-space-lg) var(--ios-space-md);
-            text-align: center;
-            color: var(--ios-text-tertiary);
-            font-size: 20px;
-            margin-top: var(--ios-space-sm); /* 减小顶部间距 */
-            position: sticky;
-            bottom: 0;
-            background: var(--ios-bg);
-        }
-        
-        /* iOS加载动画 */
-        .ios-loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 80px;
-        }
-        
-        .ios-spinner {
-            width: 44px;
-            height: 44px;
-            border: 4px solid rgba(0, 122, 255, 0.2);
-            border-top-color: var(--ios-primary);
-            border-radius: 50%;
-            animation: ios-spin 1s linear infinite;
-        }
-        
-        @keyframes ios-spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* 隐藏滚动条 - 虽然不需要滚动但保留样式 */
-        .ios-scroll-view::-webkit-scrollbar {
-            display: none;
-        }
-        
-        /* 适配屏幕高度 */
-        @media (max-height: 800px) {
-            :root {
-                --ios-space-sm: 8px;
-                --ios-space-md: 14px;
-                --ios-space-lg: 20px;
-                --ios-space-xl: 24px;
-            }
-            
-            html, body {
-                font-size: 20px;
-            }
-            
-            .ios-header-title {
-                font-size: 48px;
-            }
-            
-            .ios-header-subtitle {
-                font-size: 28px;
-            }
-            
-            .ios-app-icon {
-                width: 90px;
-                height: 90px;
-                font-size: 36px;
-            }
-            
-            .ios-app-name {
-                font-size: 28px;
-            }
-            
-            .ios-app-tag {
-                font-size: 18px;
-            }
+            font-size: 60px;
         }
     </style>
 </head>
 <body>
-    <!-- 主容器 -->
-    <div class="ios-container">
-        <!-- 主滚动区域 -->
-        <div class="ios-scroll-view">
-            <!-- 标题栏 -->
-            <div class="ios-header">
-                <div class="ios-header-title">Tsinho导航站</div>
-                <div class="ios-header-subtitle">快速访问优质资源</div>
-            </div>
-            
-            <!-- 搜索框 -->
-            <div class="ios-search-container">
-                <div class="ios-search-bar">
-                    <i class="fas fa-search ios-search-icon"></i>
-                    <input type="text" class="ios-search-input" id="searchInput" placeholder="搜索站点或标签...">
-                </div>
-            </div>
-            
-            <!-- 资源库卡片 -->
-            <div class="ios-card">
-                <div class="ios-card-header">
-                    <div class="ios-card-title">
-                        <span>Tsinho资源库</span>
-                        <div class="ios-card-badge" id="resourceCount">8</div>
-                    </div>
-                    <i class="fas fa-chevron-right" style="color: var(--ios-text-tertiary); font-size: 36px;"></i>
-                </div>
-                
-                <div class="ios-grid" id="resourceGrid">
-                    <!-- 资源项目将通过JavaScript动态生成 -->
-                </div>
-            </div>
-            
-            <!-- 网盘提速区卡片 -->
-            <div class="ios-card">
-                <div class="ios-card-header">
-                    <div class="ios-card-title">
-                        <span>网盘提速区</span>
-                        <div class="ios-card-badge" id="netdiskCount">3</div>
-                    </div>
-                    <i class="fas fa-chevron-right" style="color: var(--ios-text-tertiary); font-size: 36px;"></i>
-                </div>
-                
-                <div class="ios-grid" id="netdiskGrid">
-                    <!-- 网盘项目将通过JavaScript动态生成 -->
-                </div>
-            </div>
-            
-            <!-- 底部空间 -->
-            <div class="ios-footer">
-                <p>此资源库由站点拥有者Tsinho维护，如需补充内容请联系管理员🐧:1625862774</p>
-            </div>
-        </div>
+
+<div class="app-container">
+    <div class="app-header">
+        <h1 class="app-title">Tsinho导航站</h1>
+        <p class="app-subtitle">搜罗全网优质资源 · 极速直达</p>
     </div>
-    
-    <!-- 百度解析站模态框 -->
-    <div class="ios-modal-overlay" id="baiduModal">
-        <div class="ios-modal">
-            <div class="ios-modal-header">
-                <div class="ios-modal-title">选择解析站</div>
-                <div class="ios-modal-close" id="modalClose">
-                    <i class="fas fa-times"></i>
-                </div>
-            </div>
-            
-            <div class="ios-modal-body">
-                <div class="ios-modal-option" id="parseOption1">
-                    <div class="ios-modal-option-icon">
-                        <i class="fas fa-link"></i>
-                    </div>
-                    <div class="ios-modal-option-content">
-                        <div class="ios-modal-option-title">百度解析站1</div>
-                        <div class="ios-modal-option-subtitle">高速稳定解析</div>
-                    </div>
-                </div>
-                
-                <div class="ios-modal-option" id="parseOption2">
-                    <div class="ios-modal-option-icon blue">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <div class="ios-modal-option-content">
-                        <div class="ios-modal-option-title">百度解析站2</div>
-                        <div class="ios-modal-option-subtitle">备用解析线路</div>
-                    </div>
-                </div>
-            </div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="搜索资源、软件或教程...">
         </div>
     </div>
 
-    <script>
-        // 站点数据 - 百度解析站排在第一位
-        const sitesData = {
-            resources: [
-                { id: "all-resources", name: "全资源合集", url: "https://yun.139.com/shareweb/#/w/i/2s2yiTvk1Gwfg", tags: ["综合"], color: "#007AFF" },
-                { id: "practical-software", name: "实用软件", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJ9TZfu", tags: ["破解软件"], color: "#34C759" },
-                { id: "cracked-games", name: "老湿机", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raFw08w", tags: ["看片","黄油"], color: "#FF9500" },
-                { id: "v2ray-nodes", name: "V2节点", url: "https://yun.139.com/shareweb/#/w/i/2s2xRbrCozatn", tags: ["节点"], color: "#5856D6" },
-                { id: "gentleman-wallpaper", name: "绅士壁纸", url: "https://yun.139.com/shareweb/#/w/i/2s2xR8rp0ysdz", tags: ["绅士壁纸"], color: "#FF2D55" },
-                { id: "netdisk-helper", name: "网盘帮下目录", url: "https://yun.139.com/shareweb/#/w/i/2s2xRksiedhqv", tags: ["网盘帮下"], color: "#AF52DE" },
-                { id: "ios-cert", name: "iOS签名证书", url: "https://yun.139.com/shareweb/#/w/i/2s2xR5raHuepx", tags: ["iOS"], color: "#5AC8FA" },
-                { id: "update-docs", name: "资源更新文档", url: "https://yun.139.com/shareweb/#/w/i/2s2xQJpAR7Vqw", tags: ["更新文档"], color: "#FF3B30" }
-            ],
-            netdisk: [
-                { id: "baidu-parse", name: "百度解析站", url: "", tags: ["百度网盘解析"], color: "#FF9500", modal: true, fullwidth: true },
-                { id: "netdisk-tools", name: "网盘工具", url: "https://yun.139.com/shareweb/#/w/i/2s2xQZqJcfUm6", tags: ["网盘工具"], color: "#007AFF" },
-                { id: "netdisk-tutorials", name: "网盘教程", url: "https://dcnl6jstdzjw.feishu.cn/wiki/AgCBwxKSPinKYyko2qSc2SgmnMh", tags: ["网盘教程"], color: "#34C759" }
-            ]
-        };
-        
-        // 创建站点项目
-        function createSiteItem(site, containerId) {
-            const item = document.createElement('div');
-            item.className = 'ios-app-item';
-            
-            // 如果是百度解析站，添加全宽样式
-            if (site.fullwidth) {
-                item.classList.add('ios-app-item-fullwidth');
-                
-                // 创建内容容器
-                const contentWrapper = document.createElement('div');
-                contentWrapper.className = 'ios-app-fullwidth-content';
-                
-                // 图标
-                const icon = document.createElement('div');
-                icon.className = 'ios-app-icon';
-                icon.style.background = `linear-gradient(135deg, ${site.color}, ${site.color}99)`;
-                icon.textContent = site.name.charAt(0);
-                
-                // 文字内容
-                const textContent = document.createElement('div');
-                textContent.className = 'ios-app-fullwidth-text';
-                
-                // 名称
-                const name = document.createElement('div');
-                name.className = 'ios-app-name';
-                name.textContent = site.name;
-                
-                // 标签
-                const tags = document.createElement('div');
-                tags.className = 'ios-app-tags';
-                
-                site.tags.forEach(tagText => {
-                    const tag = document.createElement('div');
-                    tag.className = 'ios-app-tag';
-                    tag.textContent = tagText;
-                    tags.appendChild(tag);
-                });
-                
-                // 组装
-                textContent.appendChild(name);
-                textContent.appendChild(tags);
-                contentWrapper.appendChild(icon);
-                contentWrapper.appendChild(textContent);
-                item.appendChild(contentWrapper);
-            } else {
-                item.dataset.id = site.id;
-                
-                // 图标
-                const icon = document.createElement('div');
-                icon.className = 'ios-app-icon';
-                icon.style.background = `linear-gradient(135deg, ${site.color}, ${site.color}99)`;
-                icon.textContent = site.name.charAt(0);
-                
-                // 名称
-                const name = document.createElement('div');
-                name.className = 'ios-app-name';
-                name.textContent = site.name;
-                
-                // 标签
-                const tags = document.createElement('div');
-                tags.className = 'ios-app-tags';
-                
-                site.tags.forEach(tagText => {
-                    const tag = document.createElement('div');
-                    tag.className = 'ios-app-tag';
-                    tag.textContent = tagText;
-                    tags.appendChild(tag);
-                });
-                
-                // 组装
-                item.appendChild(icon);
-                item.appendChild(name);
-                item.appendChild(tags);
-            }
-            
-            // 点击事件
-            item.addEventListener('click', function(e) {
-                // iOS点击反馈 - 仅图标缩小，无背景色变化
-                this.style.backgroundColor = 'transparent'; /* 确保无背景色 */
-                setTimeout(() => {
-                    this.style.backgroundColor = '';
-                }, 150);
-                
-                if (site.modal) {
-                    // 打开模态框
-                    e.preventDefault();
-                    openBaiduModal();
-                } else if (site.url) {
-                    // 正常跳转
-                    setTimeout(() => {
-                        window.location.href = site.url;
-                    }, 200);
-                }
-            });
-            
-            document.getElementById(containerId).appendChild(item);
-        }
-        
-        // 初始化站点
-        function initSites() {
-            const resourceGrid = document.getElementById('resourceGrid');
-            const netdiskGrid = document.getElementById('netdiskGrid');
-            
-            // 清空现有内容
-            resourceGrid.innerHTML = '';
-            netdiskGrid.innerHTML = '';
-            
-            // 添加资源站点
-            sitesData.resources.forEach(site => {
-                createSiteItem(site, 'resourceGrid');
-            });
-            
-            // 添加网盘站点
-            sitesData.netdisk.forEach(site => {
-                createSiteItem(site, 'netdiskGrid');
-            });
-            
-            // 更新计数
-            document.getElementById('resourceCount').textContent = sitesData.resources.length;
-            document.getElementById('netdiskCount').textContent = sitesData.netdisk.length;
-        }
-        
-        // 模态框控制
-        function openBaiduModal() {
-            const modal = document.getElementById('baiduModal');
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeBaiduModal() {
-            const modal = document.getElementById('baiduModal');
-            modal.classList.remove('active');
+    <h2 class="card-title">资源库 <span class="card-count">8</span></h2>
+    <div class="grid-layout">
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2s2yiTvk1Gwfg')">
+            <div class="button-icon blue"><i class="fas fa-archive"></i></div>
+            <div class="button-name">全资源</div>
+            <div class="button-tag">全网聚合</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2s2xQZqJ9TZfu')">
+            <div class="button-icon green"><i class="fas fa-laptop-code"></i></div>
+            <div class="button-name">实用软件</div>
+            <div class="button-tag">精品破解</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2s2xR5raFw08w')">
+            <div class="button-icon orange"><i class="fas fa-gamepad"></i></div>
+            <div class="button-name">老湿机</div>
+            <div class="button-tag">绅士专区</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2s2xRbrCozatn')">
+            <div class="button-icon dark-blue"><i class="fas fa-globe-americas"></i></div>
+            <div class="button-name">V2节点</div>
+            <div class="button-tag">网络加速</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2s2xR8rp0ysdz')">
+            <div class="button-icon pink"><i class="fas fa-image"></i></div>
+            <div class="button-name">绅士壁纸</div>
+            <div class="button-tag">精美图片</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2s2xRksiedhqv')">
+            <div class="button-icon purple"><i class="fas fa-download"></i></div>
+            <div class="button-name">网盘帮下</div>
+            <div class="button-tag">快速下载</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2s2xR5raHuepx')">
+            <div class="button-icon blue"><i class="fas fa-signature"></i></div>
+            <div class="button-name">iOS签名</div>
+            <div class="button-tag">证书工具</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2s2xQJpAR7Vqw')">
+            <div class="button-icon green"><i class="fas fa-file-alt"></i></div>
+            <div class="button-name">更新文档</div>
+            <div class="button-tag">资源动态</div>
+        </div>
+    </div>
+
+    <h2 class="card-title">网盘提速 <span class="card-count">3</span></h2>
+    <div class="grid-layout">
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2s2xQZqJcfUm6')">
+            <div class="button-icon orange"><i class="fas fa-wrench"></i></div>
+            <div class="button-name">网盘工具</div>
+            <div class="button-tag">必备增强</div>
+        </div>
+        <div class="big-button" onclick="go('https://dcnl6jstdzjw.feishu.cn/wiki/AgCBwxKSPinKYyko2qSc2SgmnMh')">
+            <div class="button-icon green"><i class="fas fa-book"></i></div>
+            <div class="button-name">网盘教程</div>
+            <div class="button-tag">避坑指南</div>
+        </div>
+        <div class="big-button" onclick="openModal()">
+            <div class="button-icon red"><i class="fas fa-link"></i></div>
+            <div class="button-name">百度解析站</div>
+            <div class="button-tag">高速直链</div>
+        </div>
+    </div>
+
+    <div class="app-footer">
+        <p>由 Tsinho 独立维护</p>
+        <p>全网资源实时同步，若有失效请联系QQ:1625862774</p>
+    </div>
+</div>
+
+<div class="modal-overlay" id="baiduModal" onclick="closeModal(event)">
+    <div class="modal-content">
+        <div class="modal-title">请选择百度解析站</div>
+        <div class="modal-option" onclick="go('https://analysis.icy6.cn')">
+            <div class="modal-icon-box blue"><i class="fas fa-link"></i></div>
+            <div>
+                <div class="modal-option-name">解析线路 01</div>
+                <div class="modal-option-desc">稳定可靠 · 推荐作为主要解析使用</div>
+            </div>
+        </div>
+        <div class="modal-option" onclick="go('https://kdown.moiu.cn/free/#/index')">
+            <div class="modal-icon-box orange"><i class="fas fa-bolt"></i></div>
+            <div>
+                <div class="modal-option-name">解析线路 02</div>
+                <div class="modal-option-desc">极速备用 · 支持大文件多线程下载</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function go(url) {
+        setTimeout(() => { window.location.href = url; }, 150);
+    }
+
+    function openModal() { 
+        document.getElementById('baiduModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    
+    function closeModal(e) { 
+        if(e.target.id === 'baiduModal') {
+            e.target.classList.remove('active'); 
             document.body.style.overflow = '';
         }
-        
-        // 搜索功能
-        function initSearch() {
-            const searchInput = document.getElementById('searchInput');
-            
-            searchInput.addEventListener('input', function() {
-                const query = this.value.toLowerCase().trim();
-                const allItems = document.querySelectorAll('.ios-app-item');
-                
-                if (query === '') {
-                    allItems.forEach(item => {
-                        item.style.display = 'flex';
-                    });
-                    return;
-                }
-                
-                allItems.forEach(item => {
-                    const name = item.querySelector('.ios-app-name').textContent.toLowerCase();
-                    const tags = Array.from(item.querySelectorAll('.ios-app-tag'))
-                                     .map(tag => tag.textContent.toLowerCase());
-                    
-                    const nameMatch = name.includes(query);
-                    const tagMatch = tags.some(tag => tag.includes(query));
-                    
-                    item.style.display = (nameMatch || tagMatch) ? 'flex' : 'none';
-                });
-            });
-        }
-        
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            initSites();
-            initSearch();
-            
-            // 模态框关闭
-            document.getElementById('modalClose').addEventListener('click', closeBaiduModal);
-            document.getElementById('baiduModal').addEventListener('click', function(e) {
-                if (e.target === this) closeBaiduModal();
-            });
-            
-            // 模态框选项
-            document.getElementById('parseOption1').addEventListener('click', function() {
-                window.location.href = 'https://analysis.icy6.cn';
-                closeBaiduModal();
-            });
-            
-            document.getElementById('parseOption2').addEventListener('click', function() {
-                window.location.href = 'https://kdown.moiu.cn/free/#/index';
-                closeBaiduModal();
-            });
-            
-            // 移除下拉刷新相关代码（不再需要）
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const val = e.target.value.toLowerCase();
+        const btns = document.querySelectorAll('.big-button');
+        btns.forEach(btn => {
+            const text = btn.innerText.toLowerCase();
+            btn.style.display = text.includes(val) ? 'flex' : 'none';
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>
