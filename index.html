@@ -170,7 +170,7 @@
             border-top: 2px solid #E5E5EA;
         }
 
-        /* 巨大化弹窗 */
+        /* 巨大化弹窗遮罩 */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -181,6 +181,7 @@
             padding: 30px;
             z-index: 1000;
             backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
         .modal-overlay.active { display: flex; }
         
@@ -223,6 +224,56 @@
             justify-content: center;
             color: white;
             font-size: 60px;
+        }
+
+        /* ===== 超大 iOS 风格 HUD 提示框 ===== */
+        #toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(255, 255, 255, 0.85); /* 半透明白 */
+            backdrop-filter: blur(25px); /* 毛玻璃 */
+            -webkit-backdrop-filter: blur(25px);
+            color: #1c1c1e;
+            padding: 80px 100px;
+            border-radius: 80px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            z-index: 9999;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.4);
+            text-align: center;
+            min-width: 600px;
+        }
+
+        #toast-icon {
+            font-size: 130px;
+            color: #34C759; /* iOS 成功绿 */
+        }
+
+        #toast-text {
+            font-size: 46px;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #1c1c1e;
+        }
+
+        /* 弹出动画 */
+        @keyframes iosHud {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+
+        .show-toast {
+            display: flex !important;
+            animation: iosHud 2.5s ease-in-out forwards;
         }
     </style>
 </head>
@@ -270,7 +321,7 @@
         </div>
         <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4FMofsW9p')">
             <div class="button-icon purple"><i class="fas fa-download"></i></div>
-            <div class="button-name">各大网盘帮忙下载目录</div>
+            <div class="button-name">各大网盘下载</div>
             <div class="button-tag">帮下载</div>
         </div>
         <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4tLufQRa7')">
@@ -337,14 +388,14 @@
             <div class="modal-icon-box blue"><i class="fas fa-link"></i></div>
             <div>
                 <div class="modal-option-name">解析线路 01</div>
-                <div class="modal-option-desc">稳定可靠 · 推荐作为主要解析使用</div>
+                <div class="modal-option-desc">稳定可靠 · 推荐主要使用</div>
             </div>
         </div>
         <div class="modal-option" onclick="go('https://kdown.moiu.cn/free/#/index')">
             <div class="modal-icon-box orange"><i class="fas fa-bolt"></i></div>
             <div>
                 <div class="modal-option-name">解析线路 02</div>
-                <div class="modal-option-desc">极速备用 · 支持大文件多线程下载</div>
+                <div class="modal-option-desc">极速备用 · 支持大文件下载</div>
             </div>
         </div>
     </div>
@@ -353,21 +404,26 @@
 <div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)">
     <div class="modal-content">
         <div class="modal-title">请选择老司机选项</div>
-        <div class="modal-option" onclick="go('https://drive.uc.cn/s/5704ad21c5c64')">
+        <div class="modal-option" onclick="copyUrl('https://drive.uc.cn/s/5704ad21c5c64', '看篇软件')">
             <div class="modal-icon-box green"><i class="fas fa-play-circle"></i></div>
             <div>
                 <div class="modal-option-name">看篇软件</div>
-                <div class="modal-option-desc">软件资源丰富</div>
+                <div class="modal-option-desc">点击复制链接，手动到浏览器访问</div>
             </div>
         </div>
-        <div class="modal-option" onclick="go('https://drive.uc.cn/s/c5dac8b3579f4')">
+        <div class="modal-option" onclick="copyUrl('https://drive.uc.cn/s/c5dac8b3579f4', '黄油游戏')">
             <div class="modal-icon-box orange"><i class="fas fa-gamepad"></i></div>
             <div>
                 <div class="modal-option-name">黄油游戏</div>
-                <div class="modal-option-desc">游戏资源丰富</div>
+                <div class="modal-option-desc">点击复制链接，手动到浏览器访问</div>
             </div>
         </div>
     </div>
+</div>
+
+<div id="toast">
+    <i id="toast-icon" class="fas fa-check-circle"></i>
+    <div id="toast-text"></div>
 </div>
 
 <script>
@@ -375,7 +431,33 @@
         setTimeout(() => { window.location.href = url; }, 150);
     }
 
-    // 全资源弹窗控制
+    // 复制链接 + 超大 iOS HUD 提示
+    function copyUrl(url, name) {
+        const input = document.createElement('textarea');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+
+        // 触发提示框
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toast-text');
+        
+        toastText.innerHTML = `${name}链接已复制<br>请自行到浏览器访问`;
+        
+        // 移除旧动画重置
+        toast.classList.remove('show-toast');
+        void toast.offsetWidth; // 触发重绘
+        toast.classList.add('show-toast');
+
+        // 动画束后隐藏
+        setTimeout(() => {
+            toast.classList.remove('show-toast');
+        }, 2500);
+    }
+
+    // 弹窗管理函数
     function openAllResModal() { 
         document.getElementById('allResModal').classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
@@ -409,6 +491,7 @@
         }
     }
 
+    // 搜索逻辑
     document.getElementById('searchInput').addEventListener('input', function(e) {
         const val = e.target.value.toLowerCase();
         const btns = document.querySelectorAll('.big-button');
