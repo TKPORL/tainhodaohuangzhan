@@ -243,19 +243,19 @@
 
     <h2 class="card-title">资源库 <span class="card-count">8</span></h2>
     <div class="grid-layout">
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4qLg1Joij')">
+        <div class="big-button" onclick="openAllResModal()">
             <div class="button-icon blue"><i class="fas fa-archive"></i></div>
             <div class="button-name">全资源</div>
-            <div class="button-tag">全网聚合</div>
+            <div class="button-tag">分类合集</div>
         </div>
         <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4wLHx3T5m')">
             <div class="button-icon green"><i class="fas fa-laptop-code"></i></div>
             <div class="button-name">实用软件</div>
             <div class="button-tag">精品破解</div>
         </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4TNhcBhbx')">
+        <div class="big-button" onclick="openLaoSiJiModal()">
             <div class="button-icon orange"><i class="fas fa-gamepad"></i></div>
-            <div class="button-name">老湿机</div>
+            <div class="button-name">老司机</div>
             <div class="button-tag">绅士专区</div>
         </div>
         <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4gKA4i840')">
@@ -310,6 +310,26 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="allResModal" onclick="closeAllResModal(event)">
+    <div class="modal-content">
+        <div class="modal-title">请选择资源类别</div>
+        <div class="modal-option" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4nL2Ezaj4')">
+            <div class="modal-icon-box green"><i class="fas fa-laptop-code"></i></div>
+            <div>
+                <div class="modal-option-name">实用软件</div>
+                <div class="modal-option-desc">聚合全网优质实用工具软件</div>
+            </div>
+        </div>
+        <div class="modal-option" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4gKA4uHyl')">
+            <div class="modal-icon-box blue"><i class="fas fa-toolbox"></i></div>
+            <div>
+                <div class="modal-option-name">网盘工具</div>
+                <div class="modal-option-desc">提升网盘使用体验的各类神器</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal-overlay" id="baiduModal" onclick="closeModal(event)">
     <div class="modal-content">
         <div class="modal-title">请选择百度解析站</div>
@@ -330,18 +350,60 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)">
+    <div class="modal-content">
+        <div class="modal-title">请选择老司机选项</div>
+        <div class="modal-option" onclick="go('https://drive.uc.cn/s/5704ad21c5c64')">
+            <div class="modal-icon-box green"><i class="fas fa-play-circle"></i></div>
+            <div>
+                <div class="modal-option-name">看篇软件</div>
+                <div class="modal-option-desc">软件资源丰富</div>
+            </div>
+        </div>
+        <div class="modal-option" onclick="go('https://drive.uc.cn/s/c5dac8b3579f4')">
+            <div class="modal-icon-box orange"><i class="fas fa-gamepad"></i></div>
+            <div>
+                <div class="modal-option-name">黄油游戏</div>
+                <div class="modal-option-desc">游戏资源丰富</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function go(url) {
         setTimeout(() => { window.location.href = url; }, 150);
+    }
+
+    // 全资源弹窗控制
+    function openAllResModal() { 
+        document.getElementById('allResModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    function closeAllResModal(e) { 
+        if(e.target.id === 'allResModal') {
+            e.target.classList.remove('active'); 
+            document.body.style.overflow = '';
+        }
     }
 
     function openModal() { 
         document.getElementById('baiduModal').classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
     }
-    
     function closeModal(e) { 
         if(e.target.id === 'baiduModal') {
+            e.target.classList.remove('active'); 
+            document.body.style.overflow = '';
+        }
+    }
+
+    function openLaoSiJiModal() { 
+        document.getElementById('laoSiJiModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    function closeLaoSiJiModal(e) { 
+        if(e.target.id === 'laoSiJiModal') {
             e.target.classList.remove('active'); 
             document.body.style.overflow = '';
         }
