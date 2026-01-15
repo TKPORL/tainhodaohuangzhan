@@ -160,6 +160,7 @@
         .pink { background: linear-gradient(135deg, #FF2D55, #d81b43); }
         .dark-blue { background: linear-gradient(135deg, #5856D6, #4834d4); }
         .red { background: linear-gradient(135deg, #FF3B30, #c0392b); }
+        .cyan { background: linear-gradient(135deg, #32D5D9, #00BCD4); }
 
         .app-footer {
             padding: 100px 0;
@@ -292,7 +293,7 @@
         </div>
     </div>
 
-    <h2 class="card-title">资源库 <span class="card-count">8</span></h2>
+    <h2 class="card-title">资源库 <span class="card-count">9</span></h2>
     <div class="grid-layout">
         <div class="big-button" onclick="openAllResModal()">
             <div class="button-icon blue"><i class="fas fa-archive"></i></div>
@@ -328,6 +329,12 @@
             <div class="button-icon blue"><i class="fas fa-signature"></i></div>
             <div class="button-name">iOS签名</div>
             <div class="button-tag">证书证书</div>
+        </div>
+        <!-- 新增的大小型游戏按钮 -->
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4CM9DX94a')">
+            <div class="button-icon cyan"><i class="fas fa-dice"></i></div>
+            <div class="button-name">大小型游戏</div>
+            <div class="button-tag">游戏合集</div>
         </div>
         <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4FMok8H4j')">
             <div class="button-icon green"><i class="fas fa-file-alt"></i></div>
@@ -404,14 +411,14 @@
 <div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)">
     <div class="modal-content">
         <div class="modal-title">请选择老司机选项</div>
-        <div class="modal-option" onclick="copyUrl('https://yun.139.com/shareweb/#/w/i/2sxU4gKzPZaa7', '看篇软件')">
+        <div class="modal-option" onclick="copyUrl('https://drive.uc.cn/s/5704ad21c5c64', '看篇软件')">
             <div class="modal-icon-box green"><i class="fas fa-play-circle"></i></div>
             <div>
                 <div class="modal-option-name">看篇软件</div>
                 <div class="modal-option-desc">点击复制链接，手动到浏览器访问</div>
             </div>
         </div>
-        <div class="modal-option" onclick="copyUrl('https://drive.uc.cn/s/fb9fb0ca4e4f4', '黄油游戏')">
+        <div class="modal-option" onclick="copyUrl('https://drive.uc.cn/s/c5dac8b3579f4', '黄油游戏')">
             <div class="modal-icon-box orange"><i class="fas fa-gamepad"></i></div>
             <div>
                 <div class="modal-option-name">黄油游戏</div>
@@ -444,7 +451,7 @@
         const toast = document.getElementById('toast');
         const toastText = document.getElementById('toast-text');
         
-        toastText.innerHTML = `${name}链接已复制<br>请自行到浏览器访问<br>找到喜欢的就速度保存<br>这玩意和谐特别快`;
+        toastText.innerHTML = `${name}链接已复制<br>请自行到浏览器访问`;
         
         // 移除旧动画重置
         toast.classList.remove('show-toast');
