@@ -162,16 +162,170 @@
         .red { background: linear-gradient(135deg, #FF3B30, #c0392b); }
         .cyan { background: linear-gradient(135deg, #32D5D9, #00BCD4); }
 
+        /* ===== 全新的iOS风格底部卡片 ===== */
         .app-footer {
-            padding: 100px 0;
+            background: linear-gradient(145deg, #FFFFFF, #F8F9FB);
+            border-radius: 80px;
+            padding: 80px 60px;
             text-align: center;
-            font-size: 34px;
-            color: #AEAEB2;
-            line-height: 2;
-            border-top: 2px solid #E5E5EA;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.08),
+                0 5px 15px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            position: relative;
+            overflow: hidden;
+            margin-top: 50px;
         }
 
-        /* 巨大化弹窗遮罩 */
+        /* 装饰性背景元素 */
+        .footer-decoration {
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.05), rgba(52, 199, 89, 0.05));
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 标题行 */
+        .footer-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            margin-bottom: 60px;
+        }
+
+        .footer-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #007AFF, #34C759);
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 55px;
+            box-shadow: 0 15px 30px rgba(0, 122, 255, 0.2);
+        }
+
+        .footer-text {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1c1c1e;
+            text-align: left;
+        }
+
+        .footer-highlight {
+            color: #007AFF;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 122, 255, 0.15);
+            border-radius: 4px;
+            z-index: -1;
+        }
+
+        /* 信息行 */
+        .footer-info {
+            background: #F8F9FB;
+            border-radius: 45px;
+            padding: 50px 40px;
+            margin-bottom: 50px;
+            text-align: left;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+            margin-bottom: 35px;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-icon {
+            width: 80px;
+            height: 80px;
+            background: #007AFF;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 35px;
+            flex-shrink: 0;
+        }
+
+        .info-text {
+            font-size: 38px;
+            color: #1c1c1e;
+            line-height: 1.5;
+        }
+
+        .info-text span {
+            color: #007AFF;
+            font-weight: 600;
+            background: rgba(0, 122, 255, 0.1);
+            padding: 5px 15px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        /* 关于按钮 */
+        .footer-contact {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            background: linear-gradient(135deg, #007AFF, #0056b3);
+            border-radius: 60px;
+            padding: 40px 50px;
+            color: white;
+            font-size: 38px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(0, 122, 255, 0.25);
+            border: none;
+            outline: none;
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        .footer-contact:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 122, 255, 0.35);
+        }
+
+        .footer-contact:active {
+            transform: translateY(-2px);
+        }
+
+        .contact-icon {
+            font-size: 42px;
+        }
+
+        /* ===== 巨大化弹窗遮罩 ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -276,6 +430,157 @@
             display: flex !important;
             animation: iosHud 2.5s ease-in-out forwards;
         }
+
+        /* ===== 关于弹窗专属样式 ===== */
+        .contact-section {
+            margin-bottom: 60px;
+        }
+
+        .contact-section-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 40px;
+            color: #1c1c1e;
+            padding-left: 20px;
+            border-left: 12px solid #007AFF;
+        }
+
+        .contact-item {
+            background: #F8F9FB;
+            padding: 60px;
+            border-radius: 55px;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .contact-item:active {
+            transform: scale(0.96);
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-detail-name {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1c1c1e;
+        }
+
+        .contact-detail-value {
+            font-size: 36px;
+            color: #8E8E93;
+        }
+
+        /* 免责声明条目样式 */
+        .disclaimer-item {
+            background: #F8F9FB;
+            padding: 60px;
+            border-radius: 55px;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            margin-top: 30px;
+        }
+
+        .disclaimer-item:active {
+            transform: scale(0.96);
+        }
+
+        .disclaimer-item-name {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1c1c1e;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* ===== 免责声明弹窗专属样式 ===== */
+        .disclaimer-modal-content {
+            background: white;
+            width: 95%;
+            max-width: 950px;
+            max-height: 85vh; /* 限制最大高度 */
+            border-radius: 80px;
+            padding: 90px 70px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+            overflow-y: auto; /* 内容过多时滚动 */
+            -webkit-overflow-scrolling: touch; /* iOS平滑滚动 */
+        }
+
+        /* 滚动条美化 */
+        .disclaimer-modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .disclaimer-modal-content::-webkit-scrollbar-track {
+            background: #F8F9FB;
+            border-radius: 10px;
+        }
+
+        .disclaimer-modal-content::-webkit-scrollbar-thumb {
+            background: #007AFF;
+            border-radius: 10px;
+        }
+
+        .disclaimer-modal-title {
+            font-size: 65px;
+            font-weight: 900;
+            margin-bottom: 70px;
+            text-align: center;
+            color: #1c1c1e;
+        }
+
+        .disclaimer-text {
+            font-size: 32px;
+            line-height: 1.7;
+            color: #636366;
+            text-align: justify;
+        }
+
+        .disclaimer-text p {
+            margin-bottom: 35px;
+        }
+
+        /* 免责声明链接样式 */
+        .disclaimer-link {
+            color: #007AFF;
+            text-decoration: none;
+            font-weight: 600;
+            background: rgba(0,122,255,0.1);
+            padding: 5px 15px;
+            border-radius: 12px;
+            display: inline-block;
+            margin: 0 5px;
+            transition: all 0.2s ease;
+        }
+
+        .disclaimer-link:hover {
+            background: rgba(0,122,255,0.15);
+        }
+
+        .disclaimer-link:active {
+            background: rgba(0,122,255,0.2);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .modal-content, .disclaimer-modal-content {
+                padding: 60px 40px;
+            }
+            .contact-item, .disclaimer-item {
+                padding: 40px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -362,9 +667,123 @@
         </div>
     </div>
 
+    <!-- ===== 全新的iOS风格底部卡片 ===== -->
     <div class="app-footer">
-        <p>由 Tsinho 独立维护</p>
-        <p>全网资源实时同步，若有失效请联系QQ:1625862774</p>
+        <div class="footer-decoration"></div>
+        <div class="footer-content">
+            <div class="footer-title">
+                <div class="footer-icon">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <div class="footer-text">
+                    关于<span class="footer-highlight">Tsinho导航站</span>
+                </div>
+            </div>
+            
+            <div class="footer-info">
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="info-text">
+                        该软件由 <span>Tsinho</span> 独立维护
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <div class="info-text">
+                        全网资源实时同步，若有失效请联系<span>QQ:1625862774</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="footer-contact" onclick="openAboutModal()">
+                <i class="fas fa-info-circle contact-icon"></i>
+                <span>关于</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 关于弹窗 -->
+<div class="modal-overlay" id="aboutModal" onclick="closeAboutModal(event)">
+    <div class="modal-content">
+        <div class="modal-title">关于Tsinho导航站</div>
+        
+        <!-- 联系方式 -->
+        <div class="contact-section">
+            <h3 class="contact-section-title">联系方式</h3>
+            
+            <div class="contact-item" onclick="copyContact('email')">
+                <div class="modal-icon-box blue"><i class="fas fa-envelope"></i></div>
+                <div>
+                    <div class="contact-detail-name">邮箱</div>
+                    <div class="contact-detail-value">Tsinhos@qq.com</div>
+                </div>
+            </div>
+            
+            <div class="contact-item" onclick="copyContact('qq')">
+                <div class="modal-icon-box green"><i class="fas fa-comment"></i></div>
+                <div>
+                    <div class="contact-detail-name">QQ</div>
+                    <div class="contact-detail-value">1625862774</div>
+                </div>
+            </div>
+            
+            <div class="contact-item" onclick="copyContact('qqgroup')">
+                <div class="modal-icon-box purple"><i class="fas fa-users"></i></div>
+                <div>
+                    <div class="contact-detail-name">官方QQ群</div>
+                    <div class="contact-detail-value">1065975237</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 免责声明条目 -->
+        <div class="disclaimer-item" onclick="openDisclaimerModal()">
+            <div class="modal-icon-box orange"><i class="fas fa-shield-alt"></i></div>
+            <div>
+                <div class="disclaimer-item-name">
+                    <i class="fas fa-shield-alt" style="color: #FF9500;"></i>
+                    免责声明
+                </div>
+                <div style="font-size: 34px; color: #8E8E93;">
+                    点击查看完整声明内容
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 免责声明弹窗 -->
+<div class="modal-overlay" id="disclaimerModal" onclick="closeDisclaimerModal(event)">
+    <div class="disclaimer-modal-content">
+        <div class="disclaimer-modal-title">免责声明</div>
+        
+        <div class="disclaimer-text">
+            <p>根据《计算机软件保护条例》(2002年1月1日 实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。鉴于此，用户必须在研究该文件时，遵循上述法规，不得将上述内容用于二次传播或者非法用途，否则，一切后果请用户自负。</p>
+            
+            <p>本软件信息来自网络，版权争议与本软件无关，您必须在下载后的24个小时之内，从您的设备中彻底删除上述内容。访问和下载本软件内容，说明您已同意上述条款。</p>
+            
+            <p>Tsinho导航站作为软件转载方，不保证软件在所有设备上一定可用,精力有限也不会在每个机型上做测试，修改的会员也不能保证一直有效，所有软件会随着官方修复及软件升级而失效，无法接受请卸载。本软件为非盈利性APP，本软件不贩卖软件，所有内容不作为商业行为。</p>
+            
+            <p>近期发现有人搬运Tsinho软件，重申一遍，Tsinho仅发布在 
+                <a href="https://link3.cc/xakjyxgs" target="_blank" onclick="event.stopPropagation()">
+                    <span class="disclaimer-link">Tsinho导航站</span>
+                </a> 
+                网站，所有服务仅提供给 
+                <a href="https://link3.cc/xakjyxgs" target="_blank" onclick="event.stopPropagation()">
+                    <span class="disclaimer-link">Tsinho导航站</span>
+                </a> 
+                网站用户，软件并未在其他任何地方有发布渠道,除外 
+                <a href="https://link3.cc/xakjyxgs" target="_blank" onclick="event.stopPropagation()">
+                    <span class="disclaimer-link">Tsinho导航站</span>
+                </a> 
+                网站均为骗子或搬运。
+            </p>
+        </div>
     </div>
 </div>
 
@@ -466,7 +885,7 @@
 
     // 弹窗管理函数
     function openAllResModal() { 
-        document.getElementById('allResModal').classList.add('active'); 
+        document.getElementById('allResModalResModal').classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
     }
     function closeAllResModal(e) { 
@@ -498,6 +917,30 @@
         }
     }
 
+    // 关于弹窗管理
+    function openAboutModal() { 
+        document.getElementById('aboutModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    function closeAboutModal(e) { 
+        if(e.target.id === 'aboutModal') {
+            e.target.classList.remove('active'); 
+            document.body.style.overflow = '';
+        }
+    }
+
+    // 免责声明弹窗管理
+    function openDisclaimerModal() { 
+        document.getElementById('disclaimerModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    function closeDisclaimerModal(e) { 
+        if(e.target.id === 'disclaimerModal') {
+            e.target.classList.remove('active'); 
+            document.body.style.overflow = '';
+        }
+    }
+
     // 搜索逻辑
     document.getElementById('searchInput').addEventListener('input', function(e) {
         const val = e.target.value.toLowerCase();
@@ -507,6 +950,57 @@
             btn.style.display = text.includes(val) ? 'flex' : 'none';
         });
     });
+
+    // 复制联系方式
+    function copyContact(type) {
+        let text = '';
+        let name = '';
+        let icon = '';
+        
+        switch(type) {
+            case 'email':
+                text = 'Tsinhos@qq.com';
+                name = '邮箱';
+                icon = 'fa-envelope';
+                break;
+            case 'qq':
+                text = '1625862774';
+                name = 'QQ号';
+                icon = 'fa-comment';
+                break;
+            case 'qqgroup':
+                text = '1065975237';
+                name = 'QQ群号';
+                icon = 'fa-users';
+                break;
+        }
+        
+        const input = document.createElement('textarea');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+
+        // 触发提示框
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toast-text');
+        const toastIcon = document.getElementById('toast-icon');
+        
+        toastIcon.className = `fas ${icon}`;
+        toastIcon.style.color = '#007AFF';
+        toastText.innerHTML = `${name}已复制<br><b>${text}</b>`;
+        
+        toast.classList.remove('show-toast');
+        void toast.offsetWidth;
+        toast.classList.add('show-toast');
+
+        setTimeout(() => {
+            toast.classList.remove('show-toast');
+            toastIcon.className = "fas fa-check-circle";
+            toastIcon.style.color = "#34C759";
+        }, 2500);
+    }
 </script>
 
 </body>
