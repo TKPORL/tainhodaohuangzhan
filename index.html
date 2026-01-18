@@ -434,7 +434,7 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="aboutModal" onclick="closeAboutModal(event)">
+<div class="modal-overlay" id="aboutModal" onclick="closeModal(event)">
     <div class="modal-content">
         <div class="modal-header-title">详细信息</div>
         <div class="ios-list">
@@ -470,7 +470,7 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="disclaimerModal" onclick="closeDisclaimerModal(event)">
+<div class="modal-overlay" id="disclaimerModal" onclick="closeModal(event)">
     <div class="modal-content">
         <div class="modal-header-title">免责声明</div>
         <div class="disclaimer-body">
@@ -481,7 +481,7 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="allResModal" onclick="closeAllResModal(event)">
+<div class="modal-overlay" id="allResModal" onclick="closeModal(event)">
     <div class="modal-content">
         <div class="modal-header-title">资源类别</div>
         <div class="ios-list">
@@ -525,7 +525,7 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)">
+<div class="modal-overlay" id="laoSiJiModal" onclick="closeModal(event)">
     <div class="modal-content">
         <div class="modal-header-title">选择频道</div>
         <div class="ios-list">
@@ -576,21 +576,41 @@
         setTimeout(() => { toast.classList.remove('show-toast'); }, 2200);
     }
 
-    // 弹窗管理逻辑
-    function openAllResModal() { document.getElementById('allResModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-    function closeAllResModal(e) { if(e.target.id === 'allResModal') { e.target.classList.remove('active'); document.body.style.overflow = ''; } }
-
-    function openModal() { document.getElementById('baiduModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-    function closeModal(e) { if(e.target.id === 'baiduModal') { e.target.classList.remove('active'); document.body.style.overflow = ''; } }
-
-    function openLaoSiJiModal() { document.getElementById('laoSiJiModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-    function closeLaoSiJiModal(e) { if(e.target.id === 'laoSiJiModal') { e.target.classList.remove('active'); document.body.style.overflow = ''; } }
-
-    function openAboutModal() { document.getElementById('aboutModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-    function closeAboutModal(e) { if(e.target.id === 'aboutModal') { e.target.classList.remove('active'); document.body.style.overflow = ''; } }
-
-    function openDisclaimerModal() { document.getElementById('disclaimerModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-    function closeDisclaimerModal(e) { if(e.target.id === 'disclaimerModal') { e.target.classList.remove('active'); document.body.style.overflow = ''; } }
+    // 弹窗管理逻辑 - 修复后的版本
+    function openAllResModal() { 
+        document.getElementById('allResModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    
+    function openModal() { 
+        document.getElementById('baiduModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    
+    function openLaoSiJiModal() { 
+        document.getElementById('laoSiJiModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    
+    function openAboutModal() { 
+        document.getElementById('aboutModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    
+    function openDisclaimerModal() { 
+        document.getElementById('disclaimerModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    
+    // 统一的关闭函数 - 修复了点击事件判断问题
+    function closeModal(e) {
+        // 使用 closest() 检查点击是否在遮罩层区域内
+        const overlay = e.target.closest('.modal-overlay');
+        if (overlay) {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
 
     // 搜索逻辑
     document.getElementById('searchInput').addEventListener('input', function(e) {
