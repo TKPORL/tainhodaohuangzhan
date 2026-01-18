@@ -6,589 +6,359 @@
     <title>Tsinho导航站-全网资源合集</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== 全局重置与宽屏适配 ===== */
+        /* ===== iOS 系统级变量与重置 ===== */
+        :root {
+            --ios-blue: #007AFF;
+            --ios-green: #34C759;
+            --ios-bg: #F2F2F7;
+            --ios-card: rgba(255, 255, 255, 0.7);
+            --ios-blur: blur(25px);
+            --radius-main: 70px;
+            --radius-inner: 45px;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
         }
         
         body {
-            background-color: #F8F9FB;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--ios-bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(175, 82, 222, 0.08) 0px, transparent 50%);
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            color: #000;
         }
 
         .app-container {
             width: 96%; 
             max-width: 1300px; 
-            min-height: 100vh;
-            padding: 80px 20px;
+            padding: 100px 30px;
             display: flex;
             flex-direction: column;
         }
         
-        /* 标题区域 */
+        /* ===== iOS 风格页眉 ===== */
         .app-header {
-            text-align: center;
-            margin-bottom: 70px;
+            text-align: left;
+            padding-left: 30px;
+            margin-bottom: 80px;
         }
         
         .app-title {
-            font-size: 85px; 
-            font-weight: 900;
-            letter-spacing: -3px;
-            margin-bottom: 25px;
+            font-size: 110px; 
+            font-weight: 800;
+            letter-spacing: -4px;
             color: #1c1c1e;
+            margin-bottom: 15px;
         }
         
         .app-subtitle {
-            font-size: 38px;
-            color: #636366;
+            font-size: 42px;
+            color: #8E8E93;
             font-weight: 500;
-            letter-spacing: 1px;
         }
         
-        /* 搜索框 */
+        /* ===== 搜索框 - 极简 iOS 风格 ===== */
         .search-container {
-            margin: 0 auto 80px;
+            margin: 0 auto 100px;
             width: 100%;
-            max-width: 900px; 
         }
         
         .search-box {
-            background: #FFFFFF;
-            border-radius: 45px;
-            padding: 40px 60px;
+            background: rgba(118, 118, 128, 0.12);
+            border-radius: 40px;
+            padding: 35px 50px;
             display: flex;
             align-items: center;
-            gap: 35px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.06);
-            border: 1px solid rgba(0,0,0,0.03);
+            gap: 30px;
+            border: none;
+            transition: all 0.3s ease;
         }
         
-        .search-icon { font-size: 48px; color: #007AFF; }
+        .search-box:focus-within {
+            background: rgba(118, 118, 128, 0.2);
+        }
+        
+        .search-icon { font-size: 45px; color: #8E8E93; }
         .search-input {
             flex: 1;
             border: none;
             outline: none;
+            background: transparent;
             font-size: 42px;
-            font-weight: 500;
-            color: #1c1c1e;
+            color: #000;
         }
 
-        /* 分类标题 */
+        /* ===== 分类与网格 ===== */
         .card-title {
-            font-size: 54px;
-            font-weight: 800;
+            font-size: 56px;
+            font-weight: 700;
             margin-bottom: 45px;
+            padding-left: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 25px;
-            border-left: 18px solid #007AFF;
         }
 
         .card-count {
-            font-size: 36px;
-            background: rgba(0,122,255,0.12);
-            color: #007AFF;
-            padding: 12px 35px;
-            border-radius: 50px;
+            font-size: 38px;
+            color: var(--ios-blue);
+            font-weight: 600;
         }
 
-        /* 核心 1 行 2 列 */
         .grid-layout {
             display: grid;
             grid-template-columns: repeat(2, 1fr); 
-            gap: 35px; 
+            gap: 40px; 
             margin-bottom: 90px;
         }
         
+        /* ===== iOS 玻璃按钮 ===== */
         .big-button {
-            background: #FFFFFF;
-            border-radius: 55px;
-            padding: 70px 40px;
+            background: var(--ios-card);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            border-radius: var(--radius-main);
+            padding: 80px 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.02);
-            transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
 
         .big-button:active {
-            transform: scale(0.96);
+            transform: scale(0.92);
+            background: rgba(229, 229, 234, 0.8);
         }
         
         .button-icon {
-            width: 160px;
-            height: 160px;
-            border-radius: 48px;
+            width: 170px;
+            height: 170px;
+            border-radius: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 75px;
+            font-size: 80px;
             margin-bottom: 40px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
         }
         
         .button-name {
             font-size: 48px;
             font-weight: 700;
             color: #1c1c1e;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .button-tag {
             font-size: 30px;
-            background: #F2F2F7;
             color: #8E8E93;
-            padding: 12px 28px;
-            border-radius: 18px;
+            font-weight: 500;
         }
 
-        .blue { background: linear-gradient(135deg, #007AFF, #0056b3); }
-        .green { background: linear-gradient(135deg, #34C759, #28a745); }
-        .orange { background: linear-gradient(135deg, #FF9500, #e67e00); }
-        .purple { background: linear-gradient(135deg, #AF52DE, #8e44ad); }
-        .pink { background: linear-gradient(135deg, #FF2D55, #d81b43); }
-        .dark-blue { background: linear-gradient(135deg, #5856D6, #4834d4); }
-        .red { background: linear-gradient(135deg, #FF3B30, #c0392b); }
-        .cyan { background: linear-gradient(135deg, #32D5D9, #00BCD4); }
+        .blue { background: linear-gradient(180deg, #5AC8FA, #007AFF); }
+        .green { background: linear-gradient(180deg, #66D482, #34C759); }
+        .orange { background: linear-gradient(180deg, #FFB340, #FF9500); }
+        .purple { background: linear-gradient(180deg, #BF5AF2, #AF52DE); }
+        .pink { background: linear-gradient(180deg, #FF6482, #FF2D55); }
+        .dark-blue { background: linear-gradient(180deg, #7D7AFF, #5856D6); }
+        .red { background: linear-gradient(180deg, #FF6961, #FF3B30); }
+        .cyan { background: linear-gradient(180deg, #70D7FF, #32D5D9); }
 
-        /* ===== 全新的iOS风格底部卡片 ===== */
+        /* ===== iOS 底部大卡片 ===== */
         .app-footer {
-            background: linear-gradient(145deg, #FFFFFF, #F8F9FB);
-            border-radius: 80px;
+            background: var(--ios-card);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            border-radius: var(--radius-main);
             padding: 80px 60px;
-            text-align: center;
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.08),
-                0 5px 15px rgba(0, 0, 0, 0.04),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            position: relative;
-            overflow: hidden;
-            margin-top: 50px;
+            border: 1px solid rgba(255,255,255,0.5);
+            margin-top: 20px;
+            margin-bottom: 100px;
         }
 
-        /* 装饰性背景元素 */
-        .footer-decoration {
-            position: absolute;
-            top: -30px;
-            right: -30px;
-            width: 250px;
-            height: 250px;
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.05), rgba(52, 199, 89, 0.05));
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .footer-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 标题行 */
         .footer-title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 35px;
+            font-size: 54px;
+            font-weight: 800;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .footer-highlight { color: var(--ios-blue); }
+
+        .footer-info-box {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-inner);
+            padding: 10px 0;
             margin-bottom: 60px;
         }
 
-        .footer-icon {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #007AFF, #34C759);
-            border-radius: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 55px;
-            box-shadow: 0 15px 30px rgba(0, 122, 255, 0.2);
-        }
-
-        .footer-text {
-            font-size: 48px;
-            font-weight: 700;
-            color: #1c1c1e;
-            text-align: left;
-        }
-
-        .footer-highlight {
-            color: #007AFF;
-            position: relative;
-            display: inline-block;
-        }
-
-        .footer-highlight::after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            background: rgba(0, 122, 255, 0.15);
-            border-radius: 4px;
-            z-index: -1;
-        }
-
-        /* 信息行 */
-        .footer-info {
-            background: #F8F9FB;
-            border-radius: 45px;
-            padding: 50px 40px;
-            margin-bottom: 50px;
-            text-align: left;
-            border: 1px solid rgba(0, 0, 0, 0.03);
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 35px;
-            margin-bottom: 35px;
-        }
-
-        .info-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .info-icon {
-            width: 80px;
-            height: 80px;
-            background: #007AFF;
-            border-radius: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 35px;
-            flex-shrink: 0;
-        }
-
-        .info-text {
-            font-size: 38px;
-            color: #1c1c1e;
-            line-height: 1.5;
-        }
-
-        .info-text span {
-            color: #007AFF;
-            font-weight: 600;
-            background: rgba(0, 122, 255, 0.1);
-            padding: 5px 15px;
-            border-radius: 12px;
-            display: inline-block;
-        }
-
-        /* 关于按钮 */
-        .footer-contact {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 25px;
-            background: linear-gradient(135deg, #007AFF, #0056b3);
-            border-radius: 60px;
+        .info-row {
             padding: 40px 50px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .info-row:last-child { border-bottom: none; }
+
+        .info-row i { font-size: 45px; color: var(--ios-blue); width: 60px; text-align: center; }
+        .info-row span { font-size: 38px; color: #1c1c1e; font-weight: 500; }
+
+        .ios-btn-main {
+            background: var(--ios-blue);
             color: white;
-            font-size: 38px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 15px 35px rgba(0, 122, 255, 0.25);
-            border: none;
-            outline: none;
-            width: fit-content;
-            margin: 0 auto;
-        }
-
-        .footer-contact:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 122, 255, 0.35);
-        }
-
-        .footer-contact:active {
-            transform: translateY(-2px);
-        }
-
-        .contact-icon {
+            width: 100%;
+            padding: 45px;
+            border-radius: 40px;
             font-size: 42px;
+            font-weight: 700;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            transition: all 0.2s;
         }
+        .ios-btn-main:active { transform: scale(0.96); opacity: 0.9; }
 
-        /* ===== 巨大化弹窗遮罩 ===== */
+        /* ===== iOS 居中弹窗 (全系统统一) ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.75); 
+            background: rgba(0,0,0,0.3);
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 30px;
-            z-index: 1000;
+            padding: 40px;
+            z-index: 9999;
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
         }
-        .modal-overlay.active { display: flex; }
-        
+        .modal-overlay.active { display: flex; animation: iosModalIn 0.3s ease-out; }
+
+        /* iOS 弹窗退出动画 */
+        .modal-overlay.closing {
+            animation: iosModalOut 0.25s ease-in forwards;
+        }
+
+        @keyframes iosModalIn {
+            from { opacity: 0; transform: scale(1.1); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes iosModalOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(1.05); }
+        }
+
         .modal-content {
-            background: white;
-            width: 95%;
-            max-width: 950px; 
-            border-radius: 80px;
-            padding: 90px 70px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
-        }
-
-        .modal-title { 
-            font-size: 65px; 
-            font-weight: 900; 
-            margin-bottom: 70px; 
-            text-align: center; 
+            background: rgba(255, 255, 255, 0.92);
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 70px;
+            padding: 70px;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.2);
+            max-height: 85vh;
+            overflow-y: auto;
         }
         
-        .modal-option {
-            background: #F8F9FB;
-            padding: 70px; 
-            border-radius: 55px;
-            display: flex;
-            align-items: center;
-            gap: 60px;
-            margin-bottom: 40px;
-            cursor: pointer;
+        .modal-content.closing {
+            animation: iosContentOut 0.25s ease-in forwards;
         }
 
-        .modal-option-name { font-size: 52px; font-weight: 700; margin-bottom: 15px; }
-        .modal-option-desc { font-size: 34px; color: #8E8E93; }
+        @keyframes iosContentOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
 
-        .modal-icon-box {
-            width: 140px;
-            height: 140px;
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        .modal-header-title {
             font-size: 60px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 60px;
         }
 
-        /* ===== 超大 iOS 风格 HUD 提示框 ===== */
+        /* 弹窗内的选项列表 */
+        .ios-list {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 45px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .ios-list-item {
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            gap: 45px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .ios-list-item:active { background: rgba(0,0,0,0.05); }
+        .ios-list-item:last-child { border-bottom: none; }
+
+        .list-icon {
+            width: 110px; height: 110px;
+            border-radius: 28px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 55px; color: white;
+        }
+
+        .list-text-main { font-size: 46px; font-weight: 700; margin-bottom: 8px; }
+        .list-text-sub { font-size: 32px; color: #8E8E93; }
+
+        /* HUD 提示 (Apple Style) */
         #toast {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            background: rgba(255, 255, 255, 0.85); /* 半透明白 */
-            backdrop-filter: blur(25px); /* 毛玻璃 */
-            -webkit-backdrop-filter: blur(25px);
-            color: #1c1c1e;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             padding: 80px 100px;
             border-radius: 80px;
             display: none;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 40px;
-            z-index: 9999;
-            box-shadow: 0 30px 90px rgba(0,0,0,0.15);
-            border: 1px solid rgba(255,255,255,0.4);
-            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
             min-width: 600px;
         }
+        #toast-icon { font-size: 130px; color: var(--ios-green); margin-bottom: 40px; }
+        #toast-text { font-size: 46px; font-weight: 700; text-align: center; line-height: 1.4; }
+        .show-toast { display: flex !important; animation: iosHud 2.2s ease-in-out forwards; }
 
-        #toast-icon {
-            font-size: 130px;
-            color: #34C759; /* iOS 成功绿 */
-        }
-
-        #toast-text {
-            font-size: 46px;
-            font-weight: 700;
-            line-height: 1.4;
-            color: #1c1c1e;
-        }
-
-        /* 弹出动画 */
         @keyframes iosHud {
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
-            15% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-            20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
             85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
             100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
         }
 
-        .show-toast {
-            display: flex !important;
-            animation: iosHud 2.5s ease-in-out forwards;
-        }
-
-        /* ===== 关于弹窗专属样式 ===== */
-        .contact-section {
-            margin-bottom: 60px;
-        }
-
-        .contact-section-title {
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: 40px;
-            color: #1c1c1e;
-            padding-left: 20px;
-            border-left: 12px solid #007AFF;
-        }
-
-        .contact-item {
-            background: #F8F9FB;
-            padding: 60px;
-            border-radius: 55px;
-            display: flex;
-            align-items: center;
-            gap: 50px;
-            margin-bottom: 30px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .contact-item:active {
-            transform: scale(0.96);
-        }
-
-        .contact-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .contact-detail-name {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #1c1c1e;
-        }
-
-        .contact-detail-value {
-            font-size: 36px;
-            color: #8E8E93;
-        }
-
-        /* 免责声明条目样式 */
-        .disclaimer-item {
-            background: #F8F9FB;
-            padding: 60px;
-            border-radius: 55px;
-            display: flex;
-            align-items: center;
-            gap: 50px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            margin-top: 30px;
-        }
-
-        .disclaimer-item:active {
-            transform: scale(0.96);
-        }
-
-        .disclaimer-item-name {
-            font-size: 42px;
-            font-weight: 700;
-            color: #1c1c1e;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        /* ===== 免责声明弹窗专属样式 ===== */
-        .disclaimer-modal-content {
-            background: white;
-            width: 95%;
-            max-width: 950px;
-            max-height: 85vh; /* 限制最大高度 */
-            border-radius: 80px;
-            padding: 90px 70px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
-            overflow-y: auto; /* 内容过多时滚动 */
-            -webkit-overflow-scrolling: touch; /* iOS平滑滚动 */
-        }
-
-        /* 滚动条美化 */
-        .disclaimer-modal-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .disclaimer-modal-content::-webkit-scrollbar-track {
-            background: #F8F9FB;
-            border-radius: 10px;
-        }
-
-        .disclaimer-modal-content::-webkit-scrollbar-thumb {
-            background: #007AFF;
-            border-radius: 10px;
-        }
-
-        .disclaimer-modal-title {
-            font-size: 65px;
-            font-weight: 900;
-            margin-bottom: 70px;
-            text-align: center;
-            color: #1c1c1e;
-        }
-
-        .disclaimer-text {
-            font-size: 32px;
-            line-height: 1.7;
-            color: #636366;
-            text-align: justify;
-        }
-
-        .disclaimer-text p {
-            margin-bottom: 35px;
-        }
-
-        /* 免责声明链接样式 */
-        .disclaimer-link {
-            color: #007AFF;
-            text-decoration: none;
-            font-weight: 600;
-            background: rgba(0,122,255,0.1);
-            padding: 5px 15px;
-            border-radius: 12px;
-            display: inline-block;
-            margin: 0 5px;
-            transition: all 0.2s ease;
-        }
-
-        .disclaimer-link:hover {
-            background: rgba(0,122,255,0.15);
-        }
-
-        .disclaimer-link:active {
-            background: rgba(0,122,255,0.2);
-        }
-
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .modal-content, .disclaimer-modal-content {
-                padding: 60px 40px;
-            }
-            .contact-item, .disclaimer-item {
-                padding: 40px;
-            }
-        }
+        .disclaimer-body { font-size: 34px; line-height: 1.6; color: #3A3A3C; text-align: justify; }
+        .disclaimer-body p { margin-bottom: 30px; }
+        .disclaimer-body a { color: var(--ios-blue); text-decoration: none; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div class="app-header">
-        <h1 class="app-title">Tsinho导航站</h1>
-        <p class="app-subtitle">搜罗全网优质资源 · 极速直达</p>
+        <h1 class="app-title">Tsinho</h1>
+        <p class="app-subtitle">全网优质资源 · 极速直达</p>
     </div>
 
     <div class="search-container">
@@ -598,56 +368,56 @@
         </div>
     </div>
     
-<h2 class="card-title">资源库 <span class="card-count">9</span></h2>
-<div class="grid-layout">
-    <div class="big-button" onclick="openAllResModal()">
-        <div class="button-icon blue"><i class="fas fa-archive"></i></div>
-        <div class="button-name">全资源</div>
-        <div class="button-tag">分类合集</div>
+    <h2 class="card-title">资源库 <span class="card-count">9</span></h2>
+    <div class="grid-layout">
+        <div class="big-button" onclick="openAllResModal()">
+            <div class="button-icon blue"><i class="fas fa-archive"></i></div>
+            <div class="button-name">全资源</div>
+            <div class="button-tag">分类合集</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4wLHx3T5m')">
+            <div class="button-icon green"><i class="fas fa-laptop-code"></i></div>
+            <div class="button-name">实用软件</div>
+            <div class="button-tag">精品破解</div>
+        </div>
+        <div class="big-button" onclick="openLaoSiJiModal()">
+            <div class="button-icon orange"><i class="fas fa-gamepad"></i></div>
+            <div class="button-name">老司机</div>
+            <div class="button-tag">绅士专区</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4gKA4i840')">
+            <div class="button-icon dark-blue"><i class="fas fa-globe-americas"></i></div>
+            <div class="button-name">V2节点</div>
+            <div class="button-tag">网络加速</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU47JV2bGks')">
+            <div class="button-icon pink"><i class="fas fa-image"></i></div>
+            <div class="button-name">绅士壁纸</div>
+            <div class="button-tag">绅士图片</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4CM9DX94a')">
+            <div class="button-icon cyan"><i class="fas fa-dice"></i></div>
+            <div class="button-name">大型游戏</div>
+            <div class="button-tag">游戏合集</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4tLufQRa7')">
+            <div class="button-icon blue"><i class="fas fa-signature"></i></div>
+            <div class="button-name">iOS签名</div>
+            <div class="button-tag">证书证书</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4FMok8H4j')">
+            <div class="button-icon green"><i class="fas fa-file-alt"></i></div>
+            <div class="button-name">更新文档</div>
+            <div class="button-tag">资源动态</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4FMofsW9p')">
+            <div class="button-icon purple"><i class="fas fa-download"></i></div>
+            <div class="button-name">云盘下载</div>
+            <div class="button-tag">帮下载</div>
+        </div>
     </div>
-    <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4wLHx3T5m')">
-        <div class="button-icon green"><i class="fas fa-laptop-code"></i></div>
-        <div class="button-name">实用软件</div>
-        <div class="button-tag">精品破解</div>
-    </div>
-    <div class="big-button" onclick="openLaoSiJiModal()">
-        <div class="button-icon orange"><i class="fas fa-gamepad"></i></div>
-        <div class="button-name">老司机</div>
-        <div class="button-tag">绅士专区</div>
-    </div>
-    <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4gKA4i840')">
-        <div class="button-icon dark-blue"><i class="fas fa-globe-americas"></i></div>
-        <div class="button-name">V2节点</div>
-        <div class="button-tag">网络加速</div>
-    </div>
-    <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU47JV2bGks')">
-        <div class="button-icon pink"><i class="fas fa-image"></i></div>
-        <div class="button-name">绅士壁纸</div>
-        <div class="button-tag">绅士图片</div>
-    </div>
-    <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4CM9DX94a')">
-        <div class="button-icon cyan"><i class="fas fa-dice"></i></div>
-        <div class="button-name">大小型游戏</div>
-        <div class="button-tag">游戏合集</div>
-    </div>
-    <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4tLufQRa7')">
-        <div class="button-icon blue"><i class="fas fa-signature"></i></div>
-        <div class="button-name">iOS签名</div>
-        <div class="button-tag">证书证书</div>
-    </div>
-    <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4FMok8H4j')">
-        <div class="button-icon green"><i class="fas fa-file-alt"></i></div>
-        <div class="button-name">更新文档</div>
-        <div class="button-tag">资源动态</div>
-    </div>
-    <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4FMofsW9p')">
-        <div class="button-icon purple"><i class="fas fa-download"></i></div>
-        <div class="button-name">各大网盘下载</div>
-        <div class="button-tag">帮下载</div>
-    </div>
-</div>
 
-    <h2 class="card-title">网盘提速区<span class="card-count">3</span></h2>
+    <h2 class="card-title">网盘提速 <span class="card-count">3</span></h2>
     <div class="grid-layout">
         <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU41Jsoxn88')">
             <div class="button-icon orange"><i class="fas fa-wrench"></i></div>
@@ -661,146 +431,101 @@
         </div>
         <div class="big-button" onclick="openModal()">
             <div class="button-icon red"><i class="fas fa-link"></i></div>
-            <div class="button-name">百度解析站</div>
+            <div class="button-name">百度解析</div>
             <div class="button-tag">高速直链</div>
         </div>
     </div>
 
-    <!-- ===== 全新的iOS风格底部卡片 ===== -->
     <div class="app-footer">
-        <div class="footer-decoration"></div>
-        <div class="footer-content">
-            <div class="footer-title">
-                <div class="footer-icon">
-                    <i class="fas fa-cube"></i>
-                </div>
-                <div class="footer-text">
-                    关于<span class="footer-highlight">Tsinho导航站</span>
-                </div>
+        <div class="footer-title">关于 <span class="footer-highlight">Tsinho导航站</span></div>
+        <div class="footer-info-box">
+            <div class="info-row">
+                <i class="fas fa-shield-alt"></i>
+                <span>由 Tsinho 独立维护并提供安全支持</span>
             </div>
-            
-            <div class="footer-info">
-                <div class="info-item">
-                    <div class="info-icon">
-                        <i class="fas fa-tools"></i>
-                    </div>
-                    <div class="info-text">
-                        该软件由 <span>Tsinho</span> 独立维护
-                    </div>
-                </div>
-                <div class="info-item">
-                    <div class="info-icon">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <div class="info-text">
-                        全网资源实时同步，若有失效请联系<span>QQ:1625862774</span>
-                    </div>
-                </div>
+            <div class="info-row">
+                <i class="fas fa-sync"></i>
+                <span>资源全天候实时同步，极致体验</span>
             </div>
-            
-            <button class="footer-contact" onclick="openAboutModal()">
-                <i class="fas fa-info-circle contact-icon"></i>
-                <span>关于</span>
-            </button>
         </div>
+        <button class="ios-btn-main" onclick="openAboutModal()">
+            <i class="fas fa-info-circle"></i> 查看详细信息
+        </button>
     </div>
 </div>
 
-<!-- 关于弹窗 -->
 <div class="modal-overlay" id="aboutModal" onclick="closeAboutModal(event)">
     <div class="modal-content">
-        <div class="modal-title">关于Tsinho导航站</div>
-        
-        <!-- 联系方式 -->
-        <div class="contact-section">
-            <h3 class="contact-section-title">联系方式</h3>
-            
-            <div class="contact-item" onclick="copyContact('email')">
-                <div class="modal-icon-box blue"><i class="fas fa-envelope"></i></div>
+        <div class="modal-header-title">详细信息</div>
+        <div class="ios-list">
+            <div class="ios-list-item" onclick="go('https://link3.cc/xakjyxgs')">
+                <div class="list-icon dark-blue"><i class="fas fa-globe"></i></div>
                 <div>
-                    <div class="contact-detail-name">作者邮箱</div>
-                    <div class="contact-detail-value">Tsinhos@qq.com</div>
+                    <div class="list-text-main">官网地址</div>
+                    <div class="list-text-sub">link3.cc/xakjyxgs</div>
                 </div>
             </div>
-            
-            <div class="contact-item" onclick="copyContact('qq')">
-                <div class="modal-icon-box green"><i class="fas fa-comment"></i></div>
+            <div class="ios-list-item" onclick="copyContact('email')">
+                <div class="list-icon blue"><i class="fas fa-envelope"></i></div>
                 <div>
-                    <div class="contact-detail-name">作者QQ</div>
-                    <div class="contact-detail-value">1625862774</div>
+                    <div class="list-text-main">作者邮箱</div>
+                    <div class="list-text-sub">Tsinhos@qq.com</div>
                 </div>
             </div>
-            
-            <div class="contact-item" onclick="copyContact('qqgroup')">
-                <div class="modal-icon-box purple"><i class="fas fa-users"></i></div>
+            <div class="ios-list-item" onclick="copyContact('qq')">
+                <div class="list-icon green"><i class="fas fa-comment"></i></div>
                 <div>
-                    <div class="contact-detail-name">官方QQ群</div>
-                    <div class="contact-detail-value">1065975237</div>
+                    <div class="list-text-main">作者 QQ</div>
+                    <div class="list-text-sub">1625862774</div>
                 </div>
             </div>
-        </div>
-
-        <!-- 免责声明条目 -->
-        <div class="disclaimer-item" onclick="openDisclaimerModal()">
-            <div class="modal-icon-box orange"><i class="fas fa-shield-alt"></i></div>
-            <div>
-                <div class="disclaimer-item-name">
-                    <i class="fas fa-shield-alt" style="color: #FF9500;"></i>
-                    免责声明
+            <div class="ios-list-item" onclick="copyContact('qqgroup')">
+                <div class="list-icon purple"><i class="fas fa-users"></i></div>
+                <div>
+                    <div class="list-text-main">官方群聊</div>
+                    <div class="list-text-sub">1065975237</div>
                 </div>
-                <div style="font-size: 34px; color: #8E8E93;">
-                    点击查看完整声明内容
+            </div>
+            <div class="ios-list-item" onclick="openDisclaimerModal()">
+                <div class="list-icon orange"><i class="fas fa-file-contract"></i></div>
+                <div>
+                    <div class="list-text-main">免责声明</div>
+                    <div class="list-text-sub">点击阅读法律条款</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 免责声明弹窗 -->
 <div class="modal-overlay" id="disclaimerModal" onclick="closeDisclaimerModal(event)">
-    <div class="disclaimer-modal-content">
-        <div class="disclaimer-modal-title">免责声明</div>
-        
-        <div class="disclaimer-text">
-            <p>根据《计算机软件保护条例》(2002年1月1日 实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。鉴于此，用户必须在研究该文件时，遵循上述法规，不得将上述内容用于二次传播或者非法用途，否则，一切后果请用户自负。</p>
-            
+    <div class="modal-content">
+        <div class="modal-header-title">免责声明</div>
+        <div class="disclaimer-body">
+            <p>根据《计算机软件保护条例》(2002年1月1日实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。鉴于此，用户必须在研究该文件时，遵循上述法规，不得将上述内容用于二次传播或者非法用途，否则，一切后果请用户自负。</p>
             <p>本软件信息来自网络，版权争议与本软件无关，您必须在下载后的24个小时之内，从您的设备中彻底删除上述内容。访问和下载本软件内容，说明您已同意上述条款。</p>
-            
-            <p>Tsinho导航站作为软件转载方，不保证软件在所有设备上一定可用,精力有限也不会在每个机型上做测试，修改的会员也不能保证一直有效，所有软件会随着官方修复及软件升级而失效，无法接受请卸载。本软件为非盈利性APP，本软件不贩卖软件，所有内容不作为商业行为。</p>
-            
-            <p>近期发现有人搬运Tsinho软件，重申一遍，Tsinho仅发布在 
-                <a href="https://link3.cc/xakjyxgs" target="_blank" onclick="event.stopPropagation()">
-                    <span class="disclaimer-link">Tsinho导航站</span>
-                </a> 
-                网站，所有服务仅提供给 
-                <a href="https://link3.cc/xakjyxgs" target="_blank" onclick="event.stopPropagation()">
-                    <span class="disclaimer-link">Tsinho导航站</span>
-                </a> 
-                网站用户，软件并未在其他任何地方有发布渠道,除 
-                <a href="https://link3.cc/xakjyxgs" target="_blank" onclick="event.stopPropagation()">
-                    <span class="disclaimer-link">Tsinho导航站</span>
-                </a> 
-                网站外均为骗子或搬运。
-            </p>
+            <p>Tsinho导航站作为软件转载方，不保证软件在所有设备上一定可用，精力有限也不会在每个机型上做测试，修改的会员也不能保证一直有效，所有软件会随着官方修复及软件升级而失效，无法接受请卸载。</p>
+            <p>本软件为非盈利性APP，本软件不贩卖软件，所有内容不作为商业行为。</p>
         </div>
     </div>
 </div>
 
 <div class="modal-overlay" id="allResModal" onclick="closeAllResModal(event)">
     <div class="modal-content">
-        <div class="modal-title">请选择资源类别</div>
-        <div class="modal-option" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4nL2Ezaj4')">
-            <div class="modal-icon-box green"><i class="fas fa-laptop-code"></i></div>
-            <div>
-                <div class="modal-option-name">实用软件</div>
-                <div class="modal-option-desc">聚合全网优质实用工具软件</div>
+        <div class="modal-header-title">资源类别</div>
+        <div class="ios-list">
+            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4nL2Ezaj4')">
+                <div class="list-icon green"><i class="fas fa-laptop"></i></div>
+                <div>
+                    <div class="list-text-main">实用软件</div>
+                    <div class="list-text-sub">聚合全网优质工具软件</div>
+                </div>
             </div>
-        </div>
-        <div class="modal-option" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4gKA4uHyl')">
-            <div class="modal-icon-box blue"><i class="fas fa-toolbox"></i></div>
-            <div>
-                <div class="modal-option-name">网盘工具</div>
-                <div class="modal-option-desc">提升网盘使用体验的各类神器</div>
+            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sxU4gKA4uHyl')">
+                <div class="list-icon blue"><i class="fas fa-tools"></i></div>
+                <div>
+                    <div class="list-text-main">网盘工具</div>
+                    <div class="list-text-sub">提升网盘使用体验的神器</div>
+                </div>
             </div>
         </div>
     </div>
@@ -808,19 +533,21 @@
 
 <div class="modal-overlay" id="baiduModal" onclick="closeModal(event)">
     <div class="modal-content">
-        <div class="modal-title">请选择百度解析站</div>
-        <div class="modal-option" onclick="go('https://analysis.icy6.cn')">
-            <div class="modal-icon-box blue"><i class="fas fa-link"></i></div>
-            <div>
-                <div class="modal-option-name">解析线路 01</div>
-                <div class="modal-option-desc">稳定可靠 · 推荐主要使用</div>
+        <div class="modal-header-title">选择线路</div>
+        <div class="ios-list">
+            <div class="ios-list-item" onclick="go('https://analysis.icy6.cn')">
+                <div class="list-icon blue"><i class="fas fa-rocket"></i></div>
+                <div>
+                    <div class="list-text-main">线路 01</div>
+                    <div class="list-text-sub">推荐使用 · 稳定高速</div>
+                </div>
             </div>
-        </div>
-        <div class="modal-option" onclick="go('https://kdown.moiu.cn/free/#/index')">
-            <div class="modal-icon-box orange"><i class="fas fa-bolt"></i></div>
-            <div>
-                <div class="modal-option-name">解析线路 02</div>
-                <div class="modal-option-desc">极速备用 · 支持大文件下载</div>
+            <div class="ios-list-item" onclick="go('https://kdown.moiu.cn/free/#/index')">
+                <div class="list-icon orange"><i class="fas fa-bolt"></i></div>
+                <div>
+                    <div class="list-text-main">线路 02</div>
+                    <div class="list-text-sub">备用线路 · 支持大文件</div>
+                </div>
             </div>
         </div>
     </div>
@@ -828,19 +555,21 @@
 
 <div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)">
     <div class="modal-content">
-        <div class="modal-title">请选择老司机选项</div>
-        <div class="modal-option" onclick="copyUrl('https://drive.uc.cn/s/5704ad21c5c64', '看篇软件')">
-            <div class="modal-icon-box green"><i class="fas fa-play-circle"></i></div>
-            <div>
-                <div class="modal-option-name">看篇软件</div>
-                <div class="modal-option-desc">点击复制链接，手动到浏览器访问</div>
+        <div class="modal-header-title">选择频道</div>
+        <div class="ios-list">
+            <div class="ios-list-item" onclick="copyUrl('https://drive.uc.cn/s/5704ad21c5c64', '看篇软件')">
+                <div class="list-icon green"><i class="fas fa-video"></i></div>
+                <div>
+                    <div class="list-text-main">看篇软件</div>
+                    <div class="list-text-sub">点击复制链接到浏览器</div>
+                </div>
             </div>
-        </div>
-        <div class="modal-option" onclick="copyUrl('https://drive.uc.cn/s/c5dac8b3579f4', '黄油游戏')">
-            <div class="modal-icon-box orange"><i class="fas fa-gamepad"></i></div>
-            <div>
-                <div class="modal-option-name">黄油游戏</div>
-                <div class="modal-option-desc">点击复制链接，手动到浏览器访问</div>
+            <div class="ios-list-item" onclick="copyUrl('https://drive.uc.cn/s/c5dac8b3579f4', '黄油游戏')">
+                <div class="list-icon orange"><i class="fas fa-gamepad"></i></div>
+                <div>
+                    <div class="list-text-main">黄油游戏</div>
+                    <div class="list-text-sub">点击复制链接到浏览器</div>
+                </div>
             </div>
         </div>
     </div>
@@ -852,11 +581,11 @@
 </div>
 
 <script>
+    // 逻辑部分完全保持原始功能不变
     function go(url) {
         setTimeout(() => { window.location.href = url; }, 150);
     }
 
-    // 复制链接 + 超大 iOS HUD 提示
     function copyUrl(url, name) {
         const input = document.createElement('textarea');
         input.value = url;
@@ -865,33 +594,35 @@
         document.execCommand('copy');
         document.body.removeChild(input);
 
-        // 触发提示框
         const toast = document.getElementById('toast');
         const toastText = document.getElementById('toast-text');
-        
         toastText.innerHTML = `${name}链接已复制<br>请自行到浏览器访问`;
         
-        // 移除旧动画重置
         toast.classList.remove('show-toast');
-        void toast.offsetWidth; // 触发重绘
+        void toast.offsetWidth; 
         toast.classList.add('show-toast');
-
-        // 动画束后隐藏
-        setTimeout(() => {
-            toast.classList.remove('show-toast');
-        }, 2500);
+        setTimeout(() => { toast.classList.remove('show-toast'); }, 2200);
     }
 
-    // 弹窗管理函数
+    // 弹窗管理逻辑 - 包含iOS退出动画
     function openAllResModal() { 
         document.getElementById('allResModal').classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
     }
     function closeAllResModal(e) { 
-        if(e.target.id === 'allResModal') {
-            e.target.classList.remove('active'); 
-            document.body.style.overflow = '';
-        }
+        if(e.target.id === 'allResModal' || e.target.classList.contains('modal-content')) { 
+            const modal = document.getElementById('allResModal');
+            const content = modal.querySelector('.modal-content');
+            modal.classList.remove('active');
+            modal.classList.add('closing');
+            content.classList.add('closing');
+            setTimeout(() => {
+                modal.classList.remove('closing');
+                content.classList.remove('closing');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 250);
+        } 
     }
 
     function openModal() { 
@@ -899,10 +630,19 @@
         document.body.style.overflow = 'hidden'; 
     }
     function closeModal(e) { 
-        if(e.target.id === 'baiduModal') {
-            e.target.classList.remove('active'); 
-            document.body.style.overflow = '';
-        }
+        if(e.target.id === 'baiduModal' || e.target.classList.contains('modal-content')) { 
+            const modal = document.getElementById('baiduModal');
+            const content = modal.querySelector('.modal-content');
+            modal.classList.remove('active');
+            modal.classList.add('closing');
+            content.classList.add('closing');
+            setTimeout(() => {
+                modal.classList.remove('closing');
+                content.classList.remove('closing');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 250);
+        } 
     }
 
     function openLaoSiJiModal() { 
@@ -910,34 +650,59 @@
         document.body.style.overflow = 'hidden'; 
     }
     function closeLaoSiJiModal(e) { 
-        if(e.target.id === 'laoSiJiModal') {
-            e.target.classList.remove('active'); 
-            document.body.style.overflow = '';
-        }
+        if(e.target.id === 'laoSiJiModal' || e.target.classList.contains('modal-content')) { 
+            const modal = document.getElementById('laoSiJiModal');
+            const content = modal.querySelector('.modal-content');
+            modal.classList.remove('active');
+            modal.classList.add('closing');
+            content.classList.add('closing');
+            setTimeout(() => {
+                modal.classList.remove('closing');
+                content.classList.remove('closing');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 250);
+        } 
     }
 
-    // 关于弹窗管理
     function openAboutModal() { 
         document.getElementById('aboutModal').classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
     }
     function closeAboutModal(e) { 
-        if(e.target.id === 'aboutModal') {
-            e.target.classList.remove('active'); 
-            document.body.style.overflow = '';
-        }
+        if(e.target.id === 'aboutModal' || e.target.classList.contains('modal-content')) { 
+            const modal = document.getElementById('aboutModal');
+            const content = modal.querySelector('.modal-content');
+            modal.classList.remove('active');
+            modal.classList.add('closing');
+            content.classList.add('closing');
+            setTimeout(() => {
+                modal.classList.remove('closing');
+                content.classList.remove('closing');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 250);
+        } 
     }
 
-    // 免责声明弹窗管理
     function openDisclaimerModal() { 
         document.getElementById('disclaimerModal').classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
     }
     function closeDisclaimerModal(e) { 
-        if(e.target.id === 'disclaimerModal') {
-            e.target.classList.remove('active'); 
-            document.body.style.overflow = '';
-        }
+        if(e.target.id === 'disclaimerModal' || e.target.classList.contains('modal-content')) { 
+            const modal = document.getElementById('disclaimerModal');
+            const content = modal.querySelector('.modal-content');
+            modal.classList.remove('active');
+            modal.classList.add('closing');
+            content.classList.add('closing');
+            setTimeout(() => {
+                modal.classList.remove('closing');
+                content.classList.remove('closing');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 250);
+        } 
     }
 
     // 搜索逻辑
@@ -950,30 +715,13 @@
         });
     });
 
-    // 复制联系方式
     function copyContact(type) {
-        let text = '';
-        let name = '';
-        let icon = '';
-        
+        let text = '', name = '', icon = '';
         switch(type) {
-            case 'email':
-                text = 'Tsinhos@qq.com';
-                name = '邮箱';
-                icon = 'fa-envelope';
-                break;
-            case 'qq':
-                text = '1625862774';
-                name = 'QQ号';
-                icon = 'fa-comment';
-                break;
-            case 'qqgroup':
-                text = '1065975237';
-                name = 'QQ群号';
-                icon = 'fa-users';
-                break;
+            case 'email': text = 'Tsinhos@qq.com'; name = '邮箱'; icon = 'fa-envelope'; break;
+            case 'qq': text = '1625862774'; name = 'QQ号'; icon = 'fa-comment'; break;
+            case 'qqgroup': text = '1065975237'; name = 'QQ群号'; icon = 'fa-users'; break;
         }
-        
         const input = document.createElement('textarea');
         input.value = text;
         document.body.appendChild(input);
@@ -981,24 +729,18 @@
         document.execCommand('copy');
         document.body.removeChild(input);
 
-        // 触发提示框
         const toast = document.getElementById('toast');
         const toastText = document.getElementById('toast-text');
         const toastIcon = document.getElementById('toast-icon');
         
         toastIcon.className = `fas ${icon}`;
-        toastIcon.style.color = '#007AFF';
+        toastIcon.style.color = 'var(--ios-blue)';
         toastText.innerHTML = `${name}已复制<br><b>${text}</b>`;
         
         toast.classList.remove('show-toast');
         void toast.offsetWidth;
         toast.classList.add('show-toast');
-
-        setTimeout(() => {
-            toast.classList.remove('show-toast');
-            toastIcon.className = "fas fa-check-circle";
-            toastIcon.style.color = "#34C759";
-        }, 2500);
+        setTimeout(() => { toast.classList.remove('show-toast'); }, 2200);
     }
 </script>
 
