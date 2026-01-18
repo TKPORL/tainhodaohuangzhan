@@ -248,19 +248,9 @@
         }
         .modal-overlay.active { display: flex; animation: iosModalIn 0.3s ease-out; }
 
-        /* iOS 弹窗退出动画 */
-        .modal-overlay.closing {
-            animation: iosModalOut 0.25s ease-in forwards;
-        }
-
         @keyframes iosModalIn {
             from { opacity: 0; transform: scale(1.1); }
             to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes iosModalOut {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(1.05); }
         }
 
         .modal-content {
@@ -272,15 +262,6 @@
             box-shadow: 0 50px 100px rgba(0,0,0,0.2);
             max-height: 85vh;
             overflow-y: auto;
-        }
-        
-        .modal-content.closing {
-            animation: iosContentOut 0.25s ease-in forwards;
-        }
-
-        @keyframes iosContentOut {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(0.95); }
         }
 
         .modal-header-title {
@@ -350,7 +331,6 @@
 
         .disclaimer-body { font-size: 34px; line-height: 1.6; color: #3A3A3C; text-align: justify; }
         .disclaimer-body p { margin-bottom: 30px; }
-        .disclaimer-body a { color: var(--ios-blue); text-decoration: none; }
     </style>
 </head>
 <body>
@@ -458,13 +438,6 @@
     <div class="modal-content">
         <div class="modal-header-title">详细信息</div>
         <div class="ios-list">
-            <div class="ios-list-item" onclick="go('https://link3.cc/xakjyxgs')">
-                <div class="list-icon dark-blue"><i class="fas fa-globe"></i></div>
-                <div>
-                    <div class="list-text-main">官网地址</div>
-                    <div class="list-text-sub">link3.cc/xakjyxgs</div>
-                </div>
-            </div>
             <div class="ios-list-item" onclick="copyContact('email')">
                 <div class="list-icon blue"><i class="fas fa-envelope"></i></div>
                 <div>
@@ -501,10 +474,9 @@
     <div class="modal-content">
         <div class="modal-header-title">免责声明</div>
         <div class="disclaimer-body">
-            <p>根据《计算机软件保护条例》(2002年1月1日实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。鉴于此，用户必须在研究该文件时，遵循上述法规，不得将上述内容用于二次传播或者非法用途，否则，一切后果请用户自负。</p>
-            <p>本软件信息来自网络，版权争议与本软件无关，您必须在下载后的24个小时之内，从您的设备中彻底删除上述内容。访问和下载本软件内容，说明您已同意上述条款。</p>
-            <p>Tsinho导航站作为软件转载方，不保证软件在所有设备上一定可用，精力有限也不会在每个机型上做测试，修改的会员也不能保证一直有效，所有软件会随着官方修复及软件升级而失效，无法接受请卸载。</p>
-            <p>本软件为非盈利性APP，本软件不贩卖软件，所有内容不作为商业行为。</p>
+            <p>根据《计算机软件保护条例》第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可。</p>
+            <p>本站资源均来自网络，仅供私下交流学习，请于下载后24小时内彻底删除。本站不承担任何法律责任。</p>
+            <p>官方渠道唯一地址：<span style="color:var(--ios-blue)">link3.cc/xakjyxgs</span></p>
         </div>
     </div>
 </div>
@@ -604,106 +576,21 @@
         setTimeout(() => { toast.classList.remove('show-toast'); }, 2200);
     }
 
-    // 弹窗管理逻辑 - 包含iOS退出动画
-    function openAllResModal() { 
-        document.getElementById('allResModal').classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeAllResModal(e) { 
-        if(e.target.id === 'allResModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('allResModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
+    // 弹窗管理逻辑
+    function openAllResModal() { document.getElementById('allResModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeAllResModal(e) { if(e.target.id === 'allResModal') { e.target.classList.remove('active'); document.body.style.overflow = ''; } }
 
-    function openModal() { 
-        document.getElementById('baiduModal').classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeModal(e) { 
-        if(e.target.id === 'baiduModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('baiduModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
+    function openModal() { document.getElementById('baiduModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeModal(e) { if(e.target.id === 'baiduModal') { e.target.classList.remove('active'); document.body.style.overflow = ''; } }
 
-    function openLaoSiJiModal() { 
-        document.getElementById('laoSiJiModal').classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeLaoSiJiModal(e) { 
-        if(e.target.id === 'laoSiJiModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('laoSiJiModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
+    function openLaoSiJiModal() { document.getElementById('laoSiJiModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeLaoSiJiModal(e) { if(e.target.id === 'laoSiJiModal') { e.target.classList.remove('active'); document.body.style.overflow = ''; } }
 
-    function openAboutModal() { 
-        document.getElementById('aboutModal').classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeAboutModal(e) { 
-        if(e.target.id === 'aboutModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('aboutModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
+    function openAboutModal() { document.getElementById('aboutModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeAboutModal(e) { if(e.target.id === 'aboutModal') { e.target.classList.remove('active'); document.body.style.overflow = ''; } }
 
-    function openDisclaimerModal() { 
-        document.getElementById('disclaimerModal').classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeDisclaimerModal(e) { 
-        if(e.target.id === 'disclaimerModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('disclaimerModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
+    function openDisclaimerModal() { document.getElementById('disclaimerModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeDisclaimerModal(e) { if(e.target.id === 'disclaimerModal') { e.target.classList.remove('active'); document.body.style.overflow = ''; } }
 
     // 搜索逻辑
     document.getElementById('searchInput').addEventListener('input', function(e) {
