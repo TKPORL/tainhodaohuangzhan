@@ -380,17 +380,17 @@
             <div class="button-name">实用软件</div>
             <div class="button-tag">精品破解</div>
         </div>
-        <div class="big-button" onclick="openLaoSiJiModal()">
+        <div class="big-button" onclick="copyLink('https://pan.baidu.com/s/18F_igXGkdPbtvo_1khZWQg?pwd=impr')">
             <div class="button-icon orange"><i class="fas fa-gamepad"></i></div>
             <div class="button-name">老司机</div>
             <div class="button-tag">绅士专区</div>
         </div>
-        <div class="big-button" onclick="go('https://pan.baidu.com/s/18F_igXGkdPbtvo_1khZWQg?pwd=impr')">
+        <div class="big-button" onclick="go('https://pan.baidu.com/s/1td95Xzns5oitVfvgzxnpZw?pwd=fyhj')">
             <div class="button-icon dark-blue"><i class="fas fa-globe-americas"></i></div>
             <div class="button-name">VPN节点</div>
             <div class="button-tag">网络加速</div>
         </div>
-        <div class="big-button" onclick="go('https://drive.uc.cn/s/5c94199e600a4?public=1')">
+        <div class="big-button" onclick="copyLink('https://drive.uc.cn/s/5c94199e600a4?public=1')">
             <div class="button-icon pink"><i class="fas fa-image"></i></div>
             <div class="button-name">绅士壁纸</div>
             <div class="button-tag">绅士图片</div>
@@ -558,28 +558,6 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)">
-    <div class="modal-content">
-        <div class="modal-header-title">选择频道</div>
-        <div class="ios-list">
-            <div class="ios-list-item" onclick="go('https://drive.uc.cn/s/e166a3f90d984?public=1')">
-                <div class="list-icon green"><i class="fas fa-video"></i></div>
-                <div>
-                    <div class="list-text-main">看骗神器</div>
-                    <div class="list-text-sub">点击直接访问</div>
-                </div>
-            </div>
-            <div class="ios-list-item" onclick="go('https://drive.uc.cn/s/fb9fb0ca4e4f4')">
-                <div class="list-icon orange"><i class="fas fa-gamepad"></i></div>
-                <div>
-                    <div class="list-text-main">黄油游戏</div>
-                    <div class="list-text-sub">点击直接访问</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="toast">
     <i id="toast-icon" class="fas fa-check-circle"></i>
     <div id="toast-text"></div>
@@ -589,6 +567,48 @@
     // 逻辑部分完全保持原始功能不变
     function go(url) {
         setTimeout(() => { window.location.href = url; }, 150);
+    }
+
+    // 新增：复制链接功能
+    function copyLink(url) {
+        // 尝试现代剪贴板API
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('fa-link', '链接已复制<br>请自行打开浏览器搜索', '#007AFF');
+            }).catch(() => {
+                // 降级到传统方法
+                fallbackCopy(url);
+            });
+        } else {
+            // 传统浏览器方法
+            fallbackCopy(url);
+        }
+    }
+
+    // 传统复制方法
+    function fallbackCopy(url) {
+        const input = document.createElement('textarea');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast('fa-link', '链接已复制<br>请自行打开浏览器搜索', '#007AFF');
+    }
+
+    function showToast(iconClass, text, iconColor) {
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toast-text');
+        const toastIcon = document.getElementById('toast-icon');
+        
+        toastIcon.className = `fas ${iconClass}`;
+        toastIcon.style.color = iconColor || '#34C759';
+        toastText.innerHTML = text;
+        
+        toast.classList.remove('show-toast');
+        void toast.offsetWidth; 
+        toast.classList.add('show-toast');
+        setTimeout(() => { toast.classList.remove('show-toast'); }, 2200);
     }
 
     function copyUrl(url, name) {
@@ -637,26 +657,6 @@
     function closeModal(e) { 
         if(e.target.id === 'baiduModal' || e.target.classList.contains('modal-content')) { 
             const modal = document.getElementById('baiduModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
-
-    function openLaoSiJiModal() { 
-        document.getElementById('laoSiJiModal').classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeLaoSiJiModal(e) { 
-        if(e.target.id === 'laoSiJiModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('laoSiJiModal');
             const content = modal.querySelector('.modal-content');
             modal.classList.remove('active');
             modal.classList.add('closing');
