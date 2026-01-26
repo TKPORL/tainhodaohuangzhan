@@ -238,18 +238,28 @@
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.3);
-            display: none;
             align-items: center;
             justify-content: center;
             padding: 40px;
             z-index: 9999;
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.25s ease-out;
         }
-        .modal-overlay.active { display: flex; animation: iosModalIn 0.3s ease-out; }
+        .modal-overlay.active { 
+            opacity: 1; 
+            visibility: visible; 
+            pointer-events: auto;
+            display: flex; 
+            animation: iosModalIn 0.3s ease-out; 
+        }
 
         /* iOS 弹窗退出动画 */
         .modal-overlay.closing {
+            opacity: 0;
             animation: iosModalOut 0.25s ease-in forwards;
         }
 
@@ -380,7 +390,7 @@
             <div class="button-name">实用软件</div>
             <div class="button-tag">精品破解</div>
         </div>
-        <div class="big-button" onclick="copyLink('https://pan.baidu.com/s/18F_igXGkdPbtvo_1khZWQg?pwd=impr')">
+        <div class="big-button" onclick="openLaoSiJiModal()">
             <div class="button-icon orange"><i class="fas fa-gamepad"></i></div>
             <div class="button-name">老司机</div>
             <div class="button-tag">绅士专区</div>
@@ -558,6 +568,28 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)">
+    <div class="modal-content">
+        <div class="modal-header-title">选择频道</div>
+        <div class="ios-list">
+            <div class="ios-list-item" onclick="copyLink('https://pan.baidu.com/s/1G2eGhbg1ya8I7wuSZd_n2w?pwd=4u35')">
+                <div class="list-icon green"><i class="fas fa-video"></i></div>
+                <div>
+                    <div class="list-text-main">看骗神器</div>
+                    <div class="list-text-sub">点击复制链接</div>
+                </div>
+            </div>
+            <div class="ios-list-item" onclick="copyLink('https://drive.uc.cn/s/fb9fb0ca4e4f4')">
+                <div class="list-icon orange"><i class="fas fa-gamepad"></i></div>
+                <div>
+                    <div class="list-text-main">黄油游戏</div>
+                    <div class="list-text-sub">点击复制链接</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="toast">
     <i id="toast-icon" class="fas fa-check-circle"></i>
     <div id="toast-text"></div>
@@ -631,7 +663,9 @@
 
     // 弹窗管理逻辑 - 包含iOS退出动画
     function openAllResModal() { 
-        document.getElementById('allResModal').classList.add('active'); 
+        const modal = document.getElementById('allResModal');
+        modal.style.display = 'flex';
+        modal.classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
     }
     function closeAllResModal(e) { 
@@ -644,14 +678,16 @@
             setTimeout(() => {
                 modal.classList.remove('closing');
                 content.classList.remove('closing');
-                modal.style.display = 'none';
+                modal.style.display = '';
                 document.body.style.overflow = '';
             }, 250);
         } 
     }
 
     function openModal() { 
-        document.getElementById('baiduModal').classList.add('active'); 
+        const modal = document.getElementById('baiduModal');
+        modal.style.display = 'flex';
+        modal.classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
     }
     function closeModal(e) { 
@@ -664,14 +700,16 @@
             setTimeout(() => {
                 modal.classList.remove('closing');
                 content.classList.remove('closing');
-                modal.style.display = 'none';
+                modal.style.display = '';
                 document.body.style.overflow = '';
             }, 250);
         } 
     }
 
     function openAboutModal() { 
-        document.getElementById('aboutModal').classList.add('active'); 
+        const modal = document.getElementById('aboutModal');
+        modal.style.display = 'flex';
+        modal.classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
     }
     function closeAboutModal(e) { 
@@ -684,14 +722,16 @@
             setTimeout(() => {
                 modal.classList.remove('closing');
                 content.classList.remove('closing');
-                modal.style.display = 'none';
+                modal.style.display = '';
                 document.body.style.overflow = '';
             }, 250);
         } 
     }
 
     function openDisclaimerModal() { 
-        document.getElementById('disclaimerModal').classList.add('active'); 
+        const modal = document.getElementById('disclaimerModal');
+        modal.style.display = 'flex';
+        modal.classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
     }
     function closeDisclaimerModal(e) { 
@@ -704,7 +744,29 @@
             setTimeout(() => {
                 modal.classList.remove('closing');
                 content.classList.remove('closing');
-                modal.style.display = 'none';
+                modal.style.display = '';
+                document.body.style.overflow = '';
+            }, 250);
+        } 
+    }
+
+    function openLaoSiJiModal() { 
+        const modal = document.getElementById('laoSiJiModal');
+        modal.style.display = 'flex';
+        modal.classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+    }
+    function closeLaoSiJiModal(e) { 
+        if(e.target.id === 'laoSiJiModal' || e.target.classList.contains('modal-content')) { 
+            const modal = document.getElementById('laoSiJiModal');
+            const content = modal.querySelector('.modal-content');
+            modal.classList.remove('active');
+            modal.classList.add('closing');
+            content.classList.add('closing');
+            setTimeout(() => {
+                modal.classList.remove('closing');
+                content.classList.remove('closing');
+                modal.style.display = '';
                 document.body.style.overflow = '';
             }, 250);
         } 
