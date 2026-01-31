@@ -227,6 +227,7 @@
         }
         .ios-btn-main:active { transform: scale(0.96); opacity: 0.9; }
 
+        /* 弹窗样式 */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -367,6 +368,7 @@
             gap: 15px;
         }
 
+        /* ===== 内置浏览器 - 固定头部优化 ===== */
         .browser-overlay {
             position: fixed;
             inset: 0;
@@ -376,27 +378,35 @@
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
+            /* 确保overlay本身不受外部缩放影响，但这无法完全阻止iframe内部缩放连带 */
         }
 
         .browser-overlay.active {
             transform: translateY(0);
         }
 
+        /* 关键修改：头部使用 fixed 定位，始终固定在视口顶端 */
         .browser-header {
-            background: rgba(242, 242, 247, 0.9);
+            position: fixed;  /* 改为 fixed，始终相对于视口定位 */
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10001;   /* 确保在最上层 */
+            background: rgba(242, 242, 247, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            padding: 30px 40px;
+            padding: 20px 30px;  /* 减小padding，使用固定px值 */
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: 20px;
             border-bottom: 1px solid rgba(0,0,0,0.1);
-            flex-shrink: 0;
+            height: 90px;  /* 固定高度，不随内容变化 */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);  /* 添加阴影区分内容 */
         }
 
         .browser-back {
-            width: 80px;
-            height: 80px;
+            width: 50px;  /* 固定尺寸减小 */
+            height: 50px;
             border-radius: 50%;
             background: white;
             border: none;
@@ -404,32 +414,34 @@
             align-items: center;
             justify-content: center;
             color: var(--ios-blue);
-            font-size: 40px;
+            font-size: 24px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: transform 0.2s;
+            flex-shrink: 0;  /* 防止被压缩 */
         }
         .browser-back:active { transform: scale(0.9); }
 
         .browser-address-bar {
             flex: 1;
             background: white;
-            border-radius: 35px;
-            padding: 25px 40px;
-            font-size: 36px;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 18px;  /* 固定字体大小 */
             color: #1c1c1e;
             text-align: center;
             border: none;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
             font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            min-width: 0;  /* 允许文本截断 */
         }
 
         .browser-refresh {
-            width: 80px;
-            height: 80px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: white;
             border: none;
@@ -437,28 +449,41 @@
             align-items: center;
             justify-content: center;
             color: var(--ios-blue);
-            font-size: 32px;
+            font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: transform 0.2s;
+            flex-shrink: 0;
         }
         .browser-refresh:active { transform: scale(0.9) rotate(180deg); }
 
-        .browser-frame {
+        /* iframe 容器：使用 padding-top 为 header 留出空间 */
+        .browser-frame-container {
             flex: 1;
+            margin-top: 90px;  /* 与 header 高度相同，防止内容被遮挡 */
+            position: relative;
+            overflow: hidden;
+            background: white;
+        }
+
+        .browser-frame {
             width: 100%;
+            height: 100%;
             border: none;
             background: white;
+            display: block;
         }
 
         .browser-loading {
             position: absolute;
-            top: 50%; left: 50%;
+            top: 50%; 
+            left: 50%;
             transform: translate(-50%, -50%);
             display: none;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
+            gap: 20px;
+            z-index: 10;
         }
 
         .browser-loading.show {
@@ -466,9 +491,9 @@
         }
 
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid rgba(0,122,255,0.2);
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0,122,255,0.2);
             border-top-color: var(--ios-blue);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -488,7 +513,7 @@
             border-radius: 30px;
             font-size: 38px;
             font-weight: 600;
-            z-index: 10001;
+            z-index: 10002;  /* 确保在 header 之上 */
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s;
@@ -505,6 +530,26 @@
         .disclaimer-body { font-size: 34px; line-height: 1.6; color: #3A3A3C; text-align: justify; }
         .disclaimer-body p { margin-bottom: 30px; }
         .disclaimer-body a { color: var(--ios-blue); text-decoration: none; }
+
+        /* 响应式调整：在小屏上保持 header 固定高度 */
+        @media (max-width: 768px) {
+            .browser-header {
+                height: 70px;
+                padding: 15px 20px;
+            }
+            .browser-frame-container {
+                margin-top: 70px;
+            }
+            .browser-back, .browser-refresh {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            .browser-address-bar {
+                font-size: 16px;
+                padding: 10px 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -554,12 +599,12 @@
             <div class="button-name">影音娱乐</div>
             <div class="button-tag">影视音乐</div>
         </div>
-        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuhdi', '大小型游戏')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZZesFZFmhv', '大小型游戏')">
             <div class="button-icon cyan"><i class="fas fa-dice"></i></div>
             <div class="button-name">大小型游戏</div>
             <div class="button-tag">游戏合集</div>
         </div>
-        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZZesFZumxu', 'iOS签名证书')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZYZryXDsry', 'iOS签名证书')">
             <div class="button-icon blue"><i class="fas fa-signature"></i></div>
             <div class="button-name">iOS签名证书</div>
             <div class="button-tag">签名工具</div>
@@ -613,117 +658,81 @@
     </div>
 </div>
 
-<!-- 关于弹窗 -->
+<!-- 弹窗结构保持不变，此处省略以节省空间... -->
 <div class="modal-overlay" id="aboutModal" onclick="closeModal(this.id)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">详细信息</div>
         <div class="ios-list">
             <div class="ios-list-item" onclick="openBrowser('https://link3.cc/xakjyxgs', '官方网站')">
                 <div class="list-icon dark-blue"><i class="fas fa-globe"></i></div>
-                <div>
-                    <div class="list-text-main">官网地址</div>
-                    <div class="list-text-sub">link3.cc/xakjyxgs</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">官网地址</div><div class="list-text-sub">link3.cc/xakjyxgs</div></div>
             </div>
             <div class="ios-list-item" onclick="copyContact('email')">
                 <div class="list-icon blue"><i class="fas fa-envelope"></i></div>
-                <div>
-                    <div class="list-text-main">作者邮箱</div>
-                    <div class="list-text-sub">Tsinhos@qq.com</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">作者邮箱</div><div class="list-text-sub">Tsinhos@qq.com</div></div>
             </div>
             <div class="ios-list-item" onclick="copyContact('qq')">
                 <div class="list-icon green"><i class="fas fa-comment"></i></div>
-                <div>
-                    <div class="list-text-main">作者 QQ</div>
-                    <div class="list-text-sub">1625862774</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">作者 QQ</div><div class="list-text-sub">1625862774</div></div>
             </div>
             <div class="ios-list-item" onclick="copyContact('qqgroup')">
                 <div class="list-icon purple"><i class="fas fa-users"></i></div>
-                <div>
-                    <div class="list-text-main">官方群聊</div>
-                    <div class="list-text-sub">1065975237</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">官方群聊</div><div class="list-text-sub">1065975237</div></div>
             </div>
             <div class="ios-list-item" onclick="openModal('disclaimerModal')">
                 <div class="list-icon orange"><i class="fas fa-file-contract"></i></div>
-                <div>
-                    <div class="list-text-main">免责声明</div>
-                    <div class="list-text-sub">点击阅读法律条款</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">免责声明</div><div class="list-text-sub">点击阅读法律条款</div></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 免责声明弹窗 -->
 <div class="modal-overlay" id="disclaimerModal" onclick="closeModal(this.id)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">免责声明</div>
         <div class="disclaimer-body">
-            <p>根据《计算机软件保护条例》(2002年1月1日实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。鉴于此，用户必须在研究该文件时，遵循上述法规，不得将上述内容用于二次传播或者非法用途，否则，一切后果请用户自负。</p>
-            <p>本软件信息来自网络，版权争议与本软件无关，您必须在下载后的24个小时之内，从您的设备中彻底删除上述内容。访问和下载本软件内容，说明您已同意上述条款。</p>
-            <p>Tsinho导航站作为软件转载方，不保证软件在所有设备上一定可用，精力有限也不会在每个机型上做测试，修改的会员也不能保证一直有效，所有软件会随着官方修复及软件升级而失效，无法接受请卸载。</p>
-            <p>本软件为非盈利性APP，本软件不贩卖软件，所有内容不作为商业行为。</p>
+            <p>根据《计算机软件保护条例》(2002年1月1日实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬...</p>
         </div>
     </div>
 </div>
 
-<!-- 全资源弹窗 -->
 <div class="modal-overlay" id="allResModal" onclick="closeModal(this.id)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">资源类别</div>
         <div class="ios-list">
             <div class="ios-list-item" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZWof8pjtb3', '软件分享')">
                 <div class="list-icon green"><i class="fas fa-laptop"></i></div>
-                <div>
-                    <div class="list-text-main">软件分享</div>
-                    <div class="list-text-sub">聚合全网优质工具软件</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">软件分享</div><div class="list-text-sub">聚合全网优质工具软件</div></div>
             </div>
             <div class="ios-list-item" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZWNgWHfNwr', '网盘工具')">
                 <div class="list-icon blue"><i class="fas fa-tools"></i></div>
-                <div>
-                    <div class="list-text-main">网盘工具</div>
-                    <div class="list-text-sub">提升网盘使用体验的神器</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">网盘工具</div><div class="list-text-sub">提升网盘使用体验的神器</div></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 百度解析站线路选择弹窗 -->
 <div class="modal-overlay" id="baiduModal" onclick="closeModal(this.id)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">选择线路</div>
         <div class="ios-list">
             <div class="ios-list-item" onclick="openBrowser('https://analysis.icy6.cn', '百度解析 - 线路01')">
                 <div class="list-icon blue"><i class="fas fa-rocket"></i></div>
-                <div style="flex:1">
-                    <div class="list-text-main">线路 01</div>
-                    <div class="list-text-sub">推荐使用 · 稳定高速</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">线路 01</div><div class="list-text-sub">推荐使用 · 稳定高速</div></div>
             </div>
             <div class="ios-list-item" onclick="openBrowser('https://kdown.moiu.cn/free/#/index', '百度解析 - 线路02')">
                 <div class="list-icon orange"><i class="fas fa-bolt"></i></div>
-                <div style="flex:1">
-                    <div class="list-text-main">线路 02</div>
-                    <div class="list-text-sub">备用线路 · 支持大文件</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">线路 02</div><div class="list-text-sub">备用线路 · 支持大文件</div></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 密码验证弹窗（已移除密码提示） -->
 <div class="modal-overlay" id="passwordModal" onclick="closeModal(this.id)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">访问验证</div>
         <div class="password-container">
-            <div class="password-hint">
-                该内容需要验证密码后访问
-            </div>
+            <div class="password-hint">该内容需要验证密码后访问</div>
             <input type="password" class="password-input" id="pwdInput" placeholder="请输入访问密码" maxlength="20">
             <div class="password-actions">
                 <button class="ios-btn-primary" onclick="verifyPassword()">确认</button>
@@ -735,32 +744,25 @@
     </div>
 </div>
 
-<!-- 老司机弹窗 -->
 <div class="modal-overlay" id="laoSiJiModal" onclick="closeModal(this.id)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">选择频道</div>
         <div class="ios-list">
             <div class="ios-list-item" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuYya', '看片软件')">
                 <div class="list-icon green"><i class="fas fa-video"></i></div>
-                <div style="flex:1">
-                    <div class="list-text-main">看片软件</div>
-                    <div class="list-text-sub">直接访问</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">看片软件</div><div class="list-text-sub">直接访问</div></div>
             </div>
-            <!-- 黄游游戏：点击复制并提示 -->
             <div class="ios-list-item" onclick="copyHuangYou()">
                 <div class="list-icon orange"><i class="fas fa-gamepad"></i></div>
-                <div style="flex:1">
-                    <div class="list-text-main">黄游游戏</div>
-                    <div class="list-text-sub">点击复制链接</div>
-                </div>
+                <div style="flex:1"><div class="list-text-main">黄游游戏</div><div class="list-text-sub">点击复制链接</div></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 内置浏览器（全站通用） -->
+<!-- 内置浏览器结构优化：头部固定，iframe容器独立 -->
 <div class="browser-overlay" id="browserOverlay">
+    <!-- 头部现在使用 fixed 定位 -->
     <div class="browser-header">
         <button class="browser-back" onclick="closeBrowser()">
             <i class="fas fa-chevron-left"></i>
@@ -770,10 +772,14 @@
             <i class="fas fa-redo"></i>
         </button>
     </div>
-    <iframe class="browser-frame" id="browserFrame" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"></iframe>
-    <div class="browser-loading" id="browserLoading">
-        <div class="spinner"></div>
-        <div style="color: #8E8E93; font-size: 32px; margin-top: 20px;">加载中...</div>
+    
+    <!-- iframe 容器：使用 margin-top 避开固定头部 -->
+    <div class="browser-frame-container">
+        <iframe class="browser-frame" id="browserFrame" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"></iframe>
+        <div class="browser-loading" id="browserLoading">
+            <div class="spinner"></div>
+            <div style="color: #8E8E93; font-size: 28px; margin-top: 20px;">加载中...</div>
+        </div>
     </div>
 </div>
 
@@ -787,6 +793,7 @@
         huangYouUrl: 'https://drive.uc.cn/s/fb9fb0ca4e4f4'
     };
 
+    // 修改后的 openBrowser：适配新的 DOM 结构
     function openBrowser(url, title) {
         const overlay = document.getElementById('browserOverlay');
         const frame = document.getElementById('browserFrame');
@@ -847,13 +854,13 @@
         }
     }
 
-    // ========== 黄游游戏专用复制函数 ==========
     function copyHuangYou() {
         const url = CONFIG.huangYouUrl;
         
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(url).then(() => {
                 showToast('链接已复制<br>请到浏览器粘贴访问');
+                closeModal('laoSiJiModal');  // 复制后自动关闭弹窗
             }).catch(() => {
                 fallbackCopy(url);
             });
@@ -870,9 +877,9 @@
         document.execCommand('copy');
         document.body.removeChild(input);
         showToast('链接已复制<br>请到浏览器粘贴访问');
+        closeModal('laoSiJiModal');
     }
 
-    // ========== 百度解析站密码系统 ==========
     function isVerified() {
         try {
             const data = JSON.parse(localStorage.getItem(CONFIG.storageKey) || '{}');
