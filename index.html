@@ -6,7 +6,6 @@
     <title>Tsinho导航站-全网资源合集</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== iOS 系统级变量与重置 ===== */
         :root {
             --ios-blue: #007AFF;
             --ios-green: #34C759;
@@ -44,7 +43,6 @@
             flex-direction: column;
         }
         
-        /* ===== iOS 风格页眉 ===== */
         .app-header {
             text-align: left;
             padding-left: 30px;
@@ -65,7 +63,6 @@
             font-weight: 500;
         }
         
-        /* ===== 搜索框 - 极简 iOS 风格 ===== */
         .search-container {
             margin: 0 auto 100px;
             width: 100%;
@@ -78,12 +75,6 @@
             display: flex;
             align-items: center;
             gap: 30px;
-            border: none;
-            transition: all 0.3s ease;
-        }
-        
-        .search-box:focus-within {
-            background: rgba(118, 118, 128, 0.2);
         }
         
         .search-icon { font-size: 45px; color: #8E8E93; }
@@ -96,7 +87,6 @@
             color: #000;
         }
 
-        /* ===== 分类与网格 ===== */
         .card-title {
             font-size: 56px;
             font-weight: 700;
@@ -120,7 +110,11 @@
             margin-bottom: 90px;
         }
         
-        /* ===== iOS 玻璃按钮 ===== */
+        .grid-layout.special {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+        
         .big-button {
             background: var(--ios-card);
             backdrop-filter: var(--ios-blur);
@@ -176,7 +170,6 @@
         .red { background: linear-gradient(180deg, #FF6961, #FF3B30); }
         .cyan { background: linear-gradient(180deg, #70D7FF, #32D5D9); }
 
-        /* ===== iOS 底部大卡片 ===== */
         .app-footer {
             background: var(--ios-card);
             backdrop-filter: var(--ios-blur);
@@ -230,10 +223,10 @@
             justify-content: center;
             gap: 20px;
             transition: all 0.2s;
+            cursor: pointer;
         }
         .ios-btn-main:active { transform: scale(0.96); opacity: 0.9; }
 
-        /* ===== iOS 居中弹窗 (全系统统一) ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -244,33 +237,17 @@
             z-index: 9999;
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
+            display: flex;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.25s ease-out;
+            transition: opacity 0.25s ease-out, visibility 0.25s;
         }
+        
         .modal-overlay.active { 
             opacity: 1; 
             visibility: visible; 
             pointer-events: auto;
-            display: flex; 
-            animation: iosModalIn 0.3s ease-out; 
-        }
-
-        /* iOS 弹窗退出动画 */
-        .modal-overlay.closing {
-            opacity: 0;
-            animation: iosModalOut 0.25s ease-in forwards;
-        }
-
-        @keyframes iosModalIn {
-            from { opacity: 0; transform: scale(1.1); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes iosModalOut {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(1.05); }
         }
 
         .modal-content {
@@ -282,15 +259,12 @@
             box-shadow: 0 50px 100px rgba(0,0,0,0.2);
             max-height: 85vh;
             overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
         }
         
-        .modal-content.closing {
-            animation: iosContentOut 0.25s ease-in forwards;
-        }
-
-        @keyframes iosContentOut {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(0.95); }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
         }
 
         .modal-header-title {
@@ -300,7 +274,6 @@
             margin-bottom: 60px;
         }
 
-        /* 弹窗内的选项列表 */
         .ios-list {
             background: rgba(255, 255, 255, 0.6);
             border-radius: 45px;
@@ -330,32 +303,203 @@
         .list-text-main { font-size: 46px; font-weight: 700; margin-bottom: 8px; }
         .list-text-sub { font-size: 32px; color: #8E8E93; }
 
-        /* HUD 提示 (Apple Style) */
+        .password-container {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 45px;
+            padding: 60px 50px;
+        }
+
+        .password-hint {
+            text-align: center;
+            font-size: 36px;
+            color: #3A3A3C;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 35px;
+            border: none;
+            border-radius: 30px;
+            background: white;
+            font-size: 48px;
+            text-align: center;
+            letter-spacing: 0.15rem;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            outline: none;
+        }
+
+        .password-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .ios-btn-primary {
+            background: var(--ios-blue);
+            color: white;
+            width: 100%;
+            padding: 35px;
+            border-radius: 30px;
+            font-size: 42px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .ios-btn-primary:active { transform: scale(0.96); }
+
+        .ios-btn-secondary {
+            background: transparent;
+            color: var(--ios-blue);
+            width: 100%;
+            padding: 20px;
+            border: none;
+            font-size: 36px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .browser-overlay {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 10000;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .browser-overlay.active {
+            transform: translateY(0);
+        }
+
+        .browser-header {
+            background: rgba(242, 242, 247, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 30px 40px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        .browser-back {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ios-blue);
+            font-size: 40px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .browser-back:active { transform: scale(0.9); }
+
+        .browser-address-bar {
+            flex: 1;
+            background: white;
+            border-radius: 35px;
+            padding: 25px 40px;
+            font-size: 36px;
+            color: #1c1c1e;
+            text-align: center;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .browser-refresh {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ios-blue);
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .browser-refresh:active { transform: scale(0.9) rotate(180deg); }
+
+        .browser-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: white;
+        }
+
+        .browser-loading {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .browser-loading.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(0,122,255,0.2);
+            border-top-color: var(--ios-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         #toast {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            padding: 80px 100px;
-            border-radius: 80px;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            z-index: 10000;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-            min-width: 600px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 40px 60px;
+            border-radius: 30px;
+            font-size: 38px;
+            font-weight: 600;
+            z-index: 10001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            text-align: center;
+            max-width: 80vw;
+            line-height: 1.4;
         }
-        #toast-icon { font-size: 130px; color: var(--ios-green); margin-bottom: 40px; }
-        #toast-text { font-size: 46px; font-weight: 700; text-align: center; line-height: 1.4; }
-        .show-toast { display: flex !important; animation: iosHud 2.2s ease-in-out forwards; }
 
-        @keyframes iosHud {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
-            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        #toast.show {
+            opacity: 1;
+            visibility: visible;
         }
 
         .disclaimer-body { font-size: 34px; line-height: 1.6; color: #3A3A3C; text-align: justify; }
@@ -380,52 +524,52 @@
     
     <h2 class="card-title">资源库 <span class="card-count">11</span></h2>
     <div class="grid-layout">
-        <div class="big-button" onclick="openAllResModal()">
+        <div class="big-button" onclick="openModal('allResModal')">
             <div class="button-icon blue"><i class="fas fa-archive"></i></div>
             <div class="button-name">全资源</div>
             <div class="button-tag">分类合集</div>
         </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZYCq0tErl5')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZYCq0tErl5', '实用软件')">
             <div class="button-icon green"><i class="fas fa-laptop-code"></i></div>
             <div class="button-name">实用软件</div>
             <div class="button-tag">精品破解</div>
         </div>
-        <div class="big-button" onclick="openLaoSiJiModal()">
+        <div class="big-button" onclick="openModal('laoSiJiModal')">
             <div class="button-icon orange"><i class="fas fa-gamepad"></i></div>
             <div class="button-name">老司机</div>
             <div class="button-tag">黄色小玩意</div>
         </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZYCq0tEPqe')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZYCq0tEPqe', 'VPN资源')">
             <div class="button-icon dark-blue"><i class="fas fa-globe-americas"></i></div>
             <div class="button-name">VPN</div>
             <div class="button-tag">网络加速</div>
         </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvtWww')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvtWww', '绅士壁纸')">
             <div class="button-icon pink"><i class="fas fa-image"></i></div>
             <div class="button-name">绅士壁纸</div>
             <div class="button-tag">绅士图片</div>
         </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXSmDnDp67')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZXSmDnDp67', '影音娱乐')">
             <div class="button-icon purple"><i class="fas fa-film"></i></div>
             <div class="button-name">影音娱乐</div>
             <div class="button-tag">影视音乐</div>
         </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuhdi')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuhdi', '大小型游戏')">
             <div class="button-icon cyan"><i class="fas fa-dice"></i></div>
             <div class="button-name">大小型游戏</div>
             <div class="button-tag">游戏合集</div>
         </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZZesFZumxu')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZZesFZumxu', 'iOS签名证书')">
             <div class="button-icon blue"><i class="fas fa-signature"></i></div>
             <div class="button-name">iOS签名证书</div>
             <div class="button-tag">签名工具</div>
         </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXSmDnDz0o')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZXSmDnDz0o', '资源更新文档')">
             <div class="button-icon green"><i class="fas fa-file-alt"></i></div>
             <div class="button-name">资源更新文档</div>
             <div class="button-tag">已停止更新</div>
         </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuw2l')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuw2l', '网盘帮下载')">
             <div class="button-icon purple"><i class="fas fa-download"></i></div>
             <div class="button-name">各大网盘帮下载</div>
             <div class="button-tag">帮下载</div>
@@ -433,18 +577,18 @@
     </div>
 
     <h2 class="card-title">网盘提速 <span class="card-count">3</span></h2>
-    <div class="grid-layout" style="grid-template-columns: repeat(3, 1fr); gap: 25px;">
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXyki8UVu8')">
+    <div class="grid-layout special">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZXyki8UVu8', '网盘工具')">
             <div class="button-icon orange"><i class="fas fa-wrench"></i></div>
             <div class="button-name">网盘工具</div>
             <div class="button-tag">必备增强</div>
         </div>
-        <div class="big-button" onclick="openModal()">
+        <div class="big-button" onclick="checkBaiduAccess()">
             <div class="button-icon red"><i class="fas fa-link"></i></div>
             <div class="button-name">百度解析站</div>
             <div class="button-tag">高速直链</div>
         </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCsUd2v')">
+        <div class="big-button" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZXpjCsUd2v', '网盘教程')">
             <div class="button-icon green"><i class="fas fa-book"></i></div>
             <div class="button-name">网盘教程</div>
             <div class="button-tag">避坑指南</div>
@@ -463,17 +607,18 @@
                 <span>资源全天候实时同步，极致体验</span>
             </div>
         </div>
-        <button class="ios-btn-main" onclick="openAboutModal()">
+        <button class="ios-btn-main" onclick="openModal('aboutModal')">
             <i class="fas fa-info-circle"></i> 查看详细信息
         </button>
     </div>
 </div>
 
-<div class="modal-overlay" id="aboutModal" onclick="closeAboutModal(event)">
-    <div class="modal-content">
+<!-- 关于弹窗 -->
+<div class="modal-overlay" id="aboutModal" onclick="closeModal(this.id)">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">详细信息</div>
         <div class="ios-list">
-            <div class="ios-list-item" onclick="go('https://link3.cc/xakjyxgs')">
+            <div class="ios-list-item" onclick="openBrowser('https://link3.cc/xakjyxgs', '官方网站')">
                 <div class="list-icon dark-blue"><i class="fas fa-globe"></i></div>
                 <div>
                     <div class="list-text-main">官网地址</div>
@@ -501,7 +646,7 @@
                     <div class="list-text-sub">1065975237</div>
                 </div>
             </div>
-            <div class="ios-list-item" onclick="openDisclaimerModal()">
+            <div class="ios-list-item" onclick="openModal('disclaimerModal')">
                 <div class="list-icon orange"><i class="fas fa-file-contract"></i></div>
                 <div>
                     <div class="list-text-main">免责声明</div>
@@ -512,8 +657,9 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="disclaimerModal" onclick="closeDisclaimerModal(event)">
-    <div class="modal-content">
+<!-- 免责声明弹窗 -->
+<div class="modal-overlay" id="disclaimerModal" onclick="closeModal(this.id)">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">免责声明</div>
         <div class="disclaimer-body">
             <p>根据《计算机软件保护条例》(2002年1月1日实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。鉴于此，用户必须在研究该文件时，遵循上述法规，不得将上述内容用于二次传播或者非法用途，否则，一切后果请用户自负。</p>
@@ -524,18 +670,19 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="allResModal" onclick="closeAllResModal(event)">
-    <div class="modal-content">
+<!-- 全资源弹窗 -->
+<div class="modal-overlay" id="allResModal" onclick="closeModal(this.id)">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">资源类别</div>
         <div class="ios-list">
-            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZWof8pjtb3')">
+            <div class="ios-list-item" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZWof8pjtb3', '软件分享')">
                 <div class="list-icon green"><i class="fas fa-laptop"></i></div>
                 <div>
                     <div class="list-text-main">软件分享</div>
                     <div class="list-text-sub">聚合全网优质工具软件</div>
                 </div>
             </div>
-            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZWNgWHfNwr')">
+            <div class="ios-list-item" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZWNgWHfNwr', '网盘工具')">
                 <div class="list-icon blue"><i class="fas fa-tools"></i></div>
                 <div>
                     <div class="list-text-main">网盘工具</div>
@@ -546,20 +693,21 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="baiduModal" onclick="closeModal(event)">
-    <div class="modal-content">
+<!-- 百度解析站线路选择弹窗 -->
+<div class="modal-overlay" id="baiduModal" onclick="closeModal(this.id)">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">选择线路</div>
         <div class="ios-list">
-            <div class="ios-list-item" onclick="go('https://analysis.icy6.cn')">
+            <div class="ios-list-item" onclick="openBrowser('https://analysis.icy6.cn', '百度解析 - 线路01')">
                 <div class="list-icon blue"><i class="fas fa-rocket"></i></div>
-                <div>
+                <div style="flex:1">
                     <div class="list-text-main">线路 01</div>
                     <div class="list-text-sub">推荐使用 · 稳定高速</div>
                 </div>
             </div>
-            <div class="ios-list-item" onclick="go('https://kdown.moiu.cn/free/#/index')">
+            <div class="ios-list-item" onclick="openBrowser('https://kdown.moiu.cn/free/#/index', '百度解析 - 线路02')">
                 <div class="list-icon orange"><i class="fas fa-bolt"></i></div>
-                <div>
+                <div style="flex:1">
                     <div class="list-text-main">线路 02</div>
                     <div class="list-text-sub">备用线路 · 支持大文件</div>
                 </div>
@@ -568,56 +716,152 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)">
-    <div class="modal-content">
+<!-- 密码验证弹窗（已移除密码提示） -->
+<div class="modal-overlay" id="passwordModal" onclick="closeModal(this.id)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header-title">访问验证</div>
+        <div class="password-container">
+            <div class="password-hint">
+                该内容需要验证密码后访问
+            </div>
+            <input type="password" class="password-input" id="pwdInput" placeholder="请输入访问密码" maxlength="20">
+            <div class="password-actions">
+                <button class="ios-btn-primary" onclick="verifyPassword()">确认</button>
+                <a href="#" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sUfBuomz5x8y', '获取密码'); return false;" class="ios-btn-secondary">
+                    <i class="fas fa-key"></i> 获取访问密码
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 老司机弹窗 -->
+<div class="modal-overlay" id="laoSiJiModal" onclick="closeModal(this.id)">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title">选择频道</div>
         <div class="ios-list">
-            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuYya')">
+            <div class="ios-list-item" onclick="openBrowser('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuYya', '看片软件')">
                 <div class="list-icon green"><i class="fas fa-video"></i></div>
-                <div>
+                <div style="flex:1">
                     <div class="list-text-main">看片软件</div>
                     <div class="list-text-sub">直接访问</div>
                 </div>
             </div>
-            <div class="ios-list-item" onclick="copyLink('https://drive.uc.cn/s/fb9fb0ca4e4f4')">
+            <!-- 黄游游戏：点击复制并提示 -->
+            <div class="ios-list-item" onclick="copyHuangYou()">
                 <div class="list-icon orange"><i class="fas fa-gamepad"></i></div>
-                <div>
+                <div style="flex:1">
                     <div class="list-text-main">黄游游戏</div>
-                    <div class="list-text-sub">复制链接</div>
+                    <div class="list-text-sub">点击复制链接</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="toast">
-    <i id="toast-icon" class="fas fa-check-circle"></i>
-    <div id="toast-text"></div>
+<!-- 内置浏览器（全站通用） -->
+<div class="browser-overlay" id="browserOverlay">
+    <div class="browser-header">
+        <button class="browser-back" onclick="closeBrowser()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="browser-address-bar" id="browserAddress">安全浏览</div>
+        <button class="browser-refresh" onclick="refreshBrowser()">
+            <i class="fas fa-redo"></i>
+        </button>
+    </div>
+    <iframe class="browser-frame" id="browserFrame" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"></iframe>
+    <div class="browser-loading" id="browserLoading">
+        <div class="spinner"></div>
+        <div style="color: #8E8E93; font-size: 32px; margin-top: 20px;">加载中...</div>
+    </div>
 </div>
 
+<div id="toast"></div>
+
 <script>
-    // 逻辑部分完全保持原始功能不变
-    function go(url) {
-        setTimeout(() => { window.location.href = url; }, 150);
+    const CONFIG = {
+        password: 'Tsinho2255',
+        passwordVersion: 'v1',
+        storageKey: 'baidu_auth',
+        huangYouUrl: 'https://drive.uc.cn/s/fb9fb0ca4e4f4'
+    };
+
+    function openBrowser(url, title) {
+        const overlay = document.getElementById('browserOverlay');
+        const frame = document.getElementById('browserFrame');
+        const address = document.getElementById('browserAddress');
+        const loading = document.getElementById('browserLoading');
+        
+        address.textContent = title || '资源浏览';
+        loading.classList.add('show');
+        frame.src = url;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        setTimeout(() => {
+            loading.classList.remove('show');
+        }, 1000);
     }
 
-    // 新增：复制链接功能
-    function copyLink(url) {
-        // 尝试现代剪贴板API
+    function closeBrowser() {
+        const overlay = document.getElementById('browserOverlay');
+        const frame = document.getElementById('browserFrame');
+        
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        setTimeout(() => {
+            frame.src = 'about:blank';
+        }, 400);
+    }
+
+    function refreshBrowser() {
+        const frame = document.getElementById('browserFrame');
+        const loading = document.getElementById('browserLoading');
+        
+        loading.classList.add('show');
+        frame.src = frame.src;
+        
+        setTimeout(() => {
+            loading.classList.remove('show');
+        }, 800);
+    }
+
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeModal(modalId) {
+        const id = typeof modalId === 'string' ? modalId : modalId.target.id;
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.remove('active');
+            if (!document.getElementById('browserOverlay').classList.contains('active')) {
+                document.body.style.overflow = '';
+            }
+        }
+    }
+
+    // ========== 黄游游戏专用复制函数 ==========
+    function copyHuangYou() {
+        const url = CONFIG.huangYouUrl;
+        
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(url).then(() => {
-                showToast('fa-link', '链接已复制<br>请自行打开浏览器搜索', '#007AFF');
+                showToast('链接已复制<br>请到浏览器粘贴访问');
             }).catch(() => {
-                // 降级到传统方法
                 fallbackCopy(url);
             });
         } else {
-            // 传统浏览器方法
             fallbackCopy(url);
         }
     }
 
-    // 传统复制方法
     function fallbackCopy(url) {
         const input = document.createElement('textarea');
         input.value = url;
@@ -625,154 +869,97 @@
         input.select();
         document.execCommand('copy');
         document.body.removeChild(input);
-        showToast('fa-link', '链接已复制<br>请自行打开浏览器搜索', '#007AFF');
+        showToast('链接已复制<br>请到浏览器粘贴访问');
     }
 
-    function showToast(iconClass, text, iconColor) {
+    // ========== 百度解析站密码系统 ==========
+    function isVerified() {
+        try {
+            const data = JSON.parse(localStorage.getItem(CONFIG.storageKey) || '{}');
+            return data.verified === true && data.version === CONFIG.passwordVersion;
+        } catch(e) {
+            return false;
+        }
+    }
+
+    function saveVerified() {
+        const data = {
+            verified: true,
+            version: CONFIG.passwordVersion,
+            timestamp: Date.now()
+        };
+        localStorage.setItem(CONFIG.storageKey, JSON.stringify(data));
+    }
+
+    function checkBaiduAccess() {
+        if (isVerified()) {
+            openModal('baiduModal');
+        } else {
+            openModal('passwordModal');
+            setTimeout(() => {
+                document.getElementById('pwdInput').focus();
+            }, 300);
+        }
+    }
+
+    function verifyPassword() {
+        const input = document.getElementById('pwdInput').value.trim();
+        
+        if (input === CONFIG.password) {
+            saveVerified();
+            closeModal('passwordModal');
+            showToast('验证成功');
+            document.getElementById('pwdInput').value = '';
+            
+            setTimeout(() => {
+                openModal('baiduModal');
+            }, 500);
+        } else {
+            showToast('密码错误，请重试');
+            document.getElementById('pwdInput').value = '';
+            
+            const container = document.querySelector('.password-container');
+            container.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                container.style.animation = '';
+            }, 500);
+        }
+    }
+
+    document.getElementById('pwdInput')?.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') verifyPassword();
+    });
+
+    function showToast(text) {
         const toast = document.getElementById('toast');
-        const toastText = document.getElementById('toast-text');
-        const toastIcon = document.getElementById('toast-icon');
+        toast.innerHTML = text;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function copyContact(type) {
+        let text = '', name = '';
+        switch(type) {
+            case 'email': text = 'Tsinhos@qq.com'; name = '邮箱'; break;
+            case 'qq': text = '1625862774'; name = 'QQ号'; break;
+            case 'qqgroup': text = '1065975237'; name = 'QQ群号'; break;
+        }
         
-        toastIcon.className = `fas ${iconClass}`;
-        toastIcon.style.color = iconColor || '#34C759';
-        toastText.innerHTML = text;
-        
-        toast.classList.remove('show-toast');
-        void toast.offsetWidth; 
-        toast.classList.add('show-toast');
-        setTimeout(() => { toast.classList.remove('show-toast'); }, 2200);
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`${name}已复制`);
+            });
+        } else {
+            const input = document.createElement('textarea');
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            showToast(`${name}已复制`);
+        }
     }
 
-    function copyUrl(url, name) {
-        const input = document.createElement('textarea');
-        input.value = url;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-
-        const toast = document.getElementById('toast');
-        const toastText = document.getElementById('toast-text');
-        toastText.innerHTML = `${name}链接已复制<br>请自行到浏览器访问`;
-        
-        toast.classList.remove('show-toast');
-        void toast.offsetWidth; 
-        toast.classList.add('show-toast');
-        setTimeout(() => { toast.classList.remove('show-toast'); }, 2200);
-    }
-
-    // 弹窗管理逻辑 - 包含iOS退出动画
-    function openAllResModal() { 
-        const modal = document.getElementById('allResModal');
-        modal.style.display = 'flex';
-        modal.classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeAllResModal(e) { 
-        if(e.target.id === 'allResModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('allResModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = '';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
-
-    function openModal() { 
-        const modal = document.getElementById('baiduModal');
-        modal.style.display = 'flex';
-        modal.classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeModal(e) { 
-        if(e.target.id === 'baiduModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('baiduModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = '';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
-
-    function openAboutModal() { 
-        const modal = document.getElementById('aboutModal');
-        modal.style.display = 'flex';
-        modal.classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeAboutModal(e) { 
-        if(e.target.id === 'aboutModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('aboutModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = '';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
-
-    function openDisclaimerModal() { 
-        const modal = document.getElementById('disclaimerModal');
-        modal.style.display = 'flex';
-        modal.classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeDisclaimerModal(e) { 
-        if(e.target.id === 'disclaimerModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('disclaimerModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = '';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
-
-    function openLaoSiJiModal() { 
-        const modal = document.getElementById('laoSiJiModal');
-        modal.style.display = 'flex';
-        modal.classList.add('active'); 
-        document.body.style.overflow = 'hidden'; 
-    }
-    function closeLaoSiJiModal(e) { 
-        if(e.target.id === 'laoSiJiModal' || e.target.classList.contains('modal-content')) { 
-            const modal = document.getElementById('laoSiJiModal');
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('active');
-            modal.classList.add('closing');
-            content.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('closing');
-                content.classList.remove('closing');
-                modal.style.display = '';
-                document.body.style.overflow = '';
-            }, 250);
-        } 
-    }
-
-    // 搜索逻辑
     document.getElementById('searchInput').addEventListener('input', function(e) {
         const val = e.target.value.toLowerCase();
         const btns = document.querySelectorAll('.big-button');
@@ -782,33 +969,15 @@
         });
     });
 
-    function copyContact(type) {
-        let text = '', name = '', icon = '';
-        switch(type) {
-            case 'email': text = 'Tsinhos@qq.com'; name = '邮箱'; icon = 'fa-envelope'; break;
-            case 'qq': text = '1625862774'; name = 'QQ号'; icon = 'fa-comment'; break;
-            case 'qqgroup': text = '1065975237'; name = 'QQ群号'; icon = 'fa-users'; break;
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-15px); }
+            75% { transform: translateX(15px); }
         }
-        const input = document.createElement('textarea');
-        input.value = text;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-
-        const toast = document.getElementById('toast');
-        const toastText = document.getElementById('toast-text');
-        const toastIcon = document.getElementById('toast-icon');
-        
-        toastIcon.className = `fas ${icon}`;
-        toastIcon.style.color = 'var(--ios-blue)';
-        toastText.innerHTML = `${name}已复制<br><b>${text}</b>`;
-        
-        toast.classList.remove('show-toast');
-        void toast.offsetWidth;
-        toast.classList.add('show-toast');
-        setTimeout(() => { toast.classList.remove('show-toast'); }, 2200);
-    }
+    `;
+    document.head.appendChild(style);
 </script>
 
 </body>
