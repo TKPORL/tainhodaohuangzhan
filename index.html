@@ -161,7 +161,6 @@
             position: relative;
             overflow: hidden;
             will-change: transform;
-            /* 去掉所有 outline */
             outline: none !important;
         }
 
@@ -352,7 +351,6 @@
             box-shadow: var(--shadow-medium);
             position: relative;
             overflow: hidden;
-            /* 去掉所有 outline */
             outline: none !important;
         }
         
@@ -366,7 +364,7 @@
             opacity: 0.9; 
         }
 
-        /* ===== iOS 居中弹窗 (全系统统一) ===== */
+        /* ===== iOS 居中弹窗 ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -455,7 +453,6 @@
             transition: all var(--transition-fast);
             position: relative;
             overflow: hidden;
-            /* 去掉所有 outline */
             outline: none !important;
         }
         
@@ -506,13 +503,11 @@
             color: var(--ios-blue);
         }
 
-        /* HUD 提示 (Apple Style) - 改到底部中间 */
+        /* HUD 提示 - 底部中间 */
         #toast {
             position: fixed;
-            /* 改为底部定位 */
             bottom: 150px;
             left: 50%;
-            top: auto;
             transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(30px);
@@ -526,7 +521,6 @@
             box-shadow: var(--shadow-heavy);
             min-width: 500px;
             will-change: transform, opacity;
-            /* 去掉所有 outline */
             outline: none !important;
         }
         
@@ -547,7 +541,7 @@
         
         .show-toast { 
             display: flex !important; 
-            animation: iosHudBottom 2.2s ease-in-out forwards; 
+            animation: iosHudBottom 2.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
         }
 
         @keyframes toastIconPulse {
@@ -556,14 +550,16 @@
             100% { transform: scale(1); }
         }
 
-        /* 底部出现的动画 */
         @keyframes iosHudBottom {
             0% { 
                 opacity: 0; 
                 transform: translateX(-50%) translateY(50px) scale(0.8); 
             }
-            15% { 
+            20% { 
                 opacity: 1; 
+                transform: translateX(-50%) translateY(0) scale(1.05); 
+            }
+            25% { 
                 transform: translateX(-50%) translateY(0) scale(1); 
             }
             85% { 
@@ -633,7 +629,6 @@
             transition: all var(--transition-normal);
             font-weight: 600;
             letter-spacing: 2px;
-            /* 去掉所有 outline */
             outline: none !important;
         }
 
@@ -651,8 +646,8 @@
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+            25% { transform: translateX(-15px); }
+            75% { transform: translateX(15px); }
         }
 
         .auth-btn {
@@ -666,8 +661,7 @@
             cursor: pointer;
             transition: all var(--transition-normal);
             box-shadow: var(--shadow-medium);
-            min-width: 200px;
-            /* 去掉所有 outline */
+            min-width: 220px;
             outline: none !important;
         }
 
@@ -705,7 +699,6 @@
             width: 100%;
             max-width: 400px;
             margin: 0 auto;
-            /* 去掉所有 outline */
             outline: none !important;
         }
 
@@ -726,7 +719,7 @@
             color: #ff3b30;
             font-size: 28px;
             font-weight: 600;
-            margin-top: 20px;
+            margin-top: 10px;
             display: none;
         }
 
@@ -771,7 +764,6 @@
             max-width: 200px;
             margin: 20px auto 0;
             opacity: 0.8;
-            /* 去掉所有 outline */
             outline: none !important;
         }
 
@@ -885,7 +877,6 @@
                 max-width: 180px;
             }
 
-            /* 移动端 Toast 尺寸调整 */
             #toast {
                 bottom: 100px;
                 padding: 40px 60px;
@@ -902,7 +893,7 @@
             }
         }
 
-        /* 完全去掉 focus 时的 outline */
+        /* 强制去掉所有 focus outline */
         *:focus {
             outline: none !important;
         }
@@ -915,28 +906,6 @@
         .modal-content,
         .modal-overlay {
             contain: layout style paint;
-        }
-
-        /* ===== 暗色模式支持 ===== */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --ios-bg: #000000;
-                --ios-card: rgba(28, 28, 30, 0.7);
-                --text-primary: #ffffff;
-                --text-secondary: #8e8e93;
-            }
-            
-            body {
-                background-color: var(--ios-bg);
-            }
-            
-            .search-box {
-                background: rgba(120, 120, 128, 0.15);
-            }
-            
-            .search-input {
-                color: #ffffff;
-            }
         }
 
         /* ===== 减少动画（用户偏好） ===== */
@@ -1058,7 +1027,7 @@
 </div>
 
 <div class="modal-overlay" id="aboutModal" onclick="closeAboutModal(event)" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
-    <div class="modal-content">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title" id="aboutModalTitle">详细信息</div>
         <div class="ios-list">
             <div class="ios-list-item" onclick="go('https://link3.cc/xakjyxgs')" tabindex="0" role="button" aria-label="官网地址link3.cc xakjyxgs">
@@ -1101,7 +1070,7 @@
 </div>
 
 <div class="modal-overlay" id="disclaimerModal" onclick="closeDisclaimerModal(event)" role="dialog" aria-modal="true" aria-labelledby="disclaimerModalTitle">
-    <div class="modal-content">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title" id="disclaimerModalTitle">免责声明</div>
         <div class="disclaimer-body">
             <p>根据《计算机软件保护条例》(2002年1月1日实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。鉴于此，用户必须在研究该文件时，遵循上述法规，不得将上述内容用于二次传播或者非法用途，否则，一切后果请用户自负。</p>
@@ -1113,7 +1082,7 @@
 </div>
 
 <div class="modal-overlay" id="allResModal" onclick="closeAllResModal(event)" role="dialog" aria-modal="true" aria-labelledby="allResModalTitle">
-    <div class="modal-content">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title" id="allResModalTitle">资源类别</div>
         <div class="ios-list">
             <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZWof8pjtb3')" tabindex="0" role="button" aria-label="软件分享聚合全网优质工具软件">
@@ -1135,10 +1104,9 @@
 </div>
 
 <div class="modal-overlay" id="baiduModal" onclick="closeModal(event)" role="dialog" aria-modal="true" aria-labelledby="baiduModalTitle">
-    <div class="modal-content">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title" id="baiduModalTitle">选择线路</div>
         
-        <!-- 密码授权界面 -->
         <div class="password-auth-container" id="passwordAuth">
             <div class="password-input-group">
                 <h3 style="font-size: 42px; font-weight: 700; margin-bottom: 20px; color: #1c1c1e;">访问授权</h3>
@@ -1154,18 +1122,17 @@
                 <div class="auth-error-message" id="authError">密码错误，请重试</div>
             </div>
             
-            <a href="https://yun.139.com/shareweb/#/w/i/2sUfBuomz5x8y" class="get-password-btn" target="_blank" rel="noopener noreferrer">
+            <a href="https://yun.139.com/shareweb/#/w/i/2sUfBuomz5x8y" class="get-password-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
                 <i class="fas fa-key"></i>
                 获取访问密码
             </a>
             
-            <button class="clear-auth-btn" onclick="clearLocalAuthorization()" style="background: #8e8e93; color: white; border: none; border-radius: 20px; padding: 15px 25px; font-size: 20px; cursor: pointer; transition: all 0.3s; margin-top: 20px;">
+            <button class="clear-auth-btn" onclick="clearLocalAuthorization()">
                 <i class="fas fa-trash"></i>
                 清除本地授权
             </button>
         </div>
 
-        <!-- 授权成功后的线路选择界面 -->
         <div class="auth-content" id="authContent">
             <div class="ios-list">
                 <div class="ios-list-item" onclick="go('https://analysis.icy6.cn')" tabindex="0" role="button" aria-label="线路01推荐使用稳定高速">
@@ -1188,7 +1155,7 @@
 </div>
 
 <div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)" role="dialog" aria-modal="true" aria-labelledby="laoSiJiModalTitle">
-    <div class="modal-content">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-title" id="laoSiJiModalTitle">选择频道</div>
         <div class="ios-list">
             <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuYya')" tabindex="0" role="button" aria-label="看片软件直接访问">
@@ -1215,7 +1182,7 @@
 </div>
 
 <script>
-    // ===== 修复后的弹窗系统 =====
+    // ===== 弹窗系统 =====
     
     function closeModalById(modalId) {
         const modal = document.getElementById(modalId);
