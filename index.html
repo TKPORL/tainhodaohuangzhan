@@ -8,6 +8,7 @@
     <style>
         /* ===== iOS 系统级变量与重置 ===== */
         :root {
+            /* 固定颜色值，避免CSS变量在移动端的渲染问题 */
             --ios-blue: #007AFF;
             --ios-green: #34C759;
             --ios-bg: #F2F2F7;
@@ -20,6 +21,9 @@
             --shadow-light: 0 8px 25px rgba(0,0,0,0.05);
             --shadow-medium: 0 15px 35px rgba(0,0,0,0.1);
             --shadow-heavy: 0 25px 50px rgba(0,0,0,0.15);
+            /* 文本颜色变量 */
+            --text-primary: #1c1c1e;
+            --text-secondary: #8E8E93;
         }
 
         * {
@@ -31,7 +35,9 @@
         }
         
         body {
-            background-color: var(--ios-bg);
+            /* 使用固定颜色值而不是CSS变量 */
+            background-color: #F2F2F7;
+            /* 使用固定的背景渐变，避免变量在移动端的问题 */
             background-image: 
                 radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.08) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(175, 82, 222, 0.08) 0px, transparent 50%);
@@ -40,6 +46,8 @@
             min-height: 100vh;
             color: #000;
             overflow-x: hidden;
+            /* 确保在所有环境下都是浅色主题 */
+            background-attachment: fixed;
         }
 
         .app-container {
@@ -96,7 +104,7 @@
         
         .search-box:focus-within {
             background: rgba(118, 118, 128, 0.2);
-            box-shadow: var(--shadow-medium);
+            box-shadow: var(--shadow-light);
         }
         
         .search-icon { 
@@ -146,17 +154,17 @@
         
         /* ===== iOS 玻璃按钮 ===== */
         .big-button {
-            background: var(--ios-card);
-            backdrop-filter: var(--ios-blur);
-            -webkit-backdrop-filter: var(--ios-blur);
-            border-radius: var(--radius-main);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 70px;
             padding: 80px 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
             border: 1px solid rgba(255,255,255,0.5);
-            box-shadow: var(--shadow-light);
-            transition: all var(--transition-normal);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             position: relative;
             overflow: hidden;
@@ -167,12 +175,12 @@
 
         .big-button:hover {
             transform: translateY(-4px);
-            box-shadow: var(--shadow-medium);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
         .big-button:active {
             transform: scale(0.95) translateY(2px);
-            transition: all var(--transition-fast);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .button-icon {
@@ -185,8 +193,8 @@
             color: white;
             font-size: 80px;
             margin-bottom: 40px;
-            box-shadow: var(--shadow-medium);
-            transition: all var(--transition-normal);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             z-index: 2;
         }
@@ -267,20 +275,20 @@
 
         /* ===== iOS 底部大卡片 ===== */
         .app-footer {
-            background: var(--ios-card);
-            backdrop-filter: var(--ios-blur);
-            -webkit-backdrop-filter: var(--ios-blur);
-            border-radius: var(--radius-main);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 70px;
             padding: 80px 60px;
             border: 1px solid rgba(255,255,255,0.5);
             margin-top: 20px;
             margin-bottom: 100px;
-            box-shadow: var(--shadow-light);
-            transition: all var(--transition-normal);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .app-footer:hover {
-            box-shadow: var(--shadow-medium);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             transform: translateY(-2px);
         }
 
@@ -291,11 +299,11 @@
             text-align: center;
         }
 
-        .footer-highlight { color: var(--ios-blue); }
+        .footer-highlight { color: #007AFF; }
 
         .footer-info-box {
             background: rgba(255, 255, 255, 0.5);
-            border-radius: var(--radius-inner);
+            border-radius: 45px;
             padding: 10px 0;
             margin-bottom: 60px;
         }
@@ -306,7 +314,7 @@
             align-items: center;
             gap: 40px;
             border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: all var(--transition-fast);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .info-row:hover {
@@ -317,10 +325,10 @@
 
         .info-row i { 
             font-size: 45px; 
-            color: var(--ios-blue); 
+            color: #007AFF; 
             width: 60px; 
             text-align: center;
-            transition: all var(--transition-fast);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .info-row:hover i {
@@ -331,11 +339,11 @@
             font-size: 38px; 
             color: #1c1c1e; 
             font-weight: 500;
-            transition: all var(--transition-fast);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .ios-btn-main {
-            background: var(--ios-blue);
+            background: #007AFF;
             color: white;
             width: 100%;
             padding: 45px;
@@ -347,9 +355,9 @@
             align-items: center;
             justify-content: center;
             gap: 20px;
-            transition: all var(--transition-normal);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            box-shadow: var(--shadow-medium);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
             /* 去掉所有 outline */
@@ -358,7 +366,7 @@
         
         .ios-btn-main:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-heavy);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
         }
         
         .ios-btn-main:active { 
@@ -380,14 +388,14 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition: opacity var(--transition-normal);
+            transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .modal-overlay.active { 
             opacity: 1; 
             visibility: visible; 
             pointer-events: auto;
             display: flex; 
-            animation: iosModalIn var(--transition-normal) ease-out; 
+            animation: iosModalIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) ease-out; 
         }
 
         .modal-overlay.closing {
@@ -411,10 +419,10 @@
             max-width: 1000px;
             border-radius: 70px;
             padding: 70px;
-            box-shadow: var(--shadow-heavy);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             max-height: 85vh;
             overflow-y: auto;
-            transition: all var(--transition-normal);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             will-change: transform;
         }
         
@@ -452,7 +460,7 @@
             gap: 45px;
             border-bottom: 1px solid rgba(0,0,0,0.05);
             cursor: pointer;
-            transition: all var(--transition-fast);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
             /* 去掉所有 outline */
@@ -480,8 +488,8 @@
             justify-content: center;
             font-size: 55px; 
             color: white;
-            box-shadow: var(--shadow-medium);
-            transition: all var(--transition-fast);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .ios-list-item:hover .list-icon {
@@ -493,17 +501,17 @@
             font-weight: 700; 
             margin-bottom: 8px;
             color: #1c1c1e;
-            transition: all var(--transition-fast);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .list-text-sub { 
             font-size: 32px; 
             color: #8E8E93;
-            transition: all var(--transition-fast);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .ios-list-item:hover .list-text-main {
-            color: var(--ios-blue);
+            color: #007AFF;
         }
 
         /* HUD 提示 (Apple Style) - 改到底部中间 */
@@ -523,7 +531,7 @@
             flex-direction: column;
             align-items: center;
             z-index: 10000;
-            box-shadow: var(--shadow-heavy);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             min-width: 500px;
             will-change: transform, opacity;
             /* 去掉所有 outline */
@@ -532,7 +540,7 @@
         
         #toast-icon { 
             font-size: 80px; 
-            color: var(--ios-green); 
+            color: #34C759; 
             margin-bottom: 25px;
             animation: toastIconPulse 0.3s ease-out;
         }
@@ -585,7 +593,7 @@
         
         .disclaimer-body p { 
             margin-bottom: 30px;
-            transition: all var(--transition-fast);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .disclaimer-body p:hover {
@@ -595,9 +603,9 @@
         }
         
         .disclaimer-body a { 
-            color: var(--ios-blue); 
+            color: #007AFF; 
             text-decoration: none;
-            transition: all var(--transition-fast);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .disclaimer-body a:hover {
@@ -630,7 +638,7 @@
             width: 100%;
             max-width: 500px;
             text-align: center;
-            transition: all var(--transition-normal);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 600;
             letter-spacing: 2px;
             /* 去掉所有 outline */
@@ -638,7 +646,7 @@
         }
 
         .password-input:focus {
-            border-color: var(--ios-blue);
+            border-color: #007AFF;
             box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
             transform: scale(1.02);
         }
@@ -656,7 +664,7 @@
         }
 
         .auth-btn {
-            background: var(--ios-blue);
+            background: #007AFF;
             color: white;
             border: none;
             border-radius: 25px;
@@ -664,8 +672,8 @@
             font-size: 32px;
             font-weight: 700;
             cursor: pointer;
-            transition: all var(--transition-normal);
-            box-shadow: var(--shadow-medium);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             min-width: 200px;
             /* 去掉所有 outline */
             outline: none !important;
@@ -673,7 +681,7 @@
 
         .auth-btn:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-heavy);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
         }
 
         .auth-btn:active {
@@ -687,7 +695,7 @@
         }
 
         .get-password-btn {
-            background: var(--ios-green);
+            background: #34C759;
             color: white;
             border: none;
             border-radius: 25px;
@@ -695,8 +703,8 @@
             font-size: 30px;
             font-weight: 600;
             cursor: pointer;
-            transition: all var(--transition-normal);
-            box-shadow: var(--shadow-medium);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             gap: 15px;
@@ -711,7 +719,7 @@
 
         .get-password-btn:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-heavy);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
         }
 
         .get-password-btn:active {
@@ -762,7 +770,7 @@
             padding: 15px 25px;
             font-size: 20px;
             cursor: pointer;
-            transition: all var(--transition-normal);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -917,25 +925,15 @@
             contain: layout style paint;
         }
 
-        /* ===== 暗色模式支持 ===== */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --ios-bg: #000000;
-                --ios-card: rgba(28, 28, 30, 0.7);
-                --text-primary: #ffffff;
-                --text-secondary: #8e8e93;
-            }
-            
+        /* ===== 移动端强制浅色模式 ===== */
+        @media screen and (max-width: 768px) {
             body {
-                background-color: var(--ios-bg);
-            }
-            
-            .search-box {
-                background: rgba(120, 120, 128, 0.15);
-            }
-            
-            .search-input {
-                color: #ffffff;
+                /* 强制使用浅色背景 */
+                background-color: #F2F2F7 !important;
+                /* 强制使用浅色卡片背景 */
+                background-image: 
+                    radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.08) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(175, 82, 222, 0.08) 0px, transparent 50%) !important;
             }
         }
 
