@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Tsinho语音生成器</title>
+    <style>
+        /* ============================================
+           Apple Design System - 核心变量
+           ============================================ */
+        :root {
+            /* 基础色板 */
+            --ios-bg: #F5F5F7;
+            --card-bg: rgba(255, 255, 255, 0.72);
+            --card-bg-solid: #FFFFFF;
+            --card-border: rgba(255, 255, 255, 0.8);
+            --primary-blue: #0071e3;
+            --primary-hover: #0077ed;
+            --primary-active: #0068d1;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --text-tertiary: #a1a1a6;
+            --secondary-bg: #E5E5EA;
+            --secondary-hover: #DEDEE3;
+            --input-bg: #F2F2F7;
+            --input-focus-bg: #FFFFFF;
+            
+            /* 阴影系统 */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --shadow-glow: 0 0 40px rgba(0, 113, 227, 0.15);
+            
+            /* 圆角系统 - Squircle */
+            --radius-xs: 8px;
+            --radius-sm: 12px;
+            --radius-md: 18px;
+            --radius-lg: 24px;
+            --radius-xl: 28px;
+            --radius-full: 980px;
+            
+            /* Aurora 极光色 */
+            --aurora-blue: rgba(162, 210, 255, 0.5);
+            --aurora-purple: rgba(200, 180, 255, 0.4);
+            --aurora-pink: rgba(255, 182, 193, 0.35);
+            --aurora-cyan: rgba(180, 230, 255, 0.3);
+            
+            /* 动画曲线 */
+            --ease-spring: cubic-bezier(0.25, 1, 0.5, 1);
+            --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+            
+            /* 布局变量 */
+            --content-max-width: 480px;
+            --content-padding: 24px;
+            --bento-gap: 20px;
+        }
+
+        /* ============================================
+           全局重置与基础样式
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--ios-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           视图模式切换系统 - 真正的响应式适配
+           ============================================ */
+        .app-container {
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+            background: var(--ios-bg);
+        }
+
+        /* 手机模式 - 全屏自适应 */
+        .app-container[data-view="mobile"] {
+            background: linear-gradient(135deg, #e8e8e8 0%, #f0f0f0 50%, #e8e8e8 100%);
+        }
+
+        .app-container[data-view="mobile"] .content-wrapper {
+            width: 100%;
+            max-width: 100%;
+            padding: 20px;
+            padding-top: max(20px, env(safe-area-inset-top));
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
+            margin: 0 auto;
+        }
+
+        .app-container[data-view="mobile"] .bento-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+            max-width: 100%;
+        }
+
+        .app-container[data-view="mobile"] .glass-card {
+            width: 100%;
+        }
+
+        /* 桌面模式 - 全宽布局 */
+        .app-container[data-view="desktop"] {
+            max-width: 100%;
+        }
+
+        .app-container[data-view="desktop"] .content-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .app-container[data-view="desktop"] .bento-grid {
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+
+        .app-container[data-view="desktop"] .card-hero {
+            grid-column: 1 / -1;
+            padding: 48px 32px;
+        }
+
+        .app-container[data-view="desktop"] .card-main {
+            grid-column: 1 / 8;
+            padding: 28px;
+        }
+
+        .app-container[data-view="desktop"] .card-side {
+            grid-column: 8 / -1;
+            padding: 28px;
+        }
+
+        .app-container[data-view="desktop"] .form-section {
+            margin-bottom: 24px;
+        }
+
+        .app-container[data-view="desktop"] .button-group {
+            margin-top: 8px;
+        }
+
+/* ============================================
+           Aurora 极光背景
+           ============================================ */
+        .ambient-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            will-change: transform;
+        }
+
+        .orb-1 {
+            width: 60vw;
+            height: 60vw;
+            max-width: 600px;
+            max-height: 600px;
+            background: radial-gradient(circle at 30% 30%, var(--aurora-blue) 0%, transparent 60%);
+            top: -15%;
+            left: -10%;
+            animation: float-1 25s infinite ease-in-out;
+        }
+
+        .orb-2 {
+            width: 50vw;
+            height: 50vw;
+            max-width: 500px;
+            max-height: 500px;
+            background: radial-gradient(circle at 70% 70%, var(--aurora-purple) 0%, transparent 60%);
+            bottom: -10%;
+            right: -10%;
+            animation: float-2 20s infinite ease-in-out;
+        }
+
+        .orb-3 {
+            width: 40vw;
+            height: 40vw;
+            max-width: 400px;
+            max-height: 400px;
+            background: radial-gradient(circle at 50% 50%, var(--aurora-pink) 0%, transparent 60%);
+            top: 40%;
+            left: 30%;
+            opacity: 0.6;
+            animation: float-3 22s infinite ease-in-out;
+        }
+
+        .orb-4 {
+            width: 35vw;
+            height: 35vw;
+            max-width: 350px;
+            max-height: 350px;
+            background: radial-gradient(circle at 40% 60%, var(--aurora-cyan) 0%, transparent 60%);
+            top: 60%;
+            left: -10%;
+            opacity: 0.5;
+            animation: float-4 18s infinite ease-in-out;
+        }
+
+        @keyframes float-1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 40px) scale(0.95); }
+            75% { transform: translate(30px, 20px) scale(1.02); }
+        }
+
+        @keyframes float-2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-30px, -40px) scale(1.08); }
+            66% { transform: translate(20px, -20px) scale(0.92); }
+        }
+
+        @keyframes float-3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-40px, 30px) scale(1.06); }
+        }
+
+        @keyframes float-4 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -20px) scale(0.98); }
+            75% { transform: translate(-30px, 30px) scale(1.04); }
+        }
+
+        /* ============================================
+           Bento Grid 便当盒布局
+           ============================================ */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding: var(--content-padding);
+        }
+
+        .bento-grid {
+            display: grid;
+            gap: var(--bento-gap);
+            max-width: var(--content-max-width);
+            margin: 0 auto;
+        }
+
+        /* ============================================
+           Glass Card 毛玻璃卡片
+           ============================================ */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--card-border);
+            box-shadow: 
+                var(--shadow-md),
+                inset 0 0.5px 0 1px rgba(255, 255, 255, 0.6);
+            overflow: hidden;
+            transition: 
+                transform 0.5s var(--ease-spring),
+                box-shadow 0.5s var(--ease-out);
+            animation: fadeInUp 0.8s var(--ease-spring) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .glass-card:hover {
+            box-shadow: 
+                var(--shadow-lg),
+                inset 0 0.5px 0 1px rgba(255, 255, 255, 0.7);
+        }
+
+        .glass-card:nth-child(1) { animation-delay: 0.1s; }
+        .glass-card:nth-child(2) { animation-delay: 0.2s; }
+        .glass-card:nth-child(3) { animation-delay: 0.3s; }
+        .glass-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 卡片变体 */
+        .card-hero {
+            padding: 48px 32px;
+            text-align: center;
+        }
+
+        .card-main {
+            padding: 28px;
+        }
+
+        .card-side {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ============================================
+           排版系统 - Big Type
+           ============================================ */
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .headline {
+            font-size: 36px;
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .subhead {
+            font-size: 17px;
+            line-height: 1.4;
+            color: var(--text-secondary);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .app-container[data-view="desktop"] .headline {
+            font-size: 48px;
+        }
+
+        .app-container[data-view="desktop"] .subhead {
+            font-size: 19px;
+            max-width: 500px;
+        }
+
+        /* ============================================
+           表单组件
+           ============================================ */
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        /* 内联角色列表 */
+        .character-list-inline {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .character-item-inline {
+            padding: 10px 8px;
+            background: var(--secondary-bg);
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .character-item-inline:hover {
+            background: var(--secondary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .character-item-inline.selected {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue-dark);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+
+        .character-item-inline .category-tag {
+            display: block;
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .character-item-inline.selected .category-tag {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* 输入框 */
+        .input-wrapper {
+            position: relative;
+        }
+
+        .ios-textarea {
+            width: 100%;
+            min-height: 140px;
+            padding: 16px 20px 40px;
+            background: var(--input-bg);
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--text-primary);
+            resize: vertical;
+            font-family: inherit;
+            transition: all 0.3s var(--ease-spring);
+            outline: none;
+        }
+
+        .ios-textarea::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .ios-textarea:hover {
+            background: #EBEBF0;
+        }
+
+        .ios-textarea:focus {
+            background: var(--input-focus-bg);
+            border-color: rgba(0, 113, 227, 0.3);
+            box-shadow: 
+                0 0 0 4px rgba(0, 113, 227, 0.1),
+                var(--shadow-sm);
+        }
+
+        .char-count {
+            position: absolute;
+            bottom: 12px;
+            right: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ============================================
+           按钮层级系统
+           ============================================ */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border-radius: var(--radius-full);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s var(--ease-spring);
+            border: none;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Primary Button - 品牌蓝 */
+        .btn-primary {
+            flex: 1;
+            background: var(--primary-blue);
+            color: white;
+            box-shadow: 
+                0 4px 16px rgba(0, 113, 227, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+            opacity: 1;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: scale(1.02) translateY(-1px);
+            box-shadow: 
+                0 6px 24px rgba(0, 113, 227, 0.4),
+                var(--shadow-glow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:active {
+            background: var(--primary-active);
+            transform: scale(0.98) translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 113, 227, 0.3);
+        }
+
+        /* Secondary Button - 浅灰实心 */
+        .btn-secondary {
+            padding: 14px 20px;
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-hover);
+            transform: scale(1.02);
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.98);
+        }
+
+        /* Loading 状态 */
+        .btn-loading {
+            position: relative;
+            color: transparent;
+            pointer-events: none;
+        }
+
+        .btn-loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2.5px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ============================================
+           播放器卡片
+           ============================================ */
+        .player-card {
+            padding: 24px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.98);
+            transition: all 0.6s var(--ease-spring);
+            height: 0;
+            overflow: hidden;
+            margin-top: 0;
+        }
+
+        .player-card.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            height: auto;
+            overflow: visible;
+            margin-top: 20px;
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .player-artwork {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--aurora-blue), var(--aurora-purple));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-artwork::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%);
+        }
+
+        .player-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .player-meta h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-primary);
+        }
+
+        .player-meta p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .audio-container {
+            background: var(--input-bg);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        audio {
+            width: 100%;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        audio::-webkit-media-controls-panel {
+            background: var(--input-bg);
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .download-btn:hover {
+            background: var(--ios-bg);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ============================================
+           Toast 提示
+           ============================================ */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: white;
+            padding: 14px 24px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 14px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s var(--ease-spring);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: calc(100vw - 40px);
+            width: auto;
+            justify-content: center;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .toast.error {
+            background: rgba(255, 59, 48, 0.95);
+        }
+
+        .toast svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* ============================================
+           错误提示
+           ============================================ */
+        .error-hint {
+            margin-top: 16px;
+            padding: 14px 18px;
+            background: rgba(255, 59, 48, 0.08);
+            border: 1px solid rgba(255, 59, 48, 0.15);
+            border-radius: var(--radius-md);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: shake 0.5s var(--ease-spring);
+        }
+
+        .error-hint.show {
+            display: flex;
+        }
+
+        .error-hint svg {
+            width: 18px;
+            height: 18px;
+            color: #FF3B30;
+            flex-shrink: 0;
+        }
+
+        .error-hint span {
+            font-size: 14px;
+            color: #FF3B30;
+            font-weight: 500;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-5px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(3px); }
+        }
+
+        /* ============================================
+           响应式适配 - 自动适配所有屏幕
+           ============================================ */
+        @media (max-width: 360px) {
+            .headline {
+                font-size: 24px;
+            }
+
+            .subhead {
+                font-size: 15px;
+            }
+
+            .card-hero {
+                padding: 32px 20px;
+            }
+
+            .card-main, .card-side {
+                padding: 20px;
+            }
+
+            .form-label {
+                font-size: 11px;
+            }
+
+            .ios-textarea {
+                min-height: 120px;
+                font-size: 15px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 15px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn-secondary {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 361px) and (max-width: 480px) {
+            .headline {
+                font-size: 28px;
+            }
+
+            .card-hero {
+                padding: 36px 24px;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            .headline {
+                font-size: 32px;
+            }
+
+            .card-hero {
+                padding: 40px 28px;
+            }
+        }
+
+        @media (min-width: 769px) {
+        }
+
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-bg);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-hover);
+        }
+
+        /* 选择文字颜色 */
+        ::selection {
+            background: rgba(0, 113, 227, 0.2);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- 应用容器 -->
+    <div class="app-container" data-view="mobile">
+        <!-- Aurora 极光背景 -->
+        <div class="ambient-background">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+            <div class="orb orb-4"></div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="content-wrapper">
+                <div class="bento-grid">
+                    <!-- Hero Card -->
+                    <div class="glass-card card-hero">
+                        <span class="eyebrow">AI Voice Studio</span>
+                        <h1 class="headline">Tsinho语音生成器</h1>
+                        <p class="subhead">选择角色，输入文本，即刻生成自然流畅的 AI 语音</p>
+                    </div>
+
+                    <!-- Main Form Card -->
+                    <div class="glass-card card-main">
+                        <!-- 角色选择 -->
+                        <div class="form-section">
+                            <label class="form-label">配音角色</label>
+                            <div class="character-list-inline" id="characterListInline"></div>
+                        </div>
+
+                        <!-- 文本输入 -->
+                        <div class="form-section">
+                            <label class="form-label">文本内容</label>
+                            <div class="input-wrapper">
+                                <textarea 
+                                    class="ios-textarea" 
+                                    id="textInput" 
+                                    placeholder="请输入要转换为语音的文本..."
+                                    oninput="updateCharCount()"
+                                ></textarea>
+                                <span class="char-count" id="charCount">0 字</span>
+                            </div>
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="generateBtn" onclick="generateVoice()">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                                生成语音
+                            </button>
+                            <button class="btn btn-secondary" onclick="clearAll()">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                                清空
+                            </button>
+                        </div>
+
+                        <!-- 错误提示 -->
+                        <div class="error-hint" id="errorHint">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            <span id="errorText"></span>
+                        </div>
+                    </div>
+
+                    <!-- Player Card -->
+                    <div class="glass-card player-card" id="playerCard">
+                        <div class="player-header">
+                            <div class="player-artwork">🎵</div>
+                            <div class="player-meta">
+                                <h3 id="playerTitle">角色名称</h3>
+                                <p id="playerSubtitle">生成完毕 · 点击播放</p>
+                            </div>
+                        </div>
+                        <div class="audio-container">
+                            <audio id="audioPlayer" controls></audio>
+                        </div>
+                        <a class="download-btn" id="downloadLink" href="#" download>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            下载音频
+                        </a>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span id="toastMsg"></span>
+    </div>
+
+    <script>
+        // ============================================
+        // 自动适配屏幕尺寸 - 基于CSS transform实现
+        // CSS中已有媒体查询实现自动缩放
+        // ============================================
+        
+        // 监听屏幕尺寸变化
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                document.body.style.height = 'auto';
+                requestAnimationFrame(() => {
+                    document.body.style.height = '';
+                });
+            }, 100);
+        });
+
+        // 监听设备方向变化
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 100);
+        });
+
+        // ============================================
+        // 角色数据
+        // ============================================
+        const characters = [
+            { name: "知性女声", category: "热门推荐" },
+            { name: "紫薇", category: "影视角色" },
+            { name: "容嬷嬷", category: "影视角色" },
+            { name: "女儿国王", category: "影视角色" },
+            { name: "八戒", category: "影视角色" },
+            { name: "猴哥", category: "影视角色" },
+            { name: "皇上", category: "影视角色" },
+            { name: "黛玉", category: "影视角色" },
+            { name: "武则天", category: "影视角色" },
+            { name: "顾姐", category: "影视角色" },
+            { name: "TVB女声", category: "影视角色" },
+            { name: "译制片男", category: "影视角色" },
+            { name: "佩奇猪", category: "动漫角色" },
+            { name: "樱桃丸子", category: "动漫角色" },
+            { name: "懒小羊", category: "动漫角色" },
+            { name: "熊二", category: "动漫角色" },
+            { name: "小魔童", category: "动漫角色" },
+            { name: "动漫海绵", category: "动漫角色" },
+            { name: "动漫小新", category: "动漫角色" },
+            { name: "萌娃", category: "动漫角色" },
+            { name: "小女孩", category: "动漫角色" },
+            { name: "新闻男声", category: "专业配音" },
+            { name: "新闻女声", category: "专业配音" },
+            { name: "纪录片解说", category: "专业配音" },
+            { name: "广告男声", category: "专业配音" },
+            { name: "促销男声", category: "专业配音" },
+            { name: "商务殷语", category: "专业配音" },
+            { name: "知识讲解", category: "专业配音" },
+            { name: "京腔", category: "方言特色" },
+            { name: "粤语男声", category: "方言特色" },
+            { name: "天津小哥", category: "方言特色" },
+            { name: "河南大叔", category: "方言特色" },
+            { name: "西安掌柜", category: "方言特色" },
+            { name: "台湾男生", category: "方言特色" },
+            { name: "台湾女生", category: "方言特色" },
+            { name: "东北老铁", category: "方言特色" },
+            { name: "重庆小伙", category: "方言特色" },
+            { name: "广西表哥", category: "方言特色" },
+            { name: "快板", category: "特色风格" },
+            { name: "单口相声", category: "特色风格" },
+            { name: "说唱小哥", category: "特色风格" },
+            { name: "心灵鸡汤", category: "特色风格" },
+            { name: "童话解说", category: "特色风格" },
+            { name: "网文解说", category: "特色风格" },
+            { name: "悬疑解说", category: "特色风格" },
+            { name: "电竞解说", category: "特色风格" },
+            { name: "赛事解说", category: "特色风格" },
+            { name: "乒乓解说", category: "特色风格" },
+            { name: "游戏解说男", category: "特色风格" },
+            { name: "动漫解说", category: "特色风格" },
+            { name: "舌尖解说", category: "特色风格" },
+            { name: "解说小帅", category: "特色风格" },
+            { name: "甜美解说", category: "特色风格" },
+            { name: "沉稳解说", category: "特色风格" },
+            { name: "娱乐扒妹", category: "特色风格" },
+            { name: "小品艺术家", category: "特色风格" },
+            { name: "咆哮哥", category: "特色风格" },
+            { name: "樱花小哥", category: "特色风格" },
+            { name: "甜美悦悦", category: "特色风格" },
+            { name: "强势妹", category: "特色风格" },
+            { name: "理智姐", category: "特色风格" },
+            { name: "心机御姐", category: "特色风格" },
+            { name: "上海阿姨", category: "特色风格" },
+            { name: "老婆婆", category: "特色风格" },
+            { name: "古风男主", category: "特色风格" },
+            { name: "霸总", category: "特色风格" },
+            { name: "雅痞大叔", category: "特色风格" },
+            { name: "亲切女声", category: "特色风格" },
+            { name: "温柔淑女", category: "特色风格" },
+            { name: "文艺女声", category: "特色风格" },
+            { name: "少儿故事", category: "特色风格" },
+            { name: "小姐姐", category: "特色风格" },
+            { name: "阳光男生", category: "特色风格" },
+            { name: "歌唱女王", category: "歌唱类" },
+            { name: "歌唱达人", category: "歌唱类" },
+            { name: "情歌王", category: "歌唱类" },
+            { name: "摇滚男生", category: "歌唱类" },
+            { name: "甜美女孩", category: "歌唱类" },
+            { name: "激扬男声", category: "歌唱类" },
+            { name: "春节甜妹", category: "歌唱类" },
+            { name: "春日甜妹", category: "歌唱类" },
+            { name: "清新歌手", category: "歌唱类" },
+            { name: "水果舞曲", category: "歌唱类" },
+            { name: "康康舞曲", category: "歌唱类" },
+            { name: "康定情歌", category: "歌唱类" }
+        ];
+
+        const failedCharacters = new Set();
+
+        let currentSelection = null;
+        let isGenerating = false;
+
+        // ============================================
+        // 初始化
+        // ============================================
+        function init() {
+            renderInlineCharacterList();
+        }
+
+        // 渲染内联角色列表
+        function renderInlineCharacterList() {
+            const container = document.getElementById('characterListInline');
+            container.innerHTML = '';
+            
+            characters.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'character-item-inline';
+                div.innerHTML = `
+                    <span class="name">${item.name}</span>
+                    <span class="category-tag">${item.category}</span>
+                `;
+                div.onclick = () => selectCharacterInline(item, div);
+                container.appendChild(div);
+            });
+        }
+
+        // ============================================
+        // 角色选择
+        // ============================================
+        function selectCharacterInline(item, element) {
+            if (failedCharacters.has(item.name)) {
+                showToast(`"${item.name}" 暂时不可用，请选择其他角色`, true);
+                return;
+            }
+            
+            // 移除之前的选中状态
+            document.querySelectorAll('.character-item-inline').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // 添加选中状态
+            element.classList.add('selected');
+            currentSelection = item;
+            hideError();
+            showToast(`已选择 "${item.name}"`);
+        }
+
+        // ============================================
+        // 表单功能
+        // ============================================
+        function updateCharCount() {
+            const len = document.getElementById('textInput').value.length;
+            document.getElementById('charCount').textContent = `${len} 字`;
+        }
+
+        function clearAll() {
+            document.getElementById('textInput').value = '';
+            updateCharCount();
+            hidePlayer();
+            hideError();
+            currentSelection = null;
+            // 移除选中状态
+            document.querySelectorAll('.character-item-inline').forEach(el => {
+                el.classList.remove('selected');
+            });
+            showToast('已清空');
+        }
+
+        // ============================================
+        // 播放器控制
+        // ============================================
+        function hidePlayer() {
+            const player = document.getElementById('playerCard');
+            player.classList.remove('active');
+            document.getElementById('audioPlayer').pause();
+            document.getElementById('audioPlayer').src = '';
+        }
+
+        function showPlayer() {
+            const player = document.getElementById('playerCard');
+            player.classList.add('active');
+        }
+
+        // ============================================
+        // 错误提示
+        // ============================================
+        function showError(msg) {
+            const errorHint = document.getElementById('errorHint');
+            document.getElementById('errorText').textContent = msg;
+            errorHint.classList.add('show');
+        }
+
+        function hideError() {
+            document.getElementById('errorHint').classList.remove('show');
+        }
+
+        // ============================================
+        // 语音生成
+        // ============================================
+        async function generateVoice() {
+            if (isGenerating) return;
+            
+            const text = document.getElementById('textInput').value.trim();
+            
+            hideError();
+            
+            if (!currentSelection) {
+                showToast('请先选择配音角色', true);
+                openModal();
+                return;
+            }
+            
+            if (!text) {
+                showToast('请输入文本内容', true);
+                document.getElementById('textInput').focus();
+                return;
+            }
+
+            if (failedCharacters.has(currentSelection.name)) {
+                showError(`"${currentSelection.name}" 角色暂时不可用，请选择其他角色`);
+                showToast('该角色不可用', true);
+                return;
+            }
+
+            isGenerating = true;
+            const btn = document.getElementById('generateBtn');
+            btn.classList.add('btn-loading');
+            hidePlayer();
+            
+            try {
+                const apiUrl = `https://api.milorapart.top/apis/AIvoice/?text=${encodeURIComponent(text)}&speaker=${encodeURIComponent(currentSelection.name)}`;
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+                
+                const response = await fetch(apiUrl, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+
+                if (data.code === 200 && data.url && data.url.trim() !== '') {
+                    const audio = document.getElementById('audioPlayer');
+                    
+                    const audioTest = new Audio();
+                    audioTest.preload = 'metadata';
+                    
+                    audioTest.onloadedmetadata = () => {
+                        audio.src = data.url;
+                        document.getElementById('playerTitle').textContent = currentSelection.name;
+                        document.getElementById('playerSubtitle').textContent = '生成完毕 · 点击播放';
+                        document.getElementById('downloadLink').href = data.url;
+                        document.getElementById('downloadLink').download = `voice_${currentSelection.name}_${Date.now()}.mp3`;
+                        
+                        showPlayer();
+                        showToast('语音生成成功');
+                        
+                        setTimeout(() => {
+                            player.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }, 100);
+                    };
+                    
+                    audioTest.onerror = () => {
+                        throw new Error('Invalid audio URL');
+                    };
+                    
+                    audioTest.src = data.url;
+                    
+                } else if (data.code === 400 || data.code === 404 || data.msg) {
+                    const errorMsg = data.msg || '该角色暂时不可用';
+                    showError(errorMsg);
+                    showToast(errorMsg, true);
+                    failedCharacters.add(currentSelection.name);
+                } else {
+                    throw new Error('Invalid response');
+                }
+            } catch (error) {
+                console.error('Generation error:', error);
+                let errorMsg = '生成失败，请稍后重试';
+                
+                if (error.name === 'AbortError') {
+                    errorMsg = '请求超时，请检查网络连接';
+                } else if (error.message.includes('HTTP 404')) {
+                    errorMsg = '该角色暂时不可用，请选择其他角色';
+                    failedCharacters.add(currentSelection.name);
+                } else if (error.message.includes('HTTP 5')) {
+                    errorMsg = '服务器繁忙，请稍后重试';
+                } else if (error.message.includes('Failed to fetch')) {
+                    errorMsg = '网络连接失败，请检查网络';
+                }
+                
+                showError(errorMsg);
+                showToast(errorMsg, true);
+            } finally {
+                isGenerating = false;
+                btn.classList.remove('btn-loading');
+            }
+        }
+
+        // ============================================
+        // Toast 提示
+        // ============================================
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            
+            toastMsg.textContent = msg;
+            toast.className = 'toast' + (isError ? ' error' : '');
+            
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // 启动应用
+        init();
+    </script>
+</body>
+</html>

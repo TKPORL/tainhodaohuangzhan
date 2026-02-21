@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Tsinho导航站-全网资源合集</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== iOS 系统级变量与重置 ===== */
+        :root {
+            /* 固定颜色值，避免CSS变量在移动端的渲染问题 */
+            --ios-blue: #007AFF;
+            --ios-green: #34C759;
+            --ios-bg: #F2F2F7;
+            --ios-card: rgba(255, 255, 255, 0.7);
+            --ios-blur: blur(25px);
+            --radius-main: 70px;
+            --radius-inner: 45px;
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-light: 0 8px 25px rgba(0,0,0,0.05);
+            --shadow-medium: 0 15px 35px rgba(0,0,0,0.1);
+            --shadow-heavy: 0 25px 50px rgba(0,0,0,0.15);
+            /* 文本颜色变量 */
+            --text-primary: #1c1c1e;
+            --text-secondary: #8E8E93;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            /* 使用固定颜色值而不是CSS变量 */
+            background-color: #F2F2F7;
+            /* 使用固定的背景渐变，避免变量在移动端的问题 */
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(175, 82, 222, 0.08) 0px, transparent 50%);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            color: #000;
+            overflow-x: hidden;
+            /* 确保在所有环境下都是浅色主题 */
+            background-attachment: fixed;
+        }
+
+        .app-container {
+            width: 96%; 
+            max-width: 1300px; 
+            padding: 100px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* ===== iOS 风格页眉 ===== */
+        .app-header {
+            text-align: left;
+            padding-left: 30px;
+            margin-bottom: 80px;
+        }
+        
+        .app-title {
+            font-size: 110px; 
+            font-weight: 800;
+            letter-spacing: -4px;
+            color: #1c1c1e;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #1c1c1e, #3a3a3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .app-subtitle {
+            font-size: 42px;
+            color: #8E8E93;
+            font-weight: 500;
+        }
+        
+        /* ===== 搜索框 - 极简 iOS 风格 ===== */
+        .search-container {
+            margin: 0 auto 100px;
+            width: 100%;
+        }
+        
+        .search-box {
+            background: rgba(118, 118, 128, 0.12);
+            border-radius: 40px;
+            padding: 35px 50px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            border: none;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .search-box:focus-within {
+            background: rgba(118, 118, 128, 0.2);
+            box-shadow: var(--shadow-light);
+        }
+        
+        .search-icon { 
+            font-size: 45px; 
+            color: #8E8E93; 
+            transition: all var(--transition-fast);
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 42px;
+            color: #000;
+            font-weight: 400;
+        }
+        
+        .search-input::placeholder {
+            color: #8E8E93;
+            font-weight: 400;
+        }
+
+        /* ===== 分类与网格 ===== */
+        .card-title {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 45px;
+            padding-left: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-count {
+            font-size: 38px;
+            color: var(--ios-blue);
+            font-weight: 600;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 40px; 
+            margin-bottom: 90px;
+        }
+        
+        /* ===== iOS 玻璃按钮 ===== */
+        .big-button {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 70px;
+            padding: 80px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            will-change: transform;
+            /* 去掉所有 outline */
+            outline: none !important;
+        }
+
+        .big-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .big-button:active {
+            transform: scale(0.95) translateY(2px);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .button-icon {
+            width: 170px;
+            height: 170px;
+            border-radius: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 80px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .big-button:hover .button-icon {
+            transform: scale(1.05) rotate(2deg);
+        }
+        
+        .button-name {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1c1c1e;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .button-tag {
+            font-size: 30px;
+            color: #8E8E93;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+        }
+
+        .blue { 
+            background: linear-gradient(135deg, #5AC8FA, #007AFF);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+        
+        .green { 
+            background: linear-gradient(135deg, #66D482, #34C759);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite reverse;
+        }
+        
+        .orange { 
+            background: linear-gradient(135deg, #FFB340, #FF9500);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+        
+        .purple { 
+            background: linear-gradient(135deg, #BF5AF2, #AF52DE);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite reverse;
+        }
+        
+        .pink { 
+            background: linear-gradient(135deg, #FF6482, #FF2D55);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+        
+        .dark-blue { 
+            background: linear-gradient(135deg, #7D7AFF, #5856D6);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite reverse;
+        }
+        
+        .red { 
+            background: linear-gradient(135deg, #FF6961, #FF3B30);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+        
+        .cyan { 
+            background: linear-gradient(135deg, #70D7FF, #32D5D9);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite reverse;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* ===== iOS 底部大卡片 ===== */
+        .app-footer {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 70px;
+            padding: 80px 60px;
+            border: 1px solid rgba(255,255,255,0.5);
+            margin-top: 20px;
+            margin-bottom: 100px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .app-footer:hover {
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .footer-title {
+            font-size: 54px;
+            font-weight: 800;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .footer-highlight { color: #007AFF; }
+
+        .footer-info-box {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 45px;
+            padding: 10px 0;
+            margin-bottom: 60px;
+        }
+
+        .info-row {
+            padding: 40px 50px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .info-row:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .info-row:last-child { border-bottom: none; }
+
+        .info-row i { 
+            font-size: 45px; 
+            color: #007AFF; 
+            width: 60px; 
+            text-align: center;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .info-row:hover i {
+            transform: scale(1.1);
+        }
+        
+        .info-row span { 
+            font-size: 38px; 
+            color: #1c1c1e; 
+            font-weight: 500;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ios-btn-main {
+            background: #007AFF;
+            color: white;
+            width: 100%;
+            padding: 45px;
+            border-radius: 40px;
+            font-size: 42px;
+            font-weight: 700;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            /* 去掉所有 outline */
+            outline: none !important;
+        }
+        
+        .ios-btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .ios-btn-main:active { 
+            transform: scale(0.98); 
+            opacity: 0.9; 
+        }
+
+        /* ===== iOS 居中弹窗 (全系统统一) ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            z-index: 9999;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal-overlay.active { 
+            opacity: 1; 
+            visibility: visible; 
+            pointer-events: auto;
+            display: flex; 
+            animation: iosModalIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) ease-out; 
+        }
+
+        .modal-overlay.closing {
+            opacity: 0;
+            animation: iosModalOut 0.25s ease-in forwards;
+        }
+
+        @keyframes iosModalIn {
+            from { opacity: 0; transform: scale(1.1); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes iosModalOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(1.05); }
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.92);
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 70px;
+            padding: 70px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            max-height: 85vh;
+            overflow-y: auto;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+        
+        .modal-content.closing {
+            animation: iosContentOut 0.25s ease-in forwards;
+        }
+
+        @keyframes iosContentOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
+
+        .modal-header-title {
+            font-size: 60px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #1c1c1e, #007AFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ios-list {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 45px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .ios-list-item {
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            gap: 45px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            /* 去掉所有 outline */
+            outline: none !important;
+        }
+        
+        .ios-list-item:hover {
+            background: rgba(0, 122, 255, 0.05);
+            transform: translateX(8px);
+        }
+        
+        .ios-list-item:active { 
+            background: rgba(0, 122, 255, 0.1);
+            transform: translateX(4px);
+        }
+        
+        .ios-list-item:last-child { border-bottom: none; }
+
+        .list-icon {
+            width: 110px; 
+            height: 110px;
+            border-radius: 28px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 55px; 
+            color: white;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .ios-list-item:hover .list-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .list-text-main { 
+            font-size: 46px; 
+            font-weight: 700; 
+            margin-bottom: 8px;
+            color: #1c1c1e;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .list-text-sub { 
+            font-size: 32px; 
+            color: #8E8E93;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .ios-list-item:hover .list-text-main {
+            color: #007AFF;
+        }
+
+        /* HUD 提示 (Apple Style) - 改到底部中间 */
+        #toast {
+            position: fixed;
+            /* 改为底部定位 */
+            bottom: 150px;
+            left: 50%;
+            top: auto;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 50px 80px;
+            border-radius: 50px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10000;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            min-width: 500px;
+            will-change: transform, opacity;
+            /* 去掉所有 outline */
+            outline: none !important;
+        }
+        
+        #toast-icon { 
+            font-size: 80px; 
+            color: #34C759; 
+            margin-bottom: 25px;
+            animation: toastIconPulse 0.3s ease-out;
+        }
+        
+        #toast-text { 
+            font-size: 36px; 
+            font-weight: 700; 
+            text-align: center; 
+            line-height: 1.4;
+            color: #1c1c1e;
+        }
+        
+        .show-toast { 
+            display: flex !important; 
+            animation: iosHudBottom 2.2s ease-in-out forwards; 
+        }
+
+        @keyframes toastIconPulse {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* 底部出现的动画 */
+        @keyframes iosHudBottom {
+            0% { 
+                opacity: 0; 
+                transform: translateX(-50%) translateY(50px) scale(0.8); 
+            }
+            15% { 
+                opacity: 1; 
+                transform: translateX(-50%) translateY(0) scale(1); 
+            }
+            85% { 
+                opacity: 1; 
+                transform: translateX(-50%) translateY(0) scale(1); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translateX(-50%) translateY(20px) scale(0.9); 
+            }
+        }
+
+        .disclaimer-body { 
+            font-size: 34px; 
+            line-height: 1.6; 
+            color: #3A3A3C; 
+            text-align: justify;
+        }
+        
+        .disclaimer-body p { 
+            margin-bottom: 30px;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .disclaimer-body p:hover {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        
+        .disclaimer-body a { 
+            color: #007AFF; 
+            text-decoration: none;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .disclaimer-body a:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        /* ===== 密码授权样式 ===== */
+        .password-auth-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            text-align: center;
+            align-items: center;
+        }
+
+        .password-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .password-input {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #e5e5e7;
+            border-radius: 20px;
+            padding: 30px 40px;
+            font-size: 36px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            letter-spacing: 2px;
+            /* 去掉所有 outline */
+            outline: none !important;
+        }
+
+        .password-input:focus {
+            border-color: #007AFF;
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+            transform: scale(1.02);
+        }
+
+        .password-input.error {
+            border-color: #ff3b30;
+            box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.1);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .auth-btn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 25px 50px;
+            font-size: 32px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            min-width: 200px;
+            /* 去掉所有 outline */
+            outline: none !important;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .auth-btn:active {
+            transform: scale(0.98);
+        }
+
+        .auth-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .get-password-btn {
+            background: #34C759;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 25px 40px;
+            font-size: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            justify-content: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            /* 去掉所有 outline */
+            outline: none !important;
+        }
+
+        .get-password-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .get-password-btn:active {
+            transform: scale(0.98);
+        }
+
+        .get-password-btn i {
+            font-size: 28px;
+        }
+
+        .auth-error-message {
+            color: #ff3b30;
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .auth-error-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .auth-content {
+            display: none;
+        }
+
+        .auth-content.show {
+            display: block;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .clear-auth-btn {
+            background: #8e8e93;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 15px 25px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            width: 100%;
+            max-width: 200px;
+            margin: 20px auto 0;
+            opacity: 0.8;
+            /* 去掉所有 outline */
+            outline: none !important;
+        }
+
+        .clear-auth-btn:hover {
+            background: #ff3b30;
+            transform: translateY(-1px);
+            opacity: 1;
+        }
+
+        .clear-auth-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ===== 响应式优化 ===== */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 60px 20px;
+            }
+            
+            .app-title {
+                font-size: 80px;
+                letter-spacing: -2px;
+            }
+            
+            .app-subtitle {
+                font-size: 32px;
+            }
+            
+            .search-box {
+                padding: 25px 30px;
+            }
+            
+            .search-input {
+                font-size: 32px;
+            }
+            
+            .big-button {
+                padding: 60px 30px;
+            }
+            
+            .button-icon {
+                width: 140px;
+                height: 140px;
+                font-size: 65px;
+                margin-bottom: 30px;
+            }
+            
+            .button-name {
+                font-size: 40px;
+            }
+            
+            .button-tag {
+                font-size: 26px;
+            }
+            
+            .grid-layout {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .modal-content {
+                padding: 50px 40px;
+            }
+            
+            .modal-header-title {
+                font-size: 48px;
+            }
+            
+            .ios-list-item {
+                padding: 40px;
+            }
+            
+            .list-text-main {
+                font-size: 38px;
+            }
+            
+            .list-text-sub {
+                font-size: 28px;
+            }
+            
+            .password-auth-container {
+                gap: 30px;
+            }
+            
+            .password-input {
+                font-size: 32px;
+                padding: 25px 30px;
+                max-width: 100%;
+            }
+            
+            .auth-btn {
+                font-size: 28px;
+                padding: 20px 40px;
+            }
+            
+            .get-password-btn {
+                font-size: 26px;
+                padding: 20px 35px;
+                width: 100%;
+                max-width: 100%;
+                margin: 0 auto;
+            }
+            
+            .auth-error-message {
+                font-size: 24px;
+            }
+            
+            .clear-auth-btn {
+                font-size: 18px;
+                padding: 12px 20px;
+                max-width: 180px;
+            }
+
+            /* 移动端 Toast 尺寸调整 */
+            #toast {
+                bottom: 100px;
+                padding: 40px 60px;
+                min-width: 400px;
+            }
+            
+            #toast-icon {
+                font-size: 60px;
+                margin-bottom: 20px;
+            }
+            
+            #toast-text {
+                font-size: 30px;
+            }
+        }
+
+        /* 完全去掉 focus 时的 outline */
+        *:focus {
+            outline: none !important;
+        }
+
+        /* ===== 性能优化 ===== */
+        .big-button,
+        .button-icon,
+        .ios-list-item,
+        .list-icon,
+        .modal-content,
+        .modal-overlay {
+            contain: layout style paint;
+        }
+
+        /* ===== 移动端强制浅色模式 ===== */
+        @media screen and (max-width: 768px) {
+            body {
+                /* 强制使用浅色背景 */
+                background-color: #F2F2F7 !important;
+                /* 强制使用浅色卡片背景 */
+                background-image: 
+                    radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.08) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(175, 82, 222, 0.08) 0px, transparent 50%) !important;
+            }
+        }
+
+        /* ===== 减少动画（用户偏好） ===== */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="app-header">
+        <h1 class="app-title">Tsinho</h1>
+        <p class="app-subtitle">全网优质资源 · 极速直达</p>
+    </div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="搜索资源、软件或教程...">
+        </div>
+    </div>
+    
+    <h2 class="card-title">资源库 <span class="card-count">9</span></h2>
+    <div class="grid-layout">
+        <div class="big-button" onclick="openAllResModal()" tabindex="0" role="button" aria-label="查看全资源分类合集">
+            <div class="button-icon blue"><i class="fas fa-archive"></i></div>
+            <div class="button-name">全资源</div>
+            <div class="button-tag">分类合集</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZYCq0tErl5')" tabindex="0" role="button" aria-label="实用软件精品破解">
+            <div class="button-icon green"><i class="fas fa-laptop-code"></i></div>
+            <div class="button-name">实用软件</div>
+            <div class="button-tag">精品破解</div>
+        </div>
+        <div class="big-button" onclick="openLaoSiJiModal()" tabindex="0" role="button" aria-label="老司机黄色小玩意">
+            <div class="button-icon orange"><i class="fas fa-gamepad"></i></div>
+            <div class="button-name">老司机</div>
+            <div class="button-tag">黄色小玩意</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZYCq0tEPqe')" tabindex="0" role="button" aria-label="VPN网络加速">
+            <div class="button-icon dark-blue"><i class="fas fa-globe-americas"></i></div>
+            <div class="button-name">VPN</div>
+            <div class="button-tag">网络加速</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvtWww')" tabindex="0" role="button" aria-label="绅士壁纸绅士图片">
+            <div class="button-icon pink"><i class="fas fa-image"></i></div>
+            <div class="button-name">绅士壁纸</div>
+            <div class="button-tag">绅士图片</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXSmDnDp67')" tabindex="0" role="button" aria-label="影音娱乐影视音乐">
+            <div class="button-icon purple"><i class="fas fa-film"></i></div>
+            <div class="button-name">影音娱乐</div>
+            <div class="button-tag">影视音乐</div>
+        </div>
+        <!-- 大小型游戏 - 链接已更新 -->
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZZesFZFmhv')" tabindex="0" role="button" aria-label="大小型游戏游戏合集">
+            <div class="button-icon cyan"><i class="fas fa-dice"></i></div>
+            <div class="button-name">大小型游戏</div>
+            <div class="button-tag">游戏合集</div>
+        </div>
+        <!-- iOS签名证书 - 链接已更新 -->
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZYZryXDsry')" tabindex="0" role="button" aria-label="iOS签名证书签名工具">
+            <div class="button-icon blue"><i class="fas fa-signature"></i></div>
+            <div class="button-name">iOS签名证书</div>
+            <div class="button-tag">签名工具</div>
+        </div>
+    </div>
+
+    <h2 class="card-title">网盘提速 <span class="card-count">4</span></h2>
+    <div class="grid-layout">
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXyki8UVu8')" tabindex="0" role="button" aria-label="网盘工具必备增强">
+            <div class="button-icon orange"><i class="fas fa-wrench"></i></div>
+            <div class="button-name">网盘工具</div>
+            <div class="button-tag">必备增强</div>
+        </div>
+        <div class="big-button" onclick="openModal()" tabindex="0" role="button" aria-label="百度解析站高速直链">
+            <div class="button-icon red"><i class="fas fa-link"></i></div>
+            <div class="button-name">百度解析站</div>
+            <div class="button-tag">高速直链</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCsUd2v')" tabindex="0" role="button" aria-label="网盘教程避坑指南">
+            <div class="button-icon green"><i class="fas fa-book"></i></div>
+            <div class="button-name">网盘教程</div>
+            <div class="button-tag">避坑指南</div>
+        </div>
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuw2l')" tabindex="0" role="button" aria-label="各大网盘帮下载帮下载">
+            <div class="button-icon purple"><i class="fas fa-download"></i></div>
+            <div class="button-name">各大网盘帮下载</div>
+            <div class="button-tag">帮下载</div>
+        </div>
+    </div>
+
+    <h2 class="card-title">其他 <span class="card-count">2</span></h2>
+    <div class="grid-layout">
+        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sUfFLHaNEhdx')" tabindex="0" role="button" aria-label="当贝桌面">
+            <div class="button-icon blue"><i class="fas fa-tv"></i></div>
+            <div class="button-name">当贝桌面</div>
+            <div class="button-tag">电视桌面</div>
+        </div>
+        <div class="big-button" onclick="go('Tsinho语音生成器.html')" tabindex="0" role="button" aria-label="Tsinho语音生成器">
+            <div class="button-icon green"><i class="fas fa-microphone"></i></div>
+            <div class="button-name">Tsinho语音生成器</div>
+            <div class="button-tag">语音合成</div>
+        </div>
+    </div>
+
+    <div class="app-footer">
+        <div class="footer-title">关于 <span class="footer-highlight">Tsinho导航站</span></div>
+        <div class="footer-info-box">
+            <div class="info-row">
+                <i class="fas fa-shield-alt"></i>
+                <span>由 Tsinho 独立维护并提供安全支持</span>
+            </div>
+            <div class="info-row">
+                <i class="fas fa-sync"></i>
+                <span>资源全天候实时同步，极致体验</span>
+            </div>
+        </div>
+        <button class="ios-btn-main" onclick="openAboutModal()" tabindex="0" role="button" aria-label="查看关于Tsinho导航站的详细信息">
+            <i class="fas fa-info-circle"></i> 查看详细信息
+        </button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="aboutModal" onclick="closeAboutModal(event)" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
+    <div class="modal-content">
+        <div class="modal-header-title" id="aboutModalTitle">详细信息</div>
+        <div class="ios-list">
+            <div class="ios-list-item" onclick="go('https://link3.cc/xakjyxgs')" tabindex="0" role="button" aria-label="官网地址link3.cc xakjyxgs">
+                <div class="list-icon dark-blue"><i class="fas fa-globe"></i></div>
+                <div>
+                    <div class="list-text-main">官网地址</div>
+                    <div class="list-text-sub">link3.cc/xakjyxgs</div>
+                </div>
+            </div>
+            <div class="ios-list-item" onclick="copyContact('email')" tabindex="0" role="button" aria-label="复制作者邮箱">
+                <div class="list-icon blue"><i class="fas fa-envelope"></i></div>
+                <div>
+                    <div class="list-text-main">作者邮箱</div>
+                    <div class="list-text-sub">Tsinhos@qq.com</div>
+                </div>
+            </div>
+            <div class="ios-list-item" onclick="copyContact('qq')" tabindex="0" role="button" aria-label="复制作者QQ号">
+                <div class="list-icon green"><i class="fas fa-comment"></i></div>
+                <div>
+                    <div class="list-text-main">作者 QQ</div>
+                    <div class="list-text-sub">1625862774</div>
+                </div>
+            </div>
+            <div class="ios-list-item" onclick="go('https://qm.qq.com/q/SSzmcxNYQO')" tabindex="0" role="button" aria-label="访问官方群聊">
+                <div class="list-icon purple"><i class="fas fa-users"></i></div>
+                <div>
+                    <div class="list-text-main">官方群聊</div>
+                    <div class="list-text-sub">1065975237</div>
+                </div>
+            </div>
+            <div class="ios-list-item" onclick="openDisclaimerModal()" tabindex="0" role="button" aria-label="查看免责声明法律条款">
+                <div class="list-icon orange"><i class="fas fa-file-contract"></i></div>
+                <div>
+                    <div class="list-text-main">免责声明</div>
+                    <div class="list-text-sub">点击阅读法律条款</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="disclaimerModal" onclick="closeDisclaimerModal(event)" role="dialog" aria-modal="true" aria-labelledby="disclaimerModalTitle">
+    <div class="modal-content">
+        <div class="modal-header-title" id="disclaimerModalTitle">免责声明</div>
+        <div class="disclaimer-body">
+            <p>根据《计算机软件保护条例》(2002年1月1日实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。鉴于此，用户必须在研究该文件时，遵循上述法规，不得将上述内容用于二次传播或者非法用途，否则，一切后果请用户自负。</p>
+            <p>本软件信息来自网络，版权争议与本软件无关，您必须在下载后的24个小时之内，从您的设备中彻底删除上述内容。访问和下载本软件内容，说明您已同意上述条款。</p>
+            <p>Tsinho导航站作为软件转载方，不保证软件在所有设备上一定可用，精力有限也不会在每个机型上做测试，修改的会员也不能保证一直有效，所有软件会随着官方修复及软件升级而失效，无法接受请卸载。</p>
+            <p>本软件为非盈利性APP，本软件不贩卖软件，所有内容不作为商业行为。</p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="allResModal" onclick="closeAllResModal(event)" role="dialog" aria-modal="true" aria-labelledby="allResModalTitle">
+    <div class="modal-content">
+        <div class="modal-header-title" id="allResModalTitle">资源类别</div>
+        <div class="ios-list">
+            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZWof8pjtb3')" tabindex="0" role="button" aria-label="软件分享聚合全网优质工具软件">
+                <div class="list-icon green"><i class="fas fa-laptop"></i></div>
+                <div>
+                    <div class="list-text-main">软件分享</div>
+                    <div class="list-text-sub">聚合全网优质工具软件</div>
+                </div>
+            </div>
+            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZWNgWHfNwr')" tabindex="0" role="button" aria-label="网盘工具提升网盘使用体验的神器">
+                <div class="list-icon blue"><i class="fas fa-tools"></i></div>
+                <div>
+                    <div class="list-text-main">网盘工具</div>
+                    <div class="list-text-sub">提升网盘使用体验的神器</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="baiduModal" onclick="closeModal(event)" role="dialog" aria-modal="true" aria-labelledby="baiduModalTitle">
+    <div class="modal-content">
+        <div class="modal-header-title" id="baiduModalTitle">选择线路</div>
+        
+        <!-- 密码授权界面 -->
+        <div class="password-auth-container" id="passwordAuth">
+            <div class="password-input-group">
+                <h3 style="font-size: 42px; font-weight: 700; margin-bottom: 20px; color: #1c1c1e;">访问授权</h3>
+                <input 
+                    type="password" 
+                    id="passwordInput" 
+                    class="password-input" 
+                    placeholder="请输入访问密码"
+                    maxlength="20"
+                    autocomplete="off"
+                >
+                <button class="auth-btn" onclick="verifyPassword()" id="authBtn">验证密码</button>
+                <div class="auth-error-message" id="authError">密码错误，请重试</div>
+            </div>
+            
+            <a href="https://yun.139.com/shareweb/#/w/i/2sUfBuomz5x8y" class="get-password-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-key"></i>
+                获取访问密码
+            </a>
+            
+            <button class="clear-auth-btn" onclick="clearLocalAuthorization()" style="background: #8e8e93; color: white; border: none; border-radius: 20px; padding: 15px 25px; font-size: 20px; cursor: pointer; transition: all 0.3s; margin-top: 20px;">
+                <i class="fas fa-trash"></i>
+                清除本地授权
+            </button>
+        </div>
+
+        <!-- 授权成功后的线路选择界面 -->
+        <div class="auth-content" id="authContent">
+            <div class="ios-list">
+                <div class="ios-list-item" onclick="go('https://analysis.icy6.cn')" tabindex="0" role="button" aria-label="线路01推荐使用稳定高速">
+                    <div class="list-icon blue"><i class="fas fa-rocket"></i></div>
+                    <div>
+                        <div class="list-text-main">线路 01</div>
+                        <div class="list-text-sub">推荐使用 · 稳定高速</div>
+                    </div>
+                </div>
+                <div class="ios-list-item" onclick="go('https://kdown.moiu.cn/free/#/index')" tabindex="0" role="button" aria-label="线路02备用线路支持大文件">
+                    <div class="list-icon orange"><i class="fas fa-bolt"></i></div>
+                    <div>
+                        <div class="list-text-main">线路 02</div>
+                        <div class="list-text-sub">备用线路 · 支持大文件</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)" role="dialog" aria-modal="true" aria-labelledby="laoSiJiModalTitle">
+    <div class="modal-content">
+        <div class="modal-header-title" id="laoSiJiModalTitle">选择频道</div>
+        <div class="ios-list">
+            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuYya')" tabindex="0" role="button" aria-label="看片软件直接访问">
+                <div class="list-icon green"><i class="fas fa-video"></i></div>
+                <div>
+                    <div class="list-text-main">看片软件</div>
+                    <div class="list-text-sub">直接访问</div>
+                </div>
+            </div>
+            <div class="ios-list-item" onclick="copyLink('https://drive.uc.cn/s/fb9fb0ca4e4f4')" tabindex="0" role="button" aria-label="黄游游戏复制链接">
+                <div class="list-icon orange"><i class="fas fa-gamepad"></i></div>
+                <div>
+                    <div class="list-text-main">黄游游戏</div>
+                    <div class="list-text-sub">复制链接</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast" role="alert" aria-live="polite">
+    <i id="toast-icon" class="fas fa-check-circle"></i>
+    <div id="toast-text"></div>
+</div>
+
+<script>
+    // ===== 修复后的弹窗系统 =====
+    
+    function closeModalById(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        
+        modal.classList.add('closing');
+        const content = modal.querySelector('.modal-content');
+        if (content) content.classList.add('closing');
+        
+        setTimeout(() => {
+            modal.classList.remove('active', 'closing');
+            if (content) content.classList.remove('closing');
+            modal.style.display = '';
+            document.body.style.overflow = '';
+        }, 250);
+    }
+
+    function openModalGeneric(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        
+        modal.style.display = 'flex';
+        void modal.offsetWidth;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAboutModal(e) { 
+        if(e.target.id === 'aboutModal') { 
+            closeModalById('aboutModal');
+        } 
+    }
+
+    function closeDisclaimerModal(e) { 
+        if(e.target.id === 'disclaimerModal') { 
+            closeModalById('disclaimerModal');
+        } 
+    }
+
+    function closeAllResModal(e) { 
+        if(e.target.id === 'allResModal') { 
+            closeModalById('allResModal');
+        } 
+    }
+
+    function closeModal(e) { 
+        if(e.target.id === 'baiduModal') { 
+            closeModalById('baiduModal');
+        } 
+    }
+
+    function closeLaoSiJiModal(e) { 
+        if(e.target.id === 'laoSiJiModal') { 
+            closeModalById('laoSiJiModal');
+        } 
+    }
+
+    function openAboutModal() { 
+        openModalGeneric('aboutModal');
+    }
+
+    function openDisclaimerModal() { 
+        openModalGeneric('disclaimerModal');
+    }
+
+    function openAllResModal() { 
+        openModalGeneric('allResModal');
+    }
+
+    function openModal() { 
+        openModalGeneric('baiduModal');
+        resetPasswordAuth();
+    }
+
+    function openLaoSiJiModal() { 
+        openModalGeneric('laoSiJiModal');
+    }
+
+    function go(url) {
+        if (navigator.userAgent.includes('Mobile')) {
+            setTimeout(() => { 
+                window.location.href = url; 
+            }, 150);
+        } else {
+            window.open(url, '_blank');
+        }
+    }
+
+    function copyLink(url) {
+        const input = document.createElement('textarea');
+        input.value = url;
+        input.style.position = 'fixed';
+        input.style.opacity = '0';
+        document.body.appendChild(input);
+        input.select();
+        
+        try {
+            document.execCommand('copy');
+            showToast('fa-link', '链接已复制<br>请自行打开浏览器搜索', '#007AFF');
+        } catch (err) {
+            showToast('fa-exclamation-circle', '复制失败', '#FF3B30');
+        }
+        
+        document.body.removeChild(input);
+    }
+
+    function copyContact(type) {
+        let text = '', name = '', icon = 'fa-check-circle';
+        switch(type) {
+            case 'email': text = 'Tsinhos@qq.com'; name = '邮箱'; icon = 'fa-envelope'; break;
+            case 'qq': text = '1625862774'; name = 'QQ号'; icon = 'fa-comment'; break;
+            case 'qqgroup': text = '1065975237'; name = 'QQ群号'; icon = 'fa-users'; break;
+        }
+        
+        const input = document.createElement('textarea');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        
+        try {
+            document.execCommand('copy');
+            showToast(icon, `${name}已复制<br><b>${text}</b>`, '#007AFF');
+        } catch (err) {
+            showToast('fa-exclamation-circle', '复制失败', '#FF3B30');
+        }
+        
+        document.body.removeChild(input);
+    }
+
+    function showToast(iconClass, text, iconColor) {
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toast-text');
+        const toastIcon = document.getElementById('toast-icon');
+        
+        toast.classList.remove('show-toast');
+        void toast.offsetWidth;
+        
+        toastIcon.className = `fas ${iconClass}`;
+        toastIcon.style.color = iconColor || '#34C759';
+        toastText.innerHTML = text;
+        
+        toast.classList.add('show-toast');
+        
+        setTimeout(() => {
+            toast.classList.remove('show-toast');
+        }, 2200);
+    }
+
+    // ===== 密码授权功能 =====
+    
+    const PASSWORD_VERSION = '2.0';
+    let failedAttempts = 0;
+    let lockTimer = null;
+    
+    function getPasswordVersion() {
+        return localStorage.getItem('tsinho_password_version') || '1.0';
+    }
+    
+    function setPasswordVersion(version) {
+        localStorage.setItem('tsinho_password_version', version);
+    }
+    
+    function isPasswordAuthorized() {
+        const authorized = localStorage.getItem('tsinho_authorized') === 'true';
+        const version = getPasswordVersion();
+        return authorized && version === PASSWORD_VERSION;
+    }
+    
+    function setPasswordAuthorized() {
+        localStorage.setItem('tsinho_authorized', 'true');
+        localStorage.setItem('tsinho_authorized_time', new Date().getTime().toString());
+        setPasswordVersion(PASSWORD_VERSION);
+    }
+    
+    function clearPasswordAuthorization() {
+        localStorage.removeItem('tsinho_authorized');
+        localStorage.removeItem('tsinho_authorized_time');
+        localStorage.removeItem('tsinho_password_version');
+    }
+    
+    function resetPasswordAuth() {
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordAuth = document.getElementById('passwordAuth');
+        const authContent = document.getElementById('authContent');
+        const authError = document.getElementById('authError');
+        const authBtn = document.getElementById('authBtn');
+        
+        passwordInput.value = '';
+        passwordInput.classList.remove('error');
+        authError.classList.remove('show');
+        authBtn.disabled = false;
+        authBtn.textContent = '验证密码';
+        failedAttempts = 0;
+        clearTimeout(lockTimer);
+        
+        if (isPasswordAuthorized()) {
+            passwordAuth.style.display = 'none';
+            authContent.classList.add('show');
+            
+            const authorizedTime = localStorage.getItem('tsinho_authorized_time');
+            if (authorizedTime) {
+                const date = new Date(parseInt(authorizedTime));
+                const timeStr = date.toLocaleDateString('zh-CN', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                showToast('fa-clock', `欢迎回来！<br>授权日期：${timeStr}`, '#34C759');
+            }
+        } else {
+            passwordAuth.style.display = 'flex';
+            authContent.classList.remove('show');
+            setTimeout(() => passwordInput.focus(), 300);
+        }
+    }
+
+    function verifyPassword() {
+        if (failedAttempts >= 5) {
+            showToast('fa-lock', '尝试次数过多，请稍后再试', '#FF9500');
+            return;
+        }
+
+        const passwordInput = document.getElementById('passwordInput');
+        const authBtn = document.getElementById('authBtn');
+        const authError = document.getElementById('authError');
+        const passwordAuth = document.getElementById('passwordAuth');
+        const authContent = document.getElementById('authContent');
+        
+        const inputPassword = passwordInput.value.trim();
+        
+        const encoded = btoa(unescape(encodeURIComponent(inputPassword)));
+        const validEncoded = 'VHNpbmhvMjI1NQ==';
+        
+        if (encoded === validEncoded || inputPassword.toLowerCase() === 'tsinho2255') {
+            setPasswordAuthorized();
+            failedAttempts = 0;
+            
+            authBtn.disabled = true;
+            authBtn.textContent = '验证成功';
+            
+            setTimeout(() => {
+                passwordAuth.style.display = 'none';
+                authContent.classList.add('show');
+                showToast('fa-check-circle', '授权成功<br>请选择线路', '#34C759');
+            }, 500);
+        } else {
+            failedAttempts++;
+            passwordInput.classList.add('error');
+            authError.classList.add('show');
+            
+            if (failedAttempts >= 5) {
+                authBtn.disabled = true;
+                showToast('fa-lock', '尝试次数过多，请30秒后重试', '#FF3B30');
+                
+                lockTimer = setTimeout(() => {
+                    failedAttempts = 0;
+                    authBtn.disabled = false;
+                    passwordInput.classList.remove('error');
+                    authError.classList.remove('show');
+                }, 30000);
+            } else {
+                setTimeout(() => {
+                    passwordInput.classList.remove('error');
+                    authError.classList.remove('show');
+                }, 3000);
+            }
+            
+            passwordInput.value = '';
+            passwordInput.focus();
+        }
+    }
+
+    function clearLocalAuthorization() {
+        clearPasswordAuthorization();
+        resetPasswordAuth();
+        showToast('fa-trash', '已清除本地授权<br>请重新输入密码', '#FF9500');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const passwordInput = document.getElementById('passwordInput');
+        if (passwordInput) {
+            passwordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    verifyPassword();
+                }
+            });
+            
+            passwordInput.addEventListener('input', (e) => {
+                e.target.classList.remove('error');
+                document.getElementById('authError').classList.remove('show');
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                ['aboutModal', 'disclaimerModal', 'allResModal', 'baiduModal', 'laoSiJiModal'].forEach(id => {
+                    const modal = document.getElementById(id);
+                    if (modal && modal.classList.contains('active')) {
+                        closeModalById(id);
+                    }
+                });
+            }
+        });
+    });
+
+    let searchTimeout;
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const val = e.target.value.toLowerCase().trim();
+            const buttons = document.querySelectorAll('.big-button');
+            
+            if (val === '') {
+                buttons.forEach(btn => {
+                    btn.style.display = 'flex';
+                    btn.style.opacity = '1';
+                });
+                return;
+            }
+            
+            buttons.forEach(btn => {
+                const buttonName = btn.querySelector('.button-name').textContent.toLowerCase();
+                const buttonTag = btn.querySelector('.button-tag').textContent.toLowerCase();
+                
+                if ((buttonName + ' ' + buttonTag).includes(val)) {
+                    btn.style.display = 'flex';
+                    btn.style.opacity = '1';
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+        }, 300);
+    });
+</script>
+
+</body>
+</html>
