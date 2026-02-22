@@ -1005,6 +1005,7 @@
         // 角色数据
         // ============================================
         const characters = [
+            { name: "曼波配音", category: "热门推荐", api: "manbo" },
             { name: "知性女声", category: "热门推荐" },
             { name: "紫薇", category: "影视角色" },
             { name: "容嬷嬷", category: "影视角色" },
@@ -1225,7 +1226,12 @@
             hidePlayer();
             
             try {
-                const apiUrl = `https://api.milorapart.top/apis/AIvoice/?text=${encodeURIComponent(text)}&speaker=${encodeURIComponent(currentSelection.name)}`;
+                let apiUrl;
+                if (currentSelection.api === 'manbo') {
+                    apiUrl = `https://api.milorapart.top/apis/mbAIsc?text=${encodeURIComponent(text)}`;
+                } else {
+                    apiUrl = `https://api.milorapart.top/apis/AIvoice/?text=${encodeURIComponent(text)}&speaker=${encodeURIComponent(currentSelection.name)}`;
+                }
                 
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 30000);
