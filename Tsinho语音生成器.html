@@ -2,374 +2,93 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Tsinho语音生成器</title>
     <style>
-        /* ============================================
-           Apple Design System - 核心变量
-           ============================================ */
         :root {
-            /* 基础色板 */
-            --ios-bg: #F5F5F7;
-            --card-bg: rgba(255, 255, 255, 0.72);
-            --card-bg-solid: #FFFFFF;
-            --card-border: rgba(255, 255, 255, 0.8);
-            --primary-blue: #0071e3;
-            --primary-hover: #0077ed;
-            --primary-active: #0068d1;
-            --text-primary: #1d1d1f;
-            --text-secondary: #86868b;
+            --ios-blue: #007AFF;
+            --ios-bg: #F2F2F7;
+            --ios-card: rgba(255, 255, 255, 0.7);
+            --text-primary: #1c1c1e;
+            --text-secondary: #8E8E93;
             --text-tertiary: #a1a1a6;
-            --secondary-bg: #E5E5EA;
-            --secondary-hover: #DEDEE3;
-            --input-bg: #F2F2F7;
-            --input-focus-bg: #FFFFFF;
-            
-            /* 阴影系统 */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-            --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
-            --shadow-glow: 0 0 40px rgba(0, 113, 227, 0.15);
-            
-            /* 圆角系统 - Squircle */
-            --radius-xs: 8px;
-            --radius-sm: 12px;
-            --radius-md: 18px;
-            --radius-lg: 24px;
-            --radius-xl: 28px;
-            --radius-full: 980px;
-            
-            /* Aurora 极光色 */
-            --aurora-blue: rgba(162, 210, 255, 0.5);
-            --aurora-purple: rgba(200, 180, 255, 0.4);
-            --aurora-pink: rgba(255, 182, 193, 0.35);
-            --aurora-cyan: rgba(180, 230, 255, 0.3);
-            
-            /* 动画曲线 */
-            --ease-spring: cubic-bezier(0.25, 1, 0.5, 1);
-            --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
-            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-            
-            /* 布局变量 */
-            --content-max-width: 480px;
-            --content-padding: 24px;
-            --bento-gap: 20px;
+            --radius-main: 70px;
+            --radius-inner: 45px;
+            --shadow-light: 0 8px 25px rgba(0,0,0,0.05);
+            --shadow-medium: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        /* ============================================
-           全局重置与基础样式
-           ============================================ */
-        *, *::before, *::after {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        html {
-            width: 100%;
-            height: 100%;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--ios-bg);
-            color: var(--text-primary);
+            background-color: #F2F2F7;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(175, 82, 222, 0.08) 0px, transparent 50%);
+            display: flex;
+            justify-content: center;
             min-height: 100vh;
-            line-height: 1.47059;
-            font-weight: 400;
-            letter-spacing: -0.022em;
+            color: #000;
             overflow-x: hidden;
+            background-attachment: fixed;
         }
 
-        /* ============================================
-           视图模式切换系统 - 真正的响应式适配
-           ============================================ */
         .app-container {
-            width: 100%;
-            min-height: 100vh;
-            min-height: 100dvh;
-            position: relative;
-            background: var(--ios-bg);
-        }
-
-        /* 手机模式 - 全屏自适应 */
-        .app-container[data-view="mobile"] {
-            background: linear-gradient(135deg, #e8e8e8 0%, #f0f0f0 50%, #e8e8e8 100%);
-        }
-
-        .app-container[data-view="mobile"] .content-wrapper {
-            width: 100%;
-            max-width: 100%;
-            padding: 20px;
-            padding-top: max(20px, env(safe-area-inset-top));
-            padding-bottom: max(20px, env(safe-area-inset-bottom));
-            padding-left: max(16px, env(safe-area-inset-left));
-            padding-right: max(16px, env(safe-area-inset-right));
-            margin: 0 auto;
-        }
-
-        .app-container[data-view="mobile"] .bento-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-            max-width: 100%;
-        }
-
-        .app-container[data-view="mobile"] .glass-card {
-            width: 100%;
-        }
-
-        /* 桌面模式 - 全宽布局 */
-        .app-container[data-view="desktop"] {
-            max-width: 100%;
-        }
-
-        .app-container[data-view="desktop"] .content-wrapper {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 24px;
-        }
-
-        .app-container[data-view="desktop"] .bento-grid {
-            grid-template-columns: repeat(12, 1fr);
-            gap: 24px;
-        }
-
-        .app-container[data-view="desktop"] .card-hero {
-            grid-column: 1 / -1;
-            padding: 48px 32px;
-        }
-
-        .app-container[data-view="desktop"] .card-main {
-            grid-column: 1 / 8;
-            padding: 28px;
-        }
-
-        .app-container[data-view="desktop"] .card-side {
-            grid-column: 8 / -1;
-            padding: 28px;
-        }
-
-        .app-container[data-view="desktop"] .form-section {
-            margin-bottom: 24px;
-        }
-
-        .app-container[data-view="desktop"] .button-group {
-            margin-top: 8px;
-        }
-
-/* ============================================
-           Aurora 极光背景
-           ============================================ */
-        .ambient-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            will-change: transform;
-        }
-
-        .orb-1 {
-            width: 60vw;
-            height: 60vw;
-            max-width: 600px;
-            max-height: 600px;
-            background: radial-gradient(circle at 30% 30%, var(--aurora-blue) 0%, transparent 60%);
-            top: -15%;
-            left: -10%;
-            animation: float-1 25s infinite ease-in-out;
-        }
-
-        .orb-2 {
-            width: 50vw;
-            height: 50vw;
-            max-width: 500px;
-            max-height: 500px;
-            background: radial-gradient(circle at 70% 70%, var(--aurora-purple) 0%, transparent 60%);
-            bottom: -10%;
-            right: -10%;
-            animation: float-2 20s infinite ease-in-out;
-        }
-
-        .orb-3 {
-            width: 40vw;
-            height: 40vw;
-            max-width: 400px;
-            max-height: 400px;
-            background: radial-gradient(circle at 50% 50%, var(--aurora-pink) 0%, transparent 60%);
-            top: 40%;
-            left: 30%;
-            opacity: 0.6;
-            animation: float-3 22s infinite ease-in-out;
-        }
-
-        .orb-4 {
-            width: 35vw;
-            height: 35vw;
-            max-width: 350px;
-            max-height: 350px;
-            background: radial-gradient(circle at 40% 60%, var(--aurora-cyan) 0%, transparent 60%);
-            top: 60%;
-            left: -10%;
-            opacity: 0.5;
-            animation: float-4 18s infinite ease-in-out;
-        }
-
-        @keyframes float-1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -30px) scale(1.05); }
-            50% { transform: translate(-20px, 40px) scale(0.95); }
-            75% { transform: translate(30px, 20px) scale(1.02); }
-        }
-
-        @keyframes float-2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-30px, -40px) scale(1.08); }
-            66% { transform: translate(20px, -20px) scale(0.92); }
-        }
-
-        @keyframes float-3 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-40px, 30px) scale(1.06); }
-        }
-
-        @keyframes float-4 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(50px, -20px) scale(0.98); }
-            75% { transform: translate(-30px, 30px) scale(1.04); }
-        }
-
-        /* ============================================
-           Bento Grid 便当盒布局
-           ============================================ */
-        .content-wrapper {
-            position: relative;
-            z-index: 1;
-            padding: var(--content-padding);
-        }
-
-        .bento-grid {
-            display: grid;
-            gap: var(--bento-gap);
-            max-width: var(--content-max-width);
-            margin: 0 auto;
-        }
-
-        /* ============================================
-           Glass Card 毛玻璃卡片
-           ============================================ */
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--card-border);
-            box-shadow: 
-                var(--shadow-md),
-                inset 0 0.5px 0 1px rgba(255, 255, 255, 0.6);
-            overflow: hidden;
-            transition: 
-                transform 0.5s var(--ease-spring),
-                box-shadow 0.5s var(--ease-out);
-            animation: fadeInUp 0.8s var(--ease-spring) forwards;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .glass-card:hover {
-            box-shadow: 
-                var(--shadow-lg),
-                inset 0 0.5px 0 1px rgba(255, 255, 255, 0.7);
-        }
-
-        .glass-card:nth-child(1) { animation-delay: 0.1s; }
-        .glass-card:nth-child(2) { animation-delay: 0.2s; }
-        .glass-card:nth-child(3) { animation-delay: 0.3s; }
-        .glass-card:nth-child(4) { animation-delay: 0.4s; }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 卡片变体 */
-        .card-hero {
-            padding: 48px 32px;
-            text-align: center;
-        }
-
-        .card-main {
-            padding: 28px;
-        }
-
-        .card-side {
-            padding: 28px;
+            width: 96%;
+            max-width: 1300px;
+            padding: 80px 30px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
         }
 
-        /* ============================================
-           排版系统 - Big Type
-           ============================================ */
-        .eyebrow {
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--primary-blue);
-            margin-bottom: 12px;
-            display: block;
+        /* 页眉 */
+        .app-header {
+            text-align: center;
+            margin-bottom: 60px;
         }
 
-        .headline {
-            font-size: 36px;
-            line-height: 1.1;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: var(--text-primary);
-            margin-bottom: 12px;
+        .app-title {
+            font-size: clamp(48px, 10vw, 110px);
+            font-weight: 800;
+            letter-spacing: -4px;
+            color: #1c1c1e;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #1c1c1e, #3a3a3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .subhead {
-            font-size: 17px;
-            line-height: 1.4;
-            color: var(--text-secondary);
-            max-width: 400px;
-            margin: 0 auto;
+        .app-subtitle {
+            font-size: clamp(20px, 4vw, 42px);
+            color: #8E8E93;
+            font-weight: 500;
         }
 
-        .app-container[data-view="desktop"] .headline {
-            font-size: 48px;
+        /* 主卡片 */
+        .main-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 70px;
+            padding: 60px 50px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
         }
 
-        .app-container[data-view="desktop"] .subhead {
-            font-size: 19px;
-            max-width: 500px;
-        }
-
-        /* ============================================
-           表单组件
-           ============================================ */
+        /* 表单区块 */
         .form-section {
-            margin-bottom: 24px;
+            margin-bottom: 50px;
         }
 
         .form-section:last-child {
@@ -377,189 +96,153 @@
         }
 
         .form-label {
+            font-size: clamp(24px, 4vw, 38px);
+            font-weight: 700;
+            color: #1c1c1e;
+            margin-bottom: 25px;
             display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
         }
 
-        /* 内联角色列表 */
-        .character-list-inline {
+        /* 角色网格 */
+        .character-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            max-height: 200px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+            max-height: 500px;
             overflow-y: auto;
-            padding: 4px;
+            padding: 10px;
         }
 
-        .character-item-inline {
-            padding: 10px 8px;
-            background: var(--secondary-bg);
-            border: 2px solid transparent;
-            border-radius: var(--radius-md);
+        .character-item {
+            background: rgba(118, 118, 128, 0.12);
+            border-radius: 45px;
+            padding: 30px 20px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s var(--ease-spring);
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 3px solid transparent;
         }
 
-        .character-item-inline:hover {
-            background: var(--secondary-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
+        .character-item:hover {
+            background: rgba(118, 118, 128, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        .character-item-inline.selected {
-            background: var(--primary-blue);
-            color: white;
-            border-color: var(--primary-blue-dark);
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        .character-item.selected {
+            background: #007AFF;
+            border-color: #0056b3;
+            box-shadow: 0 15px 35px rgba(0, 122, 255, 0.3);
         }
 
-        .character-item-inline .category-tag {
+        .character-item .name {
+            font-size: clamp(18px, 3vw, 32px);
+            font-weight: 600;
+            color: #1c1c1e;
             display: block;
-            font-size: 10px;
-            color: var(--text-tertiary);
-            margin-top: 2px;
+            margin-bottom: 8px;
         }
 
-        .character-item-inline.selected .category-tag {
+        .character-item.selected .name {
+            color: white;
+        }
+
+        .character-item .category {
+            font-size: clamp(14px, 2vw, 24px);
+            color: #8E8E93;
+        }
+
+        .character-item.selected .category {
             color: rgba(255, 255, 255, 0.8);
         }
 
-        /* 输入框 */
-        .input-wrapper {
-            position: relative;
-        }
-
-        .ios-textarea {
+        /* 文本输入 */
+        .text-input {
             width: 100%;
-            min-height: 140px;
-            padding: 16px 20px 40px;
-            background: var(--input-bg);
-            border: 2px solid transparent;
-            border-radius: var(--radius-md);
-            font-size: 16px;
-            line-height: 1.5;
-            color: var(--text-primary);
+            min-height: 250px;
+            padding: 35px 40px;
+            background: rgba(118, 118, 128, 0.12);
+            border: none;
+            border-radius: 45px;
+            font-size: clamp(20px, 3vw, 36px);
+            line-height: 1.6;
+            color: #000;
             resize: vertical;
             font-family: inherit;
-            transition: all 0.3s var(--ease-spring);
             outline: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .ios-textarea::placeholder {
-            color: var(--text-tertiary);
+        .text-input::placeholder {
+            color: #8E8E93;
         }
 
-        .ios-textarea:hover {
-            background: #EBEBF0;
-        }
-
-        .ios-textarea:focus {
-            background: var(--input-focus-bg);
-            border-color: rgba(0, 113, 227, 0.3);
-            box-shadow: 
-                0 0 0 4px rgba(0, 113, 227, 0.1),
-                var(--shadow-sm);
+        .text-input:focus {
+            background: rgba(118, 118, 128, 0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
         .char-count {
-            position: absolute;
-            bottom: 12px;
-            right: 16px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-tertiary);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 4px 10px;
-            border-radius: var(--radius-full);
-            pointer-events: none;
-            backdrop-filter: blur(4px);
+            text-align: right;
+            font-size: clamp(16px, 2.5vw, 28px);
+            color: #8E8E93;
+            margin-top: 15px;
+            padding-right: 20px;
         }
 
-        /* ============================================
-           按钮层级系统
-           ============================================ */
+        /* 按钮组 */
         .button-group {
             display: flex;
-            gap: 12px;
-            margin-top: 8px;
+            gap: 30px;
+            margin-top: 40px;
         }
 
         .btn {
-            padding: 14px 24px;
-            border-radius: var(--radius-full);
-            font-size: 16px;
-            font-weight: 600;
+            flex: 1;
+            padding: 40px 50px;
+            border-radius: 45px;
+            font-size: clamp(20px, 3vw, 36px);
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.4s var(--ease-spring);
             border: none;
             outline: none;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
+            gap: 20px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Primary Button - 品牌蓝 */
+        .btn svg {
+            width: clamp(24px, 4vw, 40px);
+            height: clamp(24px, 4vw, 40px);
+        }
+
         .btn-primary {
-            flex: 1;
-            background: var(--primary-blue);
+            background: #007AFF;
             color: white;
-            box-shadow: 
-                0 4px 16px rgba(0, 113, 227, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-            opacity: 1;
+            box-shadow: 0 15px 35px rgba(0, 122, 255, 0.3);
         }
 
         .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: scale(1.02) translateY(-1px);
-            box-shadow: 
-                0 6px 24px rgba(0, 113, 227, 0.4),
-                var(--shadow-glow),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 45px rgba(0, 122, 255, 0.4);
         }
 
         .btn-primary:active {
-            background: var(--primary-active);
-            transform: scale(0.98) translateY(0);
-            box-shadow: 0 2px 8px rgba(0, 113, 227, 0.3);
-        }
-
-        /* Secondary Button - 浅灰实心 */
-        .btn-secondary {
-            padding: 14px 20px;
-            background: var(--secondary-bg);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--secondary-hover);
-            transform: scale(1.02);
-        }
-
-        .btn-secondary:active {
             transform: scale(0.98);
         }
 
-        /* Loading 状态 */
+        .btn-secondary {
+            background: rgba(118, 118, 128, 0.12);
+            color: #1c1c1e;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(118, 118, 128, 0.2);
+            transform: translateY(-4px);
+        }
+
         .btn-loading {
             position: relative;
             color: transparent;
@@ -569,9 +252,9 @@
         .btn-loading::after {
             content: "";
             position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2.5px solid rgba(255, 255, 255, 0.3);
+            width: 30px;
+            height: 30px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
@@ -581,122 +264,121 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ============================================
-           播放器卡片
-           ============================================ */
+        /* 播放器卡片 */
         .player-card {
-            padding: 24px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px) scale(0.98);
-            transition: all 0.6s var(--ease-spring);
-            height: 0;
-            overflow: hidden;
-            margin-top: 0;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 70px;
+            padding: 50px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            margin-top: 40px;
+            display: none;
         }
 
         .player-card.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-            height: auto;
-            overflow: visible;
-            margin-top: 20px;
+            display: block;
         }
 
         .player-header {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
+            gap: 30px;
+            margin-bottom: 35px;
         }
 
         .player-artwork {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--aurora-blue), var(--aurora-purple));
-            border-radius: var(--radius-sm);
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #5AC8FA, #007AFF);
+            border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            box-shadow: var(--shadow-sm);
+            font-size: 48px;
             flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .player-artwork::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%);
-        }
-
-        .player-meta {
-            flex: 1;
-            min-width: 0;
         }
 
         .player-meta h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: var(--text-primary);
+            font-size: clamp(24px, 4vw, 42px);
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1c1c1e;
         }
 
         .player-meta p {
-            font-size: 13px;
-            color: var(--text-secondary);
+            font-size: clamp(18px, 3vw, 30px);
+            color: #8E8E93;
         }
 
         .audio-container {
-            background: var(--input-bg);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            margin-bottom: 16px;
+            background: rgba(118, 118, 128, 0.12);
+            border-radius: 35px;
+            padding: 25px;
+            margin-bottom: 30px;
         }
 
         audio {
             width: 100%;
-            height: 40px;
-            border-radius: 8px;
-        }
-
-        audio::-webkit-media-controls-panel {
-            background: var(--input-bg);
+            height: 60px;
         }
 
         .download-btn {
             width: 100%;
-            padding: 12px;
-            background: white;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--primary-blue);
-            cursor: pointer;
-            transition: all 0.3s var(--ease-spring);
+            padding: 35px;
+            background: #34C759;
+            color: white;
+            border-radius: 35px;
+            font-size: clamp(20px, 3vw, 36px);
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            text-decoration: none;
+            gap: 20px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .download-btn:hover {
-            background: var(--ios-bg);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(52, 199, 89, 0.3);
         }
 
-        /* ============================================
-           Toast 提示
-           ============================================ */
+        .download-btn svg {
+            width: clamp(24px, 4vw, 40px);
+            height: clamp(24px, 4vw, 40px);
+        }
+
+        /* 错误提示 */
+        .error-hint {
+            background: rgba(255, 59, 48, 0.1);
+            border-radius: 35px;
+            padding: 25px 35px;
+            display: none;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .error-hint.show {
+            display: flex;
+        }
+
+        .error-hint svg {
+            width: 32px;
+            height: 32px;
+            color: #FF3B30;
+            flex-shrink: 0;
+        }
+
+        .error-hint span {
+            font-size: clamp(18px, 3vw, 30px);
+            color: #FF3B30;
+        }
+
+        /* Toast */
         .toast {
             position: fixed;
             top: 50%;
@@ -704,24 +386,15 @@
             transform: translate(-50%, -50%) scale(0.9);
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             color: white;
-            padding: 14px 24px;
-            border-radius: var(--radius-full);
+            padding: 30px 50px;
+            border-radius: 35px;
+            font-size: clamp(18px, 3vw, 32px);
             font-weight: 600;
-            font-size: 14px;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.4s var(--ease-spring);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 9999;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            max-width: calc(100vw - 40px);
-            width: auto;
-            justify-content: center;
-            text-align: center;
             white-space: nowrap;
         }
 
@@ -735,277 +408,122 @@
             background: rgba(255, 59, 48, 0.95);
         }
 
-        .toast svg {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
-
-        /* ============================================
-           错误提示
-           ============================================ */
-        .error-hint {
-            margin-top: 16px;
-            padding: 14px 18px;
-            background: rgba(255, 59, 48, 0.08);
-            border: 1px solid rgba(255, 59, 48, 0.15);
-            border-radius: var(--radius-md);
-            display: none;
-            align-items: center;
-            gap: 10px;
-            animation: shake 0.5s var(--ease-spring);
-        }
-
-        .error-hint.show {
-            display: flex;
-        }
-
-        .error-hint svg {
-            width: 18px;
-            height: 18px;
-            color: #FF3B30;
-            flex-shrink: 0;
-        }
-
-        .error-hint span {
-            font-size: 14px;
-            color: #FF3B30;
-            font-weight: 500;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-5px); }
-            40% { transform: translateX(5px); }
-            60% { transform: translateX(-3px); }
-            80% { transform: translateX(3px); }
-        }
-
-        /* ============================================
-           响应式适配 - 自动适配所有屏幕
-           ============================================ */
-        @media (max-width: 360px) {
-            .headline {
-                font-size: 24px;
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .app-container {
+                width: 100%;
+                padding: 40px 20px;
             }
 
-            .subhead {
-                font-size: 15px;
+            .main-card {
+                padding: 40px 30px;
+                border-radius: 45px;
             }
 
-            .card-hero {
-                padding: 32px 20px;
+            .character-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
             }
 
-            .card-main, .card-side {
-                padding: 20px;
-            }
-
-            .form-label {
-                font-size: 11px;
-            }
-
-            .ios-textarea {
-                min-height: 120px;
-                font-size: 15px;
-            }
-
-            .btn {
-                padding: 12px 20px;
-                font-size: 15px;
+            .character-item {
+                padding: 20px 15px;
             }
 
             .button-group {
                 flex-direction: column;
+                gap: 20px;
             }
 
-            .btn-secondary {
-                width: 100%;
+            .player-header {
+                flex-direction: column;
+                text-align: center;
             }
-        }
-
-        @media (min-width: 361px) and (max-width: 480px) {
-            .headline {
-                font-size: 28px;
-            }
-
-            .card-hero {
-                padding: 36px 24px;
-            }
-        }
-
-        @media (min-width: 481px) and (max-width: 768px) {
-            .headline {
-                font-size: 32px;
-            }
-
-            .card-hero {
-                padding: 40px 28px;
-            }
-        }
-
-        @media (min-width: 769px) {
-        }
-
-        /* 滚动条美化 */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--secondary-bg);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary-hover);
-        }
-
-        /* 选择文字颜色 */
-        ::selection {
-            background: rgba(0, 113, 227, 0.2);
-            color: var(--text-primary);
         }
     </style>
 </head>
 <body>
-    <!-- 应用容器 -->
-    <div class="app-container" data-view="mobile">
-        <!-- Aurora 极光背景 -->
-        <div class="ambient-background">
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-            <div class="orb orb-3"></div>
-            <div class="orb orb-4"></div>
+    <div class="app-container">
+        <!-- 页眉 -->
+        <div class="app-header">
+            <h1 class="app-title">Tsinho语音生成器</h1>
+            <p class="app-subtitle">选择角色，输入文本，即刻生成自然流畅的 AI 语音</p>
         </div>
 
-        <!-- 主内容区 -->
-        <div class="content-wrapper">
-                <div class="bento-grid">
-                    <!-- Hero Card -->
-                    <div class="glass-card card-hero">
-                        <span class="eyebrow">AI Voice Studio</span>
-                        <h1 class="headline">Tsinho语音生成器</h1>
-                        <p class="subhead">选择角色，输入文本，即刻生成自然流畅的 AI 语音</p>
-                    </div>
+        <!-- 主卡片 -->
+        <div class="main-card">
+            <!-- 角色选择 -->
+            <div class="form-section">
+                <label class="form-label">配音角色</label>
+                <div class="character-grid" id="characterGrid"></div>
+            </div>
 
-                    <!-- Main Form Card -->
-                    <div class="glass-card card-main">
-                        <!-- 角色选择 -->
-                        <div class="form-section">
-                            <label class="form-label">配音角色</label>
-                            <div class="character-list-inline" id="characterListInline"></div>
-                        </div>
+            <!-- 文本输入 -->
+            <div class="form-section">
+                <label class="form-label">文本内容</label>
+                <textarea class="text-input" id="textInput" placeholder="请输入要转换为语音的文本..." oninput="updateCharCount()"></textarea>
+                <div class="char-count" id="charCount">0 字</div>
+            </div>
 
-                        <!-- 文本输入 -->
-                        <div class="form-section">
-                            <label class="form-label">文本内容</label>
-                            <div class="input-wrapper">
-                                <textarea 
-                                    class="ios-textarea" 
-                                    id="textInput" 
-                                    placeholder="请输入要转换为语音的文本..."
-                                    oninput="updateCharCount()"
-                                ></textarea>
-                                <span class="char-count" id="charCount">0 字</span>
-                            </div>
-                        </div>
+            <!-- 操作按钮 -->
+            <div class="button-group">
+                <button class="btn btn-primary" id="generateBtn" onclick="generateVoice()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    生成语音
+                </button>
+                <button class="btn btn-secondary" onclick="clearAll()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    清空
+                </button>
+            </div>
 
-                        <!-- 操作按钮 -->
-                        <div class="button-group">
-                            <button class="btn btn-primary" id="generateBtn" onclick="generateVoice()">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <polygon points="5 3 19 12 5 21 5 3"/>
-                                </svg>
-                                生成语音
-                            </button>
-                            <button class="btn btn-secondary" onclick="clearAll()">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <polyline points="3 6 5 6 21 6"/>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                </svg>
-                                清空
-                            </button>
-                        </div>
+            <!-- 错误提示 -->
+            <div class="error-hint" id="errorHint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span id="errorText"></span>
+            </div>
+        </div>
 
-                        <!-- 错误提示 -->
-                        <div class="error-hint" id="errorHint">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="12" y1="8" x2="12" y2="12"/>
-                                <line x1="12" y1="16" x2="12.01" y2="16"/>
-                            </svg>
-                            <span id="errorText"></span>
-                        </div>
-                    </div>
-
-                    <!-- Player Card -->
-                    <div class="glass-card player-card" id="playerCard">
-                        <div class="player-header">
-                            <div class="player-artwork">🎵</div>
-                            <div class="player-meta">
-                                <h3 id="playerTitle">角色名称</h3>
-                                <p id="playerSubtitle">生成完毕 · 点击播放</p>
-                            </div>
-                        </div>
-                        <div class="audio-container">
-                            <audio id="audioPlayer" controls></audio>
-                        </div>
-                        <a class="download-btn" id="downloadLink" href="#" download>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="7 10 12 15 17 10"/>
-                                <line x1="12" y1="15" x2="12" y2="3"/>
-                            </svg>
-                            下载音频
-                        </a>
-                    </div>
+        <!-- 播放器卡片 -->
+        <div class="player-card" id="playerCard">
+            <div class="player-header">
+                <div class="player-artwork">🎵</div>
+                <div class="player-meta">
+                    <h3 id="playerTitle">角色名称</h3>
+                    <p id="playerSubtitle">生成完毕 · 点击播放</p>
                 </div>
             </div>
+            <div class="audio-container">
+                <audio id="audioPlayer" controls></audio>
+            </div>
+            <a class="download-btn" id="downloadLink" href="#" download>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                下载音频
+            </a>
+        </div>
     </div>
 
     <!-- Toast -->
     <div class="toast" id="toast">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12"/>
-        </svg>
         <span id="toastMsg"></span>
     </div>
 
     <script>
-        // ============================================
-        // 自动适配屏幕尺寸 - 基于CSS transform实现
-        // CSS中已有媒体查询实现自动缩放
-        // ============================================
-        
-        // 监听屏幕尺寸变化
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                document.body.style.height = 'auto';
-                requestAnimationFrame(() => {
-                    document.body.style.height = '';
-                });
-            }, 100);
-        });
-
-        // 监听设备方向变化
-        window.addEventListener('orientationchange', () => {
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-            }, 100);
-        });
-
-        // ============================================
         // 角色数据
-        // ============================================
         const characters = [
-            { name: "曼波配音", category: "热门推荐", api: "manbo" },
+            { name: "曼波配音", category: "热门推荐", api: "mbAIsc" },
             { name: "知性女声", category: "热门推荐" },
             { name: "紫薇", category: "影视角色" },
             { name: "容嬷嬷", category: "影视角色" },
@@ -1093,141 +611,119 @@
             { name: "康定情歌", category: "歌唱类" }
         ];
 
+        let currentSelection = null;
         const failedCharacters = new Set();
 
-        let currentSelection = null;
-        let isGenerating = false;
-
-        // ============================================
         // 初始化
-        // ============================================
         function init() {
-            renderInlineCharacterList();
+            renderCharacterGrid();
         }
 
-        // 渲染内联角色列表
-        function renderInlineCharacterList() {
-            const container = document.getElementById('characterListInline');
-            container.innerHTML = '';
-            
+        // 渲染角色网格
+        function renderCharacterGrid() {
+            const grid = document.getElementById('characterGrid');
+            grid.innerHTML = '';
+
             characters.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'character-item-inline';
+                div.className = 'character-item';
                 div.innerHTML = `
                     <span class="name">${item.name}</span>
-                    <span class="category-tag">${item.category}</span>
+                    <span class="category">${item.category}</span>
                 `;
-                div.onclick = () => selectCharacterInline(item, div);
-                container.appendChild(div);
+                div.onclick = () => selectCharacter(item, div);
+                grid.appendChild(div);
             });
         }
 
-        // ============================================
-        // 角色选择
-        // ============================================
-        function selectCharacterInline(item, element) {
+        // 选择角色
+        function selectCharacter(item, element) {
             if (failedCharacters.has(item.name)) {
-                showToast(`"${item.name}" 暂时不可用，请选择其他角色`, true);
+                showToast(`"${item.name}" 暂时不可用`, true);
                 return;
             }
-            
-            // 移除之前的选中状态
-            document.querySelectorAll('.character-item-inline').forEach(el => {
+
+            document.querySelectorAll('.character-item').forEach(el => {
                 el.classList.remove('selected');
             });
-            
-            // 添加选中状态
+
             element.classList.add('selected');
             currentSelection = item;
             hideError();
             showToast(`已选择 "${item.name}"`);
         }
 
-        // ============================================
-        // 表单功能
-        // ============================================
+        // 更新字数
         function updateCharCount() {
             const len = document.getElementById('textInput').value.length;
             document.getElementById('charCount').textContent = `${len} 字`;
         }
 
+        // 清空
         function clearAll() {
             document.getElementById('textInput').value = '';
             updateCharCount();
             hidePlayer();
             hideError();
             currentSelection = null;
-            // 移除选中状态
-            document.querySelectorAll('.character-item-inline').forEach(el => {
+            document.querySelectorAll('.character-item').forEach(el => {
                 el.classList.remove('selected');
             });
             showToast('已清空');
         }
 
-        // ============================================
-        // 播放器控制
-        // ============================================
+        // 隐藏播放器
         function hidePlayer() {
-            const player = document.getElementById('playerCard');
-            player.classList.remove('active');
-            document.getElementById('audioPlayer').pause();
-            document.getElementById('audioPlayer').src = '';
+            document.getElementById('playerCard').classList.remove('active');
+            const audio = document.getElementById('audioPlayer');
+            audio.pause();
+            audio.src = '';
         }
 
-        function showPlayer() {
-            const player = document.getElementById('playerCard');
-            player.classList.add('active');
-        }
-
-        // ============================================
-        // 错误提示
-        // ============================================
+        // 显示错误
         function showError(msg) {
-            const errorHint = document.getElementById('errorHint');
+            const hint = document.getElementById('errorHint');
             document.getElementById('errorText').textContent = msg;
-            errorHint.classList.add('show');
+            hint.classList.add('show');
         }
 
+        // 隐藏错误
         function hideError() {
             document.getElementById('errorHint').classList.remove('show');
         }
 
-        // ============================================
-        // 语音生成
-        // ============================================
+        // 显示Toast
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.className = isError ? 'toast error show' : 'toast show';
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 生成语音
         async function generateVoice() {
-            if (isGenerating) return;
-            
             const text = document.getElementById('textInput').value.trim();
-            
-            hideError();
-            
+
             if (!currentSelection) {
-                showToast('请先选择配音角色', true);
-                openModal();
+                showError('请先选择一个配音角色');
                 return;
             }
-            
+
             if (!text) {
-                showToast('请输入文本内容', true);
-                document.getElementById('textInput').focus();
+                showError('请输入要转换的文本内容');
                 return;
             }
 
-            if (failedCharacters.has(currentSelection.name)) {
-                showError(`"${currentSelection.name}" 角色暂时不可用，请选择其他角色`);
-                showToast('该角色不可用', true);
-                return;
-            }
-
-            isGenerating = true;
             const btn = document.getElementById('generateBtn');
             btn.classList.add('btn-loading');
-            hidePlayer();
-            
+            btn.disabled = true;
+
             try {
                 let apiUrl;
-                if (currentSelection.api === 'manbo') {
+                
+                if (currentSelection.api === 'mbAIsc') {
                     apiUrl = `https://api.milorapart.top/apis/mbAIsc?text=${encodeURIComponent(text)}`;
                 } else {
                     apiUrl = `https://api.milorapart.top/apis/AIvoice/?text=${encodeURIComponent(text)}&speaker=${encodeURIComponent(currentSelection.name)}`;
@@ -1239,86 +735,41 @@
                 const response = await fetch(apiUrl, { signal: controller.signal });
                 clearTimeout(timeoutId);
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 const data = await response.json();
 
                 if (data.code === 200 && data.url && data.url.trim() !== '') {
                     const audio = document.getElementById('audioPlayer');
-                    
-                    const audioTest = new Audio();
-                    audioTest.preload = 'metadata';
-                    
-                    audioTest.onloadedmetadata = () => {
-                        audio.src = data.url;
-                        document.getElementById('playerTitle').textContent = currentSelection.name;
-                        document.getElementById('playerSubtitle').textContent = '生成完毕 · 点击播放';
-                        document.getElementById('downloadLink').href = data.url;
-                        document.getElementById('downloadLink').download = `voice_${currentSelection.name}_${Date.now()}.mp3`;
-                        
-                        showPlayer();
-                        showToast('语音生成成功');
-                        
-                        setTimeout(() => {
-                            player.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        }, 100);
-                    };
-                    
-                    audioTest.onerror = () => {
-                        throw new Error('Invalid audio URL');
-                    };
-                    
-                    audioTest.src = data.url;
-                    
+                    audio.src = data.url;
+                    document.getElementById('playerTitle').textContent = currentSelection.name;
+                    document.getElementById('playerSubtitle').textContent = '生成完毕 · 点击播放';
+                    document.getElementById('downloadLink').href = data.url;
+                    document.getElementById('downloadLink').download = `voice_${currentSelection.name}_${Date.now()}.mp3`;
+                    document.getElementById('playerCard').classList.add('active');
+
+                    hideError();
+                    showToast('语音生成成功！');
                 } else if (data.code === 400 || data.code === 404 || data.msg) {
-                    const errorMsg = data.msg || '该角色暂时不可用';
-                    showError(errorMsg);
-                    showToast(errorMsg, true);
-                    failedCharacters.add(currentSelection.name);
+                    throw new Error(data.msg || '该角色暂时不可用');
                 } else {
-                    throw new Error('Invalid response');
+                    throw new Error('未返回有效的音频地址');
                 }
+
             } catch (error) {
-                console.error('Generation error:', error);
-                let errorMsg = '生成失败，请稍后重试';
-                
-                if (error.name === 'AbortError') {
-                    errorMsg = '请求超时，请检查网络连接';
-                } else if (error.message.includes('HTTP 404')) {
-                    errorMsg = '该角色暂时不可用，请选择其他角色';
+                if (currentSelection && error.message.includes('不可用')) {
                     failedCharacters.add(currentSelection.name);
-                } else if (error.message.includes('HTTP 5')) {
-                    errorMsg = '服务器繁忙，请稍后重试';
-                } else if (error.message.includes('Failed to fetch')) {
-                    errorMsg = '网络连接失败，请检查网络';
                 }
-                
-                showError(errorMsg);
-                showToast(errorMsg, true);
+                showError(`生成失败: ${error.message}`);
+                showToast('生成失败，请重试', true);
             } finally {
-                isGenerating = false;
                 btn.classList.remove('btn-loading');
+                btn.disabled = false;
             }
         }
 
-        // ============================================
-        // Toast 提示
-        // ============================================
-        function showToast(msg, isError = false) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMsg');
-            
-            toastMsg.textContent = msg;
-            toast.className = 'toast' + (isError ? ' error' : '');
-            
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        // 启动应用
-        init();
+        // 页面加载完成后初始化
+        window.onload = init;
     </script>
 </body>
 </html>
