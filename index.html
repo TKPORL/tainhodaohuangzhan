@@ -374,7 +374,7 @@
             opacity: 0.9; 
         }
 
-        /* ===== iOS 居中弹窗 (全系统统一) ===== */
+        /* ===== iOS 苹果风格弹窗 (从触发位置出现/消失) ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -388,29 +388,17 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .modal-overlay.active { 
             opacity: 1; 
             visibility: visible; 
             pointer-events: auto;
             display: flex; 
-            animation: iosModalIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) ease-out; 
         }
 
         .modal-overlay.closing {
             opacity: 0;
-            animation: iosModalOut 0.25s ease-in forwards;
-        }
-
-        @keyframes iosModalIn {
-            from { opacity: 0; transform: scale(1.1); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes iosModalOut {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(1.05); }
         }
 
         .modal-content {
@@ -422,17 +410,40 @@
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             max-height: 85vh;
             overflow-y: auto;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
+            transform: scale(0.5);
+            opacity: 0;
         }
         
-        .modal-content.closing {
-            animation: iosContentOut 0.25s ease-in forwards;
+        .modal-overlay.active .modal-content {
+            animation: appleModalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        
+        .modal-overlay.closing .modal-content {
+            animation: appleModalOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
-        @keyframes iosContentOut {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(0.95); }
+        @keyframes appleModalIn {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.3) translate(var(--start-x, 0), var(--start-y, 0));
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1) translate(0, 0);
+            }
+        }
+
+        @keyframes appleModalOut {
+            0% { 
+                opacity: 1; 
+                transform: scale(1) translate(0, 0);
+            }
+            100% { 
+                opacity: 0; 
+                transform: scale(0.3) translate(var(--end-x, 0), var(--end-y, 0));
+            }
         }
 
         .modal-header-title {
@@ -947,6 +958,94 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
+        /* ===== 版权信息区域 ===== */
+        .copyright-footer {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 50px;
+            padding: 40px 50px;
+            margin-top: 40px;
+            margin-bottom: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .copyright-footer:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .copyright-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .copyright-text {
+            font-size: 32px;
+            color: #8E8E93;
+            font-weight: 500;
+        }
+
+        .copyright-text strong {
+            color: #007AFF;
+            font-weight: 700;
+        }
+
+        .official-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            color: white;
+            padding: 18px 35px;
+            border-radius: 25px;
+            font-size: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px rgba(0, 122, 255, 0.25);
+        }
+
+        .official-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 122, 255, 0.35);
+        }
+
+        .official-link:active {
+            transform: scale(0.98);
+        }
+
+        .official-link i {
+            font-size: 28px;
+        }
+
+        @media (max-width: 768px) {
+            .copyright-footer {
+                padding: 30px 35px;
+                margin-bottom: 40px;
+            }
+
+            .copyright-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .copyright-text {
+                font-size: 26px;
+                text-align: center;
+            }
+
+            .official-link {
+                font-size: 26px;
+                padding: 15px 30px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -966,7 +1065,7 @@
     
     <h2 class="card-title">资源库 <span class="card-count">9</span></h2>
     <div class="grid-layout">
-        <div class="big-button" onclick="openAllResModal()" tabindex="0" role="button" aria-label="查看全资源分类合集">
+        <div class="big-button" onclick="openAllResModal(event)" tabindex="0" role="button" aria-label="查看全资源分类合集">
             <div class="button-icon blue"><i class="fas fa-archive"></i></div>
             <div class="button-name">全资源</div>
             <div class="button-tag">分类合集</div>
@@ -976,7 +1075,7 @@
             <div class="button-name">实用软件</div>
             <div class="button-tag">精品破解</div>
         </div>
-        <div class="big-button" onclick="openLaoSiJiModal()" tabindex="0" role="button" aria-label="老司机黄色小玩意">
+        <div class="big-button" onclick="openLaoSiJiModal(event)" tabindex="0" role="button" aria-label="老司机黄色小玩意">
             <div class="button-icon orange"><i class="fas fa-gamepad"></i></div>
             <div class="button-name">老司机</div>
             <div class="button-tag">黄色小玩意</div>
@@ -1017,7 +1116,7 @@
             <div class="button-name">网盘工具</div>
             <div class="button-tag">必备增强</div>
         </div>
-        <div class="big-button" onclick="openModal()" tabindex="0" role="button" aria-label="百度解析站高速直链">
+        <div class="big-button" onclick="openModal(event)" tabindex="0" role="button" aria-label="百度解析站高速直链">
             <div class="button-icon red"><i class="fas fa-link"></i></div>
             <div class="button-name">百度解析站</div>
             <div class="button-tag">高速直链</div>
@@ -1060,10 +1159,19 @@
                 <span>资源全天候实时同步，极致体验</span>
             </div>
         </div>
-        <button class="ios-btn-main" onclick="openAboutModal()" tabindex="0" role="button" aria-label="查看关于Tsinho导航站的详细信息">
+        <button class="ios-btn-main" onclick="openAboutModal(event)" tabindex="0" role="button" aria-label="查看关于Tsinho导航站的详细信息">
             <i class="fas fa-info-circle"></i> 查看详细信息
         </button>
     </div>
+
+    <footer class="copyright-footer">
+        <div class="copyright-content">
+            <span class="copyright-text">© 2025 <strong>Tsinho</strong>. All rights reserved.</span>
+            <a href="https://link3.cc/xakjyxgs" class="official-link" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-globe"></i> 官网
+            </a>
+        </div>
+    </footer>
 </div>
 
 <div class="modal-overlay" id="aboutModal" onclick="closeAboutModal(event)" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
@@ -1091,14 +1199,14 @@
                     <div class="list-text-sub">1625862774</div>
                 </div>
             </div>
-            <div class="ios-list-item" onclick="go('https://qm.qq.com/q/SSzmcxNYQO')" tabindex="0" role="button" aria-label="访问官方群聊">
+            <div class="ios-list-item" onclick="openQQGroupModal(event)" tabindex="0" role="button" aria-label="访问官方群聊">
                 <div class="list-icon purple"><i class="fas fa-users"></i></div>
                 <div>
                     <div class="list-text-main">官方群聊</div>
-                    <div class="list-text-sub">1065975237</div>
+                    <div class="list-text-sub">点击查看全部群聊</div>
                 </div>
             </div>
-            <div class="ios-list-item" onclick="openDisclaimerModal()" tabindex="0" role="button" aria-label="查看免责声明法律条款">
+            <div class="ios-list-item" onclick="openDisclaimerModal(event)" tabindex="0" role="button" aria-label="查看免责声明法律条款">
                 <div class="list-icon orange"><i class="fas fa-file-contract"></i></div>
                 <div>
                     <div class="list-text-main">免责声明</div>
@@ -1218,33 +1326,94 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="qqGroupModal" onclick="closeQQGroupModal(event)" role="dialog" aria-modal="true" aria-labelledby="qqGroupModalTitle">
+    <div class="modal-content">
+        <div class="modal-header-title" id="qqGroupModalTitle">官方QQ群</div>
+        <div class="ios-list">
+            <div class="ios-list-item" onclick="go('https://qm.qq.com/q/Fi6djpbJCY')" tabindex="0" role="button" aria-label="加入QQ群1065975237">
+                <div class="list-icon blue"><i class="fab fa-qq"></i></div>
+                <div>
+                    <div class="list-text-main">砖站群</div>
+                    <div class="list-text-sub">群号：1065975237</div>
+                </div>
+            </div>
+            <div class="ios-list-item" onclick="go('https://qm.qq.com/q/3yTAp3yuVq')" tabindex="0" role="button" aria-label="加入QQ群906813427">
+                <div class="list-icon green"><i class="fab fa-qq"></i></div>
+                <div>
+                    <div class="list-text-main">软件园群</div>
+                    <div class="list-text-sub">群号：906813427</div>
+                </div>
+            </div>
+            <div class="ios-list-item" onclick="go('https://qm.qq.com/q/bWoDGE3Sdq')" tabindex="0" role="button" aria-label="加入QQ群1081159850">
+                <div class="list-icon purple"><i class="fab fa-qq"></i></div>
+                <div>
+                    <div class="list-text-main">资源库群</div>
+                    <div class="list-text-sub">群号：1081159850</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="toast" role="alert" aria-live="polite">
     <i id="toast-icon" class="fas fa-check-circle"></i>
     <div id="toast-text"></div>
 </div>
 
 <script>
-    // ===== 修复后的弹窗系统 =====
+    // ===== 苹果风格弹窗系统 =====
+    
+    let modalTriggerElements = new Map();
+    
+    function getTriggerPosition(element) {
+        if (!element) return { x: 0, y: 0 };
+        const rect = element.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const windowCenterX = window.innerWidth / 2;
+        const windowCenterY = window.innerHeight / 2;
+        return {
+            x: centerX - windowCenterX,
+            y: centerY - windowCenterY
+        };
+    }
     
     function closeModalById(modalId) {
         const modal = document.getElementById(modalId);
         if (!modal) return;
         
-        modal.classList.add('closing');
         const content = modal.querySelector('.modal-content');
-        if (content) content.classList.add('closing');
+        const triggerElement = modalTriggerElements.get(modalId);
+        const pos = getTriggerPosition(triggerElement);
+        
+        if (content) {
+            content.style.setProperty('--end-x', `${pos.x}px`);
+            content.style.setProperty('--end-y', `${pos.y}px`);
+        }
+        
+        modal.classList.add('closing');
         
         setTimeout(() => {
             modal.classList.remove('active', 'closing');
-            if (content) content.classList.remove('closing');
             modal.style.display = '';
             document.body.style.overflow = '';
-        }, 250);
+            modalTriggerElements.delete(modalId);
+        }, 300);
     }
 
-    function openModalGeneric(modalId) {
+    function openModalGeneric(modalId, triggerElement) {
         const modal = document.getElementById(modalId);
         if (!modal) return;
+        
+        modalTriggerElements.set(modalId, triggerElement);
+        
+        const content = modal.querySelector('.modal-content');
+        const pos = getTriggerPosition(triggerElement);
+        
+        if (content) {
+            content.style.setProperty('--start-x', `${pos.x}px`);
+            content.style.setProperty('--start-y', `${pos.y}px`);
+        }
         
         modal.style.display = 'flex';
         void modal.offsetWidth;
@@ -1282,25 +1451,35 @@
         } 
     }
 
-    function openAboutModal() { 
-        openModalGeneric('aboutModal');
+    function openAboutModal(event) { 
+        openModalGeneric('aboutModal', event ? event.currentTarget : null);
     }
 
-    function openDisclaimerModal() { 
-        openModalGeneric('disclaimerModal');
+    function openDisclaimerModal(event) { 
+        openModalGeneric('disclaimerModal', event ? event.currentTarget : null);
     }
 
-    function openAllResModal() { 
-        openModalGeneric('allResModal');
+    function openAllResModal(event) { 
+        openModalGeneric('allResModal', event ? event.currentTarget : null);
     }
 
-    function openModal() { 
-        openModalGeneric('baiduModal');
+    function openModal(event) { 
+        openModalGeneric('baiduModal', event ? event.currentTarget : null);
         resetPasswordAuth();
     }
 
-    function openLaoSiJiModal() { 
-        openModalGeneric('laoSiJiModal');
+    function openLaoSiJiModal(event) { 
+        openModalGeneric('laoSiJiModal', event ? event.currentTarget : null);
+    }
+
+    function closeQQGroupModal(e) { 
+        if(e.target.id === 'qqGroupModal') { 
+            closeModalById('qqGroupModal');
+        } 
+    }
+
+    function openQQGroupModal(event) { 
+        openModalGeneric('qqGroupModal', event ? event.currentTarget : null);
     }
 
     function go(url) {
@@ -1521,7 +1700,7 @@
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                ['aboutModal', 'disclaimerModal', 'allResModal', 'baiduModal', 'laoSiJiModal'].forEach(id => {
+                ['aboutModal', 'disclaimerModal', 'allResModal', 'baiduModal', 'laoSiJiModal', 'qqGroupModal'].forEach(id => {
                     const modal = document.getElementById(id);
                     if (modal && modal.classList.contains('active')) {
                         closeModalById(id);
