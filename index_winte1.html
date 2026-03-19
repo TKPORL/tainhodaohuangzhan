@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Tsinho AI测试版 - 冬日银光版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @media only screen and (max-device-width: 1024px) and (hover: none) and (pointer: coarse) {
+            :root {
+                --force-mobile: 1;
+            }
+        }
+
+        :root {
+            --ios-blue: #007AFF;
+            --ios-green: #34C759;
+            --ios-bg: #F2F2F7;
+            --ios-card: rgba(255, 255, 255, 0.7);
+            --ios-blur: blur(25px);
+            --radius-main: 70px;
+            --radius-inner: 45px;
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-light: 0 8px 25px rgba(0,0,0,0.05);
+            --shadow-medium: 0 15px 35px rgba(0,0,0,0.1);
+            --shadow-heavy: 0 25px 50px rgba(0,0,0,0.15);
+            --text-primary: #1c1c1e;
+            --text-secondary: #8E8E93;
+            --silver-primary: #c0c6cc;
+            --silver-light: #e8ecef;
+            --silver-dark: #86929e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: #F2F2F7;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(175, 82, 222, 0.08) 0px, transparent 50%);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            color: #000;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        .app-container {
+            width: 96%;
+            max-width: 1300px;
+            padding: 100px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-header {
+            text-align: left;
+            padding-left: 30px;
+            margin-bottom: 80px;
+        }
+
+        .app-title {
+            font-size: 110px;
+            font-weight: 800;
+            letter-spacing: -4px;
+            color: #1c1c1e;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #1c1c1e, #3a3a3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .app-subtitle {
+            font-size: 42px;
+            color: #8E8E93;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-dot {
+            width: 24px;
+            height: 24px;
+            background: #34C759;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .mode-section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 45px;
+            padding-left: 20px;
+            color: #1c1c1e;
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .mode-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 70px;
+            padding: 80px 50px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .mode-card:active {
+            transform: scale(0.95) translateY(2px);
+        }
+
+        .mode-card.active {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.15) 0%, rgba(0, 122, 255, 0.05) 100%);
+            border: 3px solid rgba(0, 122, 255, 0.5);
+        }
+
+        .mode-icon {
+            width: 170px;
+            height: 170px;
+            border-radius: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            font-size: 80px;
+        }
+
+        .mode-icon.global {
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+        }
+
+        .mode-icon.single {
+            background: linear-gradient(135deg, #FF9500, #FF2D55);
+        }
+
+        .mode-name {
+            font-size: 52px;
+            font-weight: 700;
+            color: #1c1c1e;
+            margin-bottom: 20px;
+        }
+
+        .mode-desc {
+            font-size: 36px;
+            color: #8E8E93;
+            line-height: 1.4;
+        }
+
+        .members-section {
+            margin-bottom: 80px;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px;
+        }
+
+        .member-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 50px;
+            padding: 50px 30px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .member-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .member-card.selected {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.15) 0%, rgba(0, 122, 255, 0.05) 100%);
+            border: 3px solid rgba(0, 122, 255, 0.5);
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 35px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: white;
+        }
+
+        .member-name {
+            font-size: 32px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 10px;
+        }
+
+        .member-role {
+            font-size: 24px;
+            color: #8E8E93;
+        }
+
+        .chat-section {
+            margin-bottom: 80px;
+        }
+
+        .chat-container {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 70px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            padding: 60px;
+            min-height: 500px;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 100px 60px;
+        }
+
+        .welcome-icon {
+            font-size: 120px;
+            margin-bottom: 40px;
+        }
+
+        .welcome-title {
+            font-size: 56px;
+            font-weight: 700;
+            color: #1c1c1e;
+            margin-bottom: 20px;
+        }
+
+        .welcome-subtitle {
+            font-size: 36px;
+            color: #8E8E93;
+            margin-bottom: 40px;
+        }
+
+        .welcome-tips {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .tip-item {
+            font-size: 32px;
+            color: #1c1c1e;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .message {
+            margin-bottom: 40px;
+            animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .message-ai {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 40px 50px;
+            border-radius: 50px;
+            font-size: 36px;
+            line-height: 1.5;
+        }
+
+        .message-user .message-bubble {
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            color: white;
+            border-bottom-right-radius: 15px;
+        }
+
+        .message-ai .message-bubble {
+            background: rgba(118, 118, 128, 0.12);
+            color: #1c1c1e;
+            border-bottom-left-radius: 15px;
+        }
+
+        .message-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 25px;
+            margin: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .message-name {
+            font-size: 28px;
+            font-weight: 600;
+            color: #8E8E93;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 40px 50px;
+            background: rgba(118, 118, 128, 0.12);
+            border-radius: 50px;
+            width: fit-content;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .typing-dot {
+            width: 16px;
+            height: 16px;
+            background: #8E8E93;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { opacity: 0.3; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-8px); }
+        }
+
+        .typing-name {
+            font-size: 32px;
+            color: #8E8E93;
+        }
+
+        .chat-input-area {
+            padding: 50px 60px;
+            border-top: 2px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            background: rgba(118, 118, 128, 0.12);
+            border: none;
+            border-radius: 50px;
+            padding: 40px 60px;
+            font-size: 42px;
+            color: #1c1c1e;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .chat-input:focus {
+            background: rgba(118, 118, 128, 0.2);
+        }
+
+        .chat-input::placeholder {
+            color: #8E8E93;
+        }
+
+        .send-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 40px;
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            border: none;
+            color: white;
+            font-size: 50px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 50px;
+            padding: 50px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-align: center;
+            font-size: 42px;
+            font-weight: 600;
+            color: #1c1c1e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .action-btn.random {
+            background: linear-gradient(135deg, rgba(255, 149, 0, 0.15) 0%, rgba(255, 45, 85, 0.1) 100%);
+        }
+
+        .action-btn.clear {
+            background: linear-gradient(135deg, rgba(255, 59, 48, 0.15) 0%, rgba(255, 59, 48, 0.05) 100%);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 40px 60px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.5);
+            font-size: 32px;
+            color: #8E8E93;
+        }
+
+        .stats-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stats-value {
+            color: #007AFF;
+            font-weight: 600;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -50px;
+            color: rgba(192, 198, 204, 0.6);
+            font-size: 30px;
+            animation: snow-fall linear forwards;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes snow-fall {
+            0% { transform: translateY(-100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh) translateX(20px); opacity: 0; }
+        }
+
+        .transfer-btn {
+            position: fixed;
+            top: 50px;
+            right: 50px;
+            background: linear-gradient(135deg, #FF9500, #FF2D55);
+            border-radius: 40px;
+            padding: 30px 50px;
+            font-size: 36px;
+            font-weight: 600;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 149, 0, 0.3);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .transfer-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .balance-display {
+            position: fixed;
+            top: 50px;
+            left: 50px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 40px;
+            padding: 25px 40px;
+            font-size: 32px;
+            color: #1c1c1e;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .balance-value {
+            color: #FF9500;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 40px 16px;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .app-header {
+                padding-left: 10px;
+                margin-bottom: 30px;
+            }
+
+            .app-title {
+                font-size: 36px;
+                letter-spacing: -1px;
+            }
+
+            .app-subtitle {
+                font-size: 16px;
+            }
+
+            .status-dot {
+                width: 12px;
+                height: 12px;
+            }
+
+            .section-title {
+                font-size: 22px;
+                margin-bottom: 20px;
+                padding-left: 10px;
+            }
+
+            .mode-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .mode-card {
+                border-radius: 25px;
+                padding: 30px 25px;
+            }
+
+            .mode-icon {
+                width: 70px;
+                height: 70px;
+                border-radius: 20px;
+                font-size: 32px;
+                margin-bottom: 20px;
+            }
+
+            .mode-name {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+            .mode-desc {
+                font-size: 14px;
+            }
+
+            .members-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .member-card {
+                border-radius: 20px;
+                padding: 20px 15px;
+            }
+
+            .member-avatar {
+                width: 50px;
+                height: 50px;
+                border-radius: 15px;
+                font-size: 22px;
+                margin-bottom: 10px;
+            }
+
+            .member-name {
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+            .member-role {
+                font-size: 11px;
+            }
+
+            .chat-container {
+                border-radius: 25px;
+            }
+
+            .chat-messages {
+                padding: 20px;
+                min-height: 300px;
+                max-height: 500px;
+            }
+
+            .welcome-message {
+                padding: 40px 20px;
+            }
+
+            .welcome-icon {
+                font-size: 50px;
+                margin-bottom: 20px;
+            }
+
+            .welcome-title {
+                font-size: 22px;
+                margin-bottom: 10px;
+            }
+
+            .welcome-subtitle {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+
+            .tip-item {
+                font-size: 13px;
+            }
+
+            .message-bubble {
+                padding: 15px 20px;
+                border-radius: 20px;
+                font-size: 14px;
+            }
+
+            .message-avatar {
+                width: 35px;
+                height: 35px;
+                border-radius: 12px;
+                font-size: 16px;
+                margin: 0 10px;
+            }
+
+            .message-name {
+                font-size: 12px;
+            }
+
+            .typing-indicator {
+                padding: 15px 20px;
+                border-radius: 20px;
+            }
+
+            .typing-dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            .typing-name {
+                font-size: 13px;
+            }
+
+            .chat-input-area {
+                padding: 15px 20px;
+                gap: 15px;
+            }
+
+            .chat-input {
+                border-radius: 20px;
+                padding: 15px 20px;
+                font-size: 16px;
+            }
+
+            .send-btn {
+                width: 50px;
+                height: 50px;
+                border-radius: 18px;
+                font-size: 22px;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                margin-bottom: 30px;
+            }
+
+            .action-btn {
+                border-radius: 20px;
+                padding: 20px;
+                font-size: 16px;
+            }
+
+            .stats-bar {
+                padding: 15px 20px;
+                border-radius: 20px;
+                font-size: 13px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .transfer-btn {
+                top: 15px;
+                right: 15px;
+                border-radius: 15px;
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .balance-display {
+                top: 15px;
+                left: 15px;
+                border-radius: 15px;
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body id="app-body">
+    <div id="snow-container"></div>
+    
+    <div class="balance-display">
+        <i class="fas fa-coins"></i>
+        <span class="balance-value">∞</span>
+        <span>DSK</span>
+    </div>
+    
+    <button class="transfer-btn" onclick="toggleTransferModal()">
+        <i class="fas fa-paper-plane"></i>
+        <span>转账</span>
+    </button>
+
+    <div class="app-container">
+        <header class="app-header">
+            <h1 class="app-title">Tsinho AI测试版</h1>
+            <p class="app-subtitle">
+                <span class="status-dot"></span>
+                冬日银光版 · 智谱GLM5 · 已连接
+            </p>
+        </header>
+
+        <section class="mode-section">
+            <h2 class="section-title">对话模式</h2>
+            <div class="mode-grid">
+                <div class="mode-card active" onclick="setMode('global')" id="mode-global">
+                    <div class="mode-icon global">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="mode-name">全局模式</div>
+                    <div class="mode-desc">发送消息后，所有AI成员同时回复</div>
+                </div>
+                <div class="mode-card" onclick="setMode('single')" id="mode-single">
+                    <div class="mode-icon single">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="mode-name">单选模式</div>
+                    <div class="mode-desc">选择特定AI成员进行一对一对话</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="members-section" id="membersSection" style="display: none;">
+            <h2 class="section-title">选择AI成员 <span id="selectedCount" style="color: #007AFF; font-size: 36px;"></span></h2>
+            <div class="members-grid" id="memberList"></div>
+        </section>
+
+        <section class="chat-section">
+            <h2 class="section-title">对话区域</h2>
+            <div class="chat-container">
+                <div class="chat-messages" id="chatContainer">
+                    <div class="welcome-message" id="welcomeMsg">
+                        <div class="welcome-icon">🧠</div>
+                        <div class="welcome-title">Tsinho AI测试版</div>
+                        <div class="welcome-subtitle">冬日银光版 · 智谱GLM5</div>
+                        <div class="welcome-tips">
+                            <div class="tip-item">
+                                <span style="color: #007AFF;">💡</span>
+                                <span><strong>全局模式</strong>：所有AI成员同时回复</span>
+                            </div>
+                            <div class="tip-item">
+                                <span style="color: #FF9500;">🎯</span>
+                                <span><strong>单选模式</strong>：选择特定AI成员对话</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <div class="input-wrapper">
+                        <input type="text" class="chat-input" id="messageInput" placeholder="发送消息..." onkeypress="handleKeyPress(event)">
+                    </div>
+                    <button class="send-btn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="action-buttons">
+            <button class="action-btn random" onclick="triggerAutoChat()" id="autoChatBtn">
+                <i class="fas fa-random"></i>
+                <span>随机话题</span>
+            </button>
+            <button class="action-btn clear" onclick="clearChat()">
+                <i class="fas fa-trash"></i>
+                <span>清空对话</span>
+            </button>
+        </section>
+
+        <div class="stats-bar">
+            <div class="stats-item">
+                <i class="fas fa-robot"></i>
+                <span>API: GLM5</span>
+            </div>
+            <div class="stats-item">
+                <i class="fas fa-comments"></i>
+                <span>消息: <span class="stats-value" id="msgCount">0</span></span>
+            </div>
+            <div class="stats-item">
+                <i class="fas fa-clock"></i>
+                <span id="currentTime"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = '20252a487bf4433dae034e4607626ff6.IZtAmpkRKydep2YR';
+        const API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
+        
+        const members = [
+            { id: 1, name: "小明", role: "创意总监", color: "#007AFF", emoji: "🧠", personality: "富有创意、思维活跃、善于打破常规。擅长从不同角度思考问题，提供创新解决方案。", expertise: ["创意策划", "品牌设计", "用户体验"] },
+            { id: 2, name: "小红", role: "产品经理", color: "#FF2D55", emoji: "📊", personality: "关注用户需求、注重产品可行性、善于协调资源。说话条理清晰，关注数据支撑。", expertise: ["需求分析", "产品规划", "用户研究"] },
+            { id: 3, name: "小华", role: "技术专家", color: "#5856D6", emoji: "💻", personality: "技术严谨、追求代码质量、善于架构设计。说话专业直接，关注技术可行性。", expertise: ["系统架构", "代码优化", "技术选型"] },
+            { id: 4, name: "小李", role: "设计师", color: "#FF9500", emoji: "🎨", personality: "审美敏锐、关注细节、善于视觉表达。说话富有艺术感，注重用户体验。", expertise: ["UI设计", "视觉设计", "交互设计"] },
+            { id: 5, name: "小王", role: "数据分析师", color: "#34C759", emoji: "📈", personality: "数据驱动、逻辑严密、善于发现规律。说话喜欢用数据说话，关注指标变化。", expertise: ["数据分析", "商业洞察", "报表设计"] },
+            { id: 6, name: "小张", role: "市场专家", color: "#AF52DE", emoji: "📢", personality: "市场敏感、善于营销策划、了解用户心理。说话有感染力，关注品牌传播。", expertise: ["市场推广", "品牌营销", "用户增长"] },
+            { id: 7, name: "小陈", role: "运营专家", color: "#FF3B30", emoji: "⚙️", personality: "执行力强、善于优化流程、关注用户留存。说话务实，关注运营效果。", expertise: ["用户运营", "活动策划", "社区运营"] },
+            { id: 8, name: "小林", role: "内容创作者", color: "#64D2FF", emoji: "✍️", personality: "文笔优美、善于讲故事、了解内容传播。说话有文采，注重内容质量。", expertise: ["内容创作", "文案策划", "自媒体运营"] },
+            { id: 9, name: "小赵", role: "心理学家", color: "#FFD60A", emoji: "🧩", personality: "洞察人心、善于分析行为动机、理解用户需求。说话温和有深度，关注心理层面。", expertise: ["用户心理", "行为分析", "需求挖掘"] },
+            { id: 10, name: "小周", role: "战略顾问", color: "#32ADE6", emoji: "🎯", personality: "视野开阔、善于战略规划、了解行业趋势。说话有高度，关注长期价值。", expertise: ["战略规划", "竞争分析", "商业模式"] }
+        ];
+
+        let currentMode = 'global';
+        let selectedMembers = [];
+        let messages = [];
+        let messageCount = 0;
+        let isProcessing = false;
+
+        function init() {
+            renderMembers();
+            updateTime();
+            setInterval(updateTime, 1000);
+            createSnowflakes();
+        }
+
+        function renderMembers() {
+            const container = document.getElementById('memberList');
+            container.innerHTML = members.map(member => `
+                <div class="member-card" onclick="toggleMember(${member.id})" id="member-${member.id}">
+                    <div class="member-avatar" style="background: ${member.color}">
+                        ${member.emoji}
+                    </div>
+                    <div class="member-name">${member.name}</div>
+                    <div class="member-role">${member.role}</div>
+                </div>
+            `).join('');
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('mode-global').classList.toggle('active', mode === 'global');
+            document.getElementById('mode-single').classList.toggle('active', mode === 'single');
+            document.getElementById('membersSection').style.display = mode === 'single' ? 'block' : 'none';
+            
+            if (mode === 'global') {
+                selectedMembers = [];
+                document.querySelectorAll('.member-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+            }
+        }
+
+        function toggleMember(id) {
+            if (currentMode !== 'single') return;
+            
+            const card = document.getElementById(`member-${id}`);
+            const index = selectedMembers.indexOf(id);
+            
+            if (index > -1) {
+                selectedMembers.splice(index, 1);
+                card.classList.remove('selected');
+            } else {
+                selectedMembers.push(id);
+                card.classList.add('selected');
+            }
+            
+            document.getElementById('selectedCount').textContent = selectedMembers.length > 0 ? `(${selectedMembers.length}人已选)` : '';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            if (isProcessing) return;
+            
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+            document.getElementById('welcomeMsg').style.display = 'none';
+            
+            addMessage('user', text);
+            messageCount++;
+            document.getElementById('msgCount').textContent = messageCount;
+
+            const responders = currentMode === 'global' ? members : members.filter(m => selectedMembers.includes(m.id));
+            
+            if (responders.length === 0) {
+                addMessage('system', '请先选择至少一位AI成员');
+                return;
+            }
+
+            isProcessing = true;
+            document.getElementById('messageInput').disabled = true;
+            
+            try {
+                for (const member of responders) {
+                    await simulateResponse(member, text);
+                }
+            } finally {
+                isProcessing = false;
+                document.getElementById('messageInput').disabled = false;
+                document.getElementById('messageInput').focus();
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatMessage(content) {
+            return escapeHtml(content)
+                .replace(/\n/g, '<br>')
+                .replace(/```([\s\S]*?)```/g, '<pre style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; overflow-x: auto; font-size: 14px;">$1</pre>')
+                .replace(/`([^`]+)`/g, '<code style="background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 4px;">$1</code>');
+        }
+
+        function addMessage(type, content, member = null) {
+            const container = document.getElementById('chatContainer');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message message-${type}`;
+            
+            if (type === 'user') {
+                msgDiv.innerHTML = `<div class="message-bubble">${escapeHtml(content)}</div>`;
+            } else if (type === 'ai' && member) {
+                msgDiv.innerHTML = `
+                    <div class="message-avatar" style="background: ${member.color}">${member.emoji}</div>
+                    <div style="flex: 1; max-width: calc(100% - 120px);">
+                        <div class="message-name">${member.name} · ${member.role}</div>
+                        <div class="message-bubble">${formatMessage(content)}</div>
+                    </div>
+                `;
+            } else {
+                msgDiv.innerHTML = `<div class="message-bubble">${escapeHtml(content)}</div>`;
+            }
+            
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function simulateResponse(member, userMessage) {
+            showTyping(member);
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'glm-4-flash',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: `你是一位${member.role}，${member.personality} 你的专长是：${member.expertise.join('、')}。请用简洁专业的语言回答问题，保持回复在200字以内。`
+                            },
+                            {
+                                role: 'user',
+                                content: userMessage
+                            }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 500
+                    })
+                });
+                
+                const data = await response.json();
+                hideTyping();
+                
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    const content = data.choices[0].message.content;
+                    addMessage('ai', content, member);
+                    messageCount++;
+                    document.getElementById('msgCount').textContent = messageCount;
+                } else if (data.error) {
+                    addMessage('ai', `抱歉，API返回错误：${data.error.message || '未知错误'}`, member);
+                } else {
+                    addMessage('ai', '抱歉，我暂时无法回答这个问题，请稍后再试。', member);
+                }
+            } catch (error) {
+                hideTyping();
+                console.error('API error:', error);
+                addMessage('ai', `抱歉，网络请求失败：${error.message}`, member);
+            }
+        }
+
+        function showTyping(member) {
+            const container = document.getElementById('chatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typingIndicator';
+            typingDiv.className = 'message message-ai';
+            typingDiv.innerHTML = `
+                <div class="message-avatar" style="background: ${member.color}">${member.emoji}</div>
+                <div class="typing-indicator">
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                    <span class="typing-name">${member.name}正在思考...</span>
+                </div>
+            `;
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        function clearChat() {
+            const container = document.getElementById('chatContainer');
+            container.innerHTML = `
+                <div class="welcome-message" id="welcomeMsg">
+                    <div class="welcome-icon">🧠</div>
+                    <div class="welcome-title">Tsinho AI测试版</div>
+                    <div class="welcome-subtitle">冬日银光版 · 智谱GLM5</div>
+                    <div class="welcome-tips">
+                        <div class="tip-item">
+                            <span style="color: #007AFF;">💡</span>
+                            <span><strong>全局模式</strong>：所有AI成员同时回复</span>
+                        </div>
+                        <div class="tip-item">
+                            <span style="color: #FF9500;">🎯</span>
+                            <span><strong>单选模式</strong>：选择特定AI成员对话</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            messages = [];
+            messageCount = 0;
+            document.getElementById('msgCount').textContent = '0';
+        }
+
+        function triggerAutoChat() {
+            const topics = [
+                "如何提高团队协作效率？",
+                "未来十年科技发展趋势是什么？",
+                "如何打造一个成功的创业项目？",
+                "人工智能会如何改变我们的生活？",
+                "如何平衡工作与生活？"
+            ];
+            const topic = topics[Math.floor(Math.random() * topics.length)];
+            document.getElementById('messageInput').value = topic;
+            sendMessage();
+        }
+
+        function toggleTransferModal() {
+            alert('转账功能开发中...');
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function createSnowflakes() {
+            const container = document.getElementById('snow-container');
+            
+            function createSnowflake() {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '❄';
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                snowflake.style.opacity = Math.random() * 0.5 + 0.3;
+                snowflake.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                container.appendChild(snowflake);
+                
+                setTimeout(() => snowflake.remove(), 8000);
+            }
+            
+            setInterval(createSnowflake, 500);
+        }
+
+        init();
+    </script>
+</body>
+</html>
