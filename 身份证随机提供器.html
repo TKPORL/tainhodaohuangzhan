@@ -1154,18 +1154,56 @@
     setRandomWallpaper();
 
     // 身份证信息数据
-    const idCardData = [
-        { name: "张三", id: "110101199001011234" },
-        { name: "李四", id: "310101199102022345" },
-        { name: "王五", id: "440101199203033456" },
-        { name: "赵六", id: "330101199304044567" },
-        { name: "钱七", id: "420101199405055678" },
-        { name: "孙八", id: "120101199506066789" },
-        { name: "周九", id: "510101199607077890" },
-        { name: "吴十", id: "320101199708088901" },
-        { name: "郑一", id: "370101199809099012" },
-        { name: "王二", id: "410101199910100123" }
-    ];
+    // 身份证数据数组（从文件加载）
+    let idCardData = [];
+    let dataLoaded = false;
+
+    // 加载身份证数据文件
+    async function loadIdCardData() {
+        try {
+            const response = await fetch('身份证＋姓名数据(10W条).txt');
+            const arrayBuffer = await response.arrayBuffer();
+            
+            // 使用TextDecoder处理GBK编码
+            const decoder = new TextDecoder('GBK');
+            const text = decoder.decode(arrayBuffer);
+            
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            
+            idCardData = lines.map(line => {
+                const parts = line.split('----');
+                if (parts.length === 2) {
+                    return {
+                        name: parts[0].trim(),
+                        id: parts[1].trim()
+                    };
+                }
+                return null;
+            }).filter(item => item !== null);
+            
+            dataLoaded = true;
+            console.log(`成功加载 ${idCardData.length} 条身份证数据`);
+        } catch (error) {
+            console.error('加载数据失败:', error);
+            // 如果加载失败，使用默认数据
+            idCardData = [
+                { name: "张三", id: "110101199001011234" },
+                { name: "李四", id: "310101199102022345" },
+                { name: "王五", id: "440101199203033456" },
+                { name: "赵六", id: "330101199304044567" },
+                { name: "钱七", id: "420101199405055678" },
+                { name: "孙八", id: "120101199506066789" },
+                { name: "周九", id: "510101199607077890" },
+                { name: "吴十", id: "320101199708088901" },
+                { name: "郑一", id: "370101199809099012" },
+                { name: "王二", id: "410101199910100123" }
+            ];
+            dataLoaded = true;
+        }
+    }
+
+    // 页面加载时自动加载数据
+    document.addEventListener('DOMContentLoaded', loadIdCardData);
 
     // 历史记录
     let history = [];
@@ -1218,7 +1256,16 @@
     }
 
     // 获取随机身份证信息
-    function getRandomId() {
+    async function getRandomId() {
+        // 检查数据是否已加载
+        if (!dataLoaded) {
+            showToast('数据加载中，请稍候...');
+            // 等待数据加载完成
+            while (!dataLoaded) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+        }
+        
         const randomIndex = Math.floor(Math.random() * idCardData.length);
         const randomIdCard = idCardData[randomIndex];
         
