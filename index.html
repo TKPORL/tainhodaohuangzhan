@@ -48,6 +48,14 @@
             overflow-x: hidden;
             /* 确保在所有环境下都是浅色主题 */
             background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+        }
+
+        body.with-wallpaper {
+            background-color: rgba(0, 0, 0, 0.7);
+            background-blend-mode: overlay;
         }
 
         .app-container {
@@ -1392,6 +1400,22 @@
 </div>
 
 <script>
+    // ===== 随机壁纸功能 =====
+    (function() {
+        const wallpapers = [
+            'https://img.cdn1.vip/i/69ee28d910b11_1777215705.webp',
+            'https://img.cdn1.vip/i/69ee2942a96f1_1777215810.webp',
+            'https://img.cdn1.vip/i/69ee2953b60a4_1777215827.webp',
+            'https://img.cdn1.vip/i/69ee2957626c7_1777215831.webp'
+        ];
+        
+        const randomIndex = Math.floor(Math.random() * wallpapers.length);
+        const wallpaperUrl = wallpapers[randomIndex];
+        
+        document.body.classList.add('with-wallpaper');
+        document.body.style.backgroundImage = `url(${wallpaperUrl}), radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(175, 82, 222, 0.08) 0px, transparent 50%)`;
+    })();
+
     // ===== 苹果风格弹窗系统 =====
     
     let modalTriggerElements = new Map();
