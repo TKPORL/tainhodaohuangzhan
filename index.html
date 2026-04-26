@@ -1133,16 +1133,21 @@
         </div>
     </div>
 
-    <h2 class="card-title">其他 <span class="card-count">3</span></h2>
+    <h2 class="card-title">其他 <span class="card-count">4</span></h2>
     <div class="grid-layout">
         <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sUfFLHaNEhdx')" tabindex="0" role="button" aria-label="当贝桌面">
             <div class="button-icon blue"><i class="fas fa-tv"></i></div>
             <div class="button-name">当贝桌面</div>
             <div class="button-tag">电视桌面</div>
         </div>
-        <div class="big-button" onclick="go('Tsinho语音生成器.html')" tabindex="0" role="button" aria-label="Tsinho语音生成器">
+        <div class="big-button" onclick="go('身份证随机提供器.html')" tabindex="0" role="button" aria-label="随机身份证生成器">
+            <div class="button-icon orange"><i class="fas fa-id-card"></i></div>
+            <div class="button-name">随机身份证</div>
+            <div class="button-tag">生成器</div>
+        </div>
+        <div class="big-button" onclick="go('Tsinho语音生成器.html')" tabindex="0" role="button" aria-label="语音生成器">
             <div class="button-icon green"><i class="fas fa-microphone"></i></div>
-            <div class="button-name">Tsinho语音生成器</div>
+            <div class="button-name">语音生成器</div>
             <div class="button-tag">语音合成</div>
         </div>
         <div class="big-button" onclick="go('index_winte1.html')" tabindex="0" role="button" aria-label="AI对话测试版">
@@ -1764,6 +1769,114 @@
             });
         }, 300);
     });
+
+    function generateRandomID() {
+        const provinces = ['11', '12', '13', '14', '15', '21', '22', '23', '31', '32', '33', '34', '35', '36', '37', '41', '42', '43', '44', '45', '46', '50', '51', '52', '53', '54', '61', '62', '63', '64', '65'];
+        const provinceNames = ['北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆'];
+        
+        const province = provinces[Math.floor(Math.random() * provinces.length)];
+        const city = String(Math.floor(Math.random() * 100)).padStart(2, '0');
+        const district = String(Math.floor(Math.random() * 100)).padStart(2, '0');
+        
+        const year = String(1950 + Math.floor(Math.random() * 75)).padStart(4, '0');
+        const month = String(1 + Math.floor(Math.random() * 12)).padStart(2, '0');
+        const day = String(1 + Math.floor(Math.random() * 28)).padStart(2, '0');
+        
+        const seq = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+        
+        const idWithoutCheck = province + city + district + year + month + day + seq;
+        const checkCode = calculateCheckCode(idWithoutCheck);
+        
+        const fullID = idWithoutCheck + checkCode;
+        
+        const provinceIndex = provinces.indexOf(province);
+        const provinceName = provinceIndex >= 0 ? provinceNames[provinceIndex] : '未知';
+        
+        const gender = parseInt(seq) % 2 === 0 ? '女' : '男';
+        
+        const idCardInfo = {
+            id: fullID,
+            province: provinceName,
+            birthday: year + '-' + month + '-' + day,
+            gender: gender
+        };
+        
+        showIDCardModal(idCardInfo);
+    }
+    
+    function calculateCheckCode(id) {
+        const weights = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+        const checkCodes = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'];
+        
+        let sum = 0;
+        for (let i = 0; i < id.length; i++) {
+            sum += parseInt(id[i]) * weights[i];
+        }
+        
+        return checkCodes[sum % 11];
+    }
+    
+    function showIDCardModal(info) {
+        const modalContent = `
+            <div class="modal-overlay active" id="idCardModal" onclick="closeIDCardModal()" role="dialog" aria-modal="true" aria-labelledby="idCardModalTitle">
+                <div class="modal-content">
+                    <div class="modal-header-title" id="idCardModalTitle">随机身份证</div>
+                    <div style="margin-top: 30px;">
+                        <div style="background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%); border-radius: 30px; padding: 40px; color: white;">
+                            <div style="font-size: 48px; font-weight: 700; letter-spacing: 8px; text-align: center; margin-bottom: 30px;">${info.id}</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-around; margin-top: 40px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 32px; color: #8E8E93; margin-bottom: 10px;">户籍</div>
+                                <div style="font-size: 36px; font-weight: 600; color: #1c1c1e;">${info.province}</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 32px; color: #8E8E93; margin-bottom: 10px;">生日</div>
+                                <div style="font-size: 36px; font-weight: 600; color: #1c1c1e;">${info.birthday}</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 32px; color: #8E8E93; margin-bottom: 10px;">性别</div>
+                                <div style="font-size: 36px; font-weight: 600; color: #1c1c1e;">${info.gender}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="ios-btn-main" onclick="copyIDCard('${info.id}'); closeIDCardModal()" style="margin-top: 40px;">
+                        <i class="fas fa-copy"></i> 复制身份证号
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalContent);
+    }
+    
+    function closeIDCardModal() {
+        const modal = document.getElementById('idCardModal');
+        if (modal) {
+            modal.classList.add('closing');
+            setTimeout(() => {
+                modal.remove();
+            }, 300);
+        }
+    }
+    
+    function copyIDCard(id) {
+        const input = document.createElement('textarea');
+        input.value = id;
+        input.style.position = 'fixed';
+        input.style.opacity = '0';
+        document.body.appendChild(input);
+        input.select();
+        
+        try {
+            document.execCommand('copy');
+            showToast('fa-check-circle', '身份证号已复制', '#34C759');
+        } catch (err) {
+            showToast('fa-exclamation-circle', '复制失败', '#FF3B30');
+        }
+        
+        document.body.removeChild(input);
+    }
 </script>
 
 </body>

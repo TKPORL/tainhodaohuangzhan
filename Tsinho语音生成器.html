@@ -408,6 +408,360 @@
             background: rgba(255, 59, 48, 0.95);
         }
 
+        /* 历史记录卡片 */
+        .history-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 70px;
+            padding: 40px 50px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            margin-top: 40px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .history-title {
+            font-size: clamp(24px, 4vw, 42px);
+            font-weight: 700;
+            color: #1c1c1e;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .history-title svg {
+            width: clamp(24px, 4vw, 40px);
+            height: clamp(24px, 4vw, 40px);
+            color: #007AFF;
+        }
+
+        .clear-history-btn {
+            background: rgba(118, 118, 128, 0.12);
+            border: none;
+            border-radius: 25px;
+            padding: 15px 25px;
+            font-size: clamp(16px, 2.5vw, 28px);
+            color: #8E8E93;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.25s ease;
+        }
+
+        .clear-history-btn:hover {
+            background: rgba(255, 59, 48, 0.1);
+            color: #FF3B30;
+        }
+
+        .clear-history-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .history-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .empty-history {
+            text-align: center;
+            font-size: clamp(18px, 3vw, 32px);
+            color: #8E8E93;
+            padding: 40px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 25px;
+            background: rgba(118, 118, 128, 0.08);
+            border-radius: 35px;
+            margin-bottom: 20px;
+            transition: all 0.25s ease;
+        }
+
+        .history-item:hover {
+            background: rgba(118, 118, 128, 0.15);
+            transform: translateX(8px);
+        }
+
+        .history-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .history-avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #5AC8FA, #007AFF);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .history-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .history-name {
+            font-size: clamp(18px, 3vw, 32px);
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 5px;
+        }
+
+        .history-text {
+            font-size: clamp(14px, 2.5vw, 26px);
+            color: #8E8E93;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .history-action-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+        }
+
+        .history-action-btn.play {
+            background: #007AFF;
+            color: white;
+        }
+
+        .history-action-btn.download {
+            background: #34C759;
+            color: white;
+        }
+
+        .history-action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .history-action-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* 关于卡片 */
+        .about-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 70px;
+            padding: 50px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            margin-top: 40px;
+        }
+
+        .about-header {
+            margin-bottom: 35px;
+        }
+
+        .about-title {
+            font-size: clamp(28px, 4vw, 48px);
+            font-weight: 700;
+            color: #1c1c1e;
+            text-align: center;
+        }
+
+        .about-title .highlight {
+            color: #007AFF;
+        }
+
+        .about-content {
+            background: rgba(118, 118, 128, 0.08);
+            border-radius: 35px;
+            padding: 10px 0;
+            margin-bottom: 35px;
+        }
+
+        .about-item {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 25px 35px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.15s ease;
+        }
+
+        .about-item:last-child {
+            border-bottom: none;
+        }
+
+        .about-item:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .about-item svg {
+            width: clamp(24px, 4vw, 40px);
+            height: clamp(24px, 4vw, 40px);
+            color: #007AFF;
+            flex-shrink: 0;
+        }
+
+        .about-item span {
+            font-size: clamp(18px, 3vw, 32px);
+            color: #1c1c1e;
+        }
+
+        .about-btn {
+            width: 100%;
+            padding: 30px;
+            background: #007AFF;
+            color: white;
+            border-radius: 35px;
+            font-size: clamp(20px, 3vw, 36px);
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: all 0.25s ease;
+        }
+
+        .about-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 122, 255, 0.3);
+        }
+
+        .about-btn svg {
+            width: clamp(24px, 4vw, 40px);
+            height: clamp(24px, 4vw, 40px);
+        }
+
+        /* 关于弹窗 */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 800px;
+            border-radius: 50px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header-title {
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #1c1c1e, #007AFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-list-item {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 25px;
+            background: rgba(118, 118, 128, 0.08);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .modal-list-item:hover {
+            background: rgba(0, 122, 255, 0.08);
+            transform: translateX(8px);
+        }
+
+        .modal-list-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .modal-list-icon.blue {
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+        }
+
+        .modal-list-icon.green {
+            background: linear-gradient(135deg, #34C759, #30D158);
+        }
+
+        .modal-list-icon.purple {
+            background: linear-gradient(135deg, #AF52DE, #BF5AF2);
+        }
+
+        .modal-list-icon.orange {
+            background: linear-gradient(135deg, #FF9500, #FF6D00);
+        }
+
+        .modal-list-info {
+            flex: 1;
+        }
+
+        .modal-list-title {
+            font-size: clamp(18px, 3vw, 30px);
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 5px;
+        }
+
+        .modal-list-subtitle {
+            font-size: clamp(14px, 2.5vw, 24px);
+            color: #8E8E93;
+        }
+
         /* 响应式 */
         @media (max-width: 768px) {
             .app-container {
@@ -512,6 +866,60 @@
                 </svg>
                 下载音频
             </a>
+        </div>
+
+        <!-- 历史记录 -->
+        <div class="history-card" id="historyCard">
+            <div class="history-header">
+                <h3 class="history-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 4h4l3 8-2.5-5.5L1 16M5 4v16"/>
+                    </svg>
+                    历史记录
+                </h3>
+                <button class="clear-history-btn" onclick="clearHistory()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    清空
+                </button>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="empty-history">暂无历史记录</div>
+            </div>
+        </div>
+
+        <!-- 关于 -->
+        <div class="about-card">
+            <div class="about-header">
+                <h3 class="about-title">关于 <span class="highlight">Tsinho语音生成器</span></h3>
+            </div>
+            <div class="about-content">
+                <div class="about-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>由 Tsinho 独立维护并提供安全支持</span>
+                </div>
+                <div class="about-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                        <path d="M3 3v5h5"/>
+                        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                        <path d="M16 21h5v-5"/>
+                    </svg>
+                    <span>资源全天候实时同步，极致体验</span>
+                </div>
+            </div>
+            <button class="about-btn" onclick="openAboutModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="15" x2="12" y2="9"/>
+                    <line x1="9" y1="12" x2="15" y2="12"/>
+                </svg>
+                查看详细信息
+            </button>
         </div>
     </div>
 
@@ -750,6 +1158,9 @@
 
                     hideError();
                     showToast('语音生成成功！');
+
+                    // 保存到历史记录
+                    saveToHistory(currentSelection.name, text, data.url);
                 } else if (data.code === 400 || data.code === 404 || data.msg) {
                     throw new Error(data.msg || '该角色暂时不可用');
                 } else {
@@ -769,7 +1180,180 @@
         }
 
         // 页面加载完成后初始化
-        window.onload = init;
+        window.onload = () => {
+            init();
+            loadHistory();
+        };
+
+        // 保存到历史记录
+        function saveToHistory(characterName, text, audioUrl) {
+            const history = getHistory();
+            const record = {
+                id: Date.now(),
+                characterName,
+                text: text.substring(0, 50) + (text.length > 50 ? '...' : ''),
+                fullText: text,
+                audioUrl,
+                timestamp: new Date().toLocaleString('zh-CN')
+            };
+            
+            history.unshift(record);
+            if (history.length > 20) {
+                history.pop();
+            }
+            
+            localStorage.setItem('voice_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        // 获取历史记录
+        function getHistory() {
+            try {
+                return JSON.parse(localStorage.getItem('voice_history') || '[]');
+            } catch {
+                return [];
+            }
+        }
+
+        // 渲染历史记录
+        function renderHistory() {
+            const history = getHistory();
+            const list = document.getElementById('historyList');
+            
+            if (history.length === 0) {
+                list.innerHTML = '<div class="empty-history">暂无历史记录</div>';
+                return;
+            }
+            
+            list.innerHTML = history.map(record => `
+                <div class="history-item">
+                    <div class="history-avatar">🎵</div>
+                    <div class="history-info">
+                        <div class="history-name">${record.characterName}</div>
+                        <div class="history-text">${record.text}</div>
+                    </div>
+                    <div class="history-actions">
+                        <button class="history-action-btn play" onclick="playHistoryAudio('${record.audioUrl}', '${record.characterName}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                        </button>
+                        <button class="history-action-btn download" onclick="downloadHistoryAudio('${record.audioUrl}', '${record.characterName}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 播放历史记录音频
+        function playHistoryAudio(url, characterName) {
+            const audio = document.getElementById('audioPlayer');
+            audio.src = url;
+            document.getElementById('playerTitle').textContent = characterName;
+            document.getElementById('playerSubtitle').textContent = '播放历史记录';
+            document.getElementById('downloadLink').href = url;
+            document.getElementById('downloadLink').download = `voice_${characterName}_${Date.now()}.mp3`;
+            document.getElementById('playerCard').classList.add('active');
+            audio.play().catch(() => {});
+        }
+
+        // 下载历史记录音频
+        function downloadHistoryAudio(url, characterName) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `voice_${characterName}.mp3`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('下载已开始');
+        }
+
+        // 清空历史记录
+        function clearHistory() {
+            localStorage.removeItem('voice_history');
+            renderHistory();
+            showToast('历史记录已清空');
+        }
+
+        // 加载历史记录
+        function loadHistory() {
+            renderHistory();
+        }
+
+        // 打开关于弹窗
+        function openAboutModal() {
+            const modal = `
+                <div class="modal-overlay active" id="aboutModal" onclick="closeAboutModal()">
+                    <div class="modal-content" onclick="event.stopPropagation()">
+                        <div class="modal-header-title">详细信息</div>
+                        <div class="modal-list">
+                            <div class="modal-list-item" onclick="goToLink('https://link3.cc/xakjyxgs')">
+                                <div class="modal-list-icon blue">🌐</div>
+                                <div class="modal-list-info">
+                                    <div class="modal-list-title">官网地址</div>
+                                    <div class="modal-list-subtitle">link3.cc/xakjyxgs</div>
+                                </div>
+                            </div>
+                            <div class="modal-list-item" onclick="copyContact('email')">
+                                <div class="modal-list-icon green">📧</div>
+                                <div class="modal-list-info">
+                                    <div class="modal-list-title">作者邮箱</div>
+                                    <div class="modal-list-subtitle">Tsinhos@qq.com</div>
+                                </div>
+                            </div>
+                            <div class="modal-list-item" onclick="copyContact('qq')">
+                                <div class="modal-list-icon purple">💬</div>
+                                <div class="modal-list-info">
+                                    <div class="modal-list-title">作者 QQ</div>
+                                    <div class="modal-list-subtitle">1625862774</div>
+                                </div>
+                            </div>
+                            <div class="modal-list-item" onclick="goToLink('https://qm.qq.com/q/Fi6djpbJCY')">
+                                <div class="modal-list-icon orange">👥</div>
+                                <div class="modal-list-info">
+                                    <div class="modal-list-title">官方群聊</div>
+                                    <div class="modal-list-subtitle">点击查看全部群聊</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modal);
+        }
+
+        // 关闭关于弹窗
+        function closeAboutModal() {
+            const modal = document.getElementById('aboutModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // 跳转到链接
+        function goToLink(url) {
+            window.open(url, '_blank');
+        }
+
+        // 复制联系方式
+        function copyContact(type) {
+            let text = '';
+            switch(type) {
+                case 'email': text = 'Tsinhos@qq.com'; break;
+                case 'qq': text = '1625862774'; break;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('已复制');
+            }).catch(() => {
+                showToast('复制失败', true);
+            });
+        }
     </script>
 </body>
 </html>
