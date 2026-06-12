@@ -1,2 +1,2 @@
-电脑模式https://tkporl.github.io/tainhodaohuangzhan/
-手机模式https://tkporl.github.io/tainhodaohuangzhan/Tsinho手机端.html
+电脑模式：https://tkporl.github.io/tainhodaohuangzhan/
+手机模式：https://tkporl.github.io/tainhodaohuangzhan/Tsinho手机端.html
