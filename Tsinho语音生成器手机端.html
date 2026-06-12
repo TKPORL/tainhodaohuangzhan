@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Tsinho语音生成器</title>
+    <style>
+        :root {
+            --ios-blue: #007AFF;
+            --ios-green: #34C759;
+            --ios-red: #FF3B30;
+            --ios-orange: #FF9500;
+            --ios-purple: #AF52DE;
+            --bg: #F2F2F7;
+            --card: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(255, 255, 255, 0.5);
+            --text-primary: #1c1c1e;
+            --text-secondary: #8E8E93;
+            --text-tertiary: #C7C7CC;
+            --separator: rgba(60, 60, 67, 0.12);
+            --fill-1: rgba(120, 120, 128, 0.12);
+            --fill-2: rgba(120, 120, 128, 0.16);
+            --radius-card: 20px;
+            --radius-item: 14px;
+            --radius-pill: 999px;
+            --shadow-1: 0 2px 12px rgba(0, 0, 0, 0.04);
+            --shadow-2: 0 8px 25px rgba(0, 0, 0, 0.05);
+            --ease: cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        html, body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 20px 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* 入场动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .app-header,
+        .glass-card {
+            opacity: 0;
+            animation: fadeInUp 0.5s var(--ease) forwards;
+        }
+        .app-header { animation-delay: 0s; }
+        .glass-card:nth-of-type(1) { animation-delay: 0.04s; }
+        .glass-card:nth-of-type(2) { animation-delay: 0.08s; }
+        .glass-card:nth-of-type(3) { animation-delay: 0.12s; }
+        .glass-card:nth-of-type(4) { animation-delay: 0.16s; }
+        .glass-card:nth-of-type(5) { animation-delay: 0.20s; }
+
+        /* 页眉 */
+        .app-header {
+            text-align: center;
+            padding: 8px 0 4px;
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .app-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* 玻璃卡片 */
+        .glass-card {
+            background: var(--card);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: var(--radius-card);
+            padding: 20px;
+            box-shadow: var(--shadow-1), var(--shadow-2);
+            border: 1px solid var(--card-border);
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            letter-spacing: -0.01em;
+        }
+
+        .card-title-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title .icon {
+            width: 18px;
+            height: 18px;
+            color: var(--ios-blue);
+        }
+
+        .card-inline-btn {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--ios-blue);
+            background: transparent;
+            border: none;
+            padding: 6px 10px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: background-color 0.2s var(--ease);
+        }
+
+        .card-inline-btn:hover {
+            background: var(--fill-1);
+        }
+
+        .card-inline-btn.danger:hover {
+            background: rgba(255, 59, 48, 0.12);
+            color: var(--ios-red);
+        }
+
+        /* 角色网格 */
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding: 2px;
+        }
+
+        .character-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+        .character-grid::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.12);
+            border-radius: 3px;
+        }
+
+        .character-item {
+            background: var(--fill-1);
+            border-radius: var(--radius-pill);
+            padding: 12px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s var(--ease), transform 0.2s var(--ease);
+            border: 1.5px solid transparent;
+            user-select: none;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .character-item:hover {
+            background: var(--fill-2);
+            transform: translateY(-1px);
+        }
+
+        .character-item:active {
+            transform: scale(0.96);
+        }
+
+        .character-item.selected {
+            background: var(--ios-blue);
+            color: #fff;
+            border-color: var(--ios-blue);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+        }
+
+        .character-item.failed {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .character-item .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: inherit;
+            line-height: 1.3;
+        }
+
+        .character-item .category {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .character-item.selected .category {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        /* 分组标题 */
+        .category-heading {
+            grid-column: 1 / -1;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 10px 4px 4px;
+        }
+
+        .category-heading:first-child {
+            padding-top: 0;
+        }
+
+        /* 文本输入 */
+        .text-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 14px 16px;
+            background: var(--fill-1);
+            border: 1.5px solid transparent;
+            border-radius: var(--radius-item);
+            font-size: 15px;
+            line-height: 1.5;
+            color: var(--text-primary);
+            resize: vertical;
+            font-family: inherit;
+            outline: none;
+            transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease);
+        }
+
+        .text-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .text-input:focus {
+            background: #fff;
+            border-color: var(--ios-blue);
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            padding-right: 4px;
+        }
+
+        /* 按钮组 */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            min-height: 48px;
+            padding: 0 20px;
+            border-radius: var(--radius-pill);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.2s var(--ease), background-color 0.2s var(--ease), opacity 0.2s var(--ease);
+            white-space: nowrap;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .btn-primary {
+            background: var(--ios-blue);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: #0069d9;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-secondary {
+            background: var(--fill-1);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--fill-2);
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-success {
+            background: var(--ios-green);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(52, 199, 89, 0.25);
+        }
+
+        .btn-success:hover {
+            background: #28a745;
+        }
+
+        .btn-success:active {
+            transform: scale(0.96);
+        }
+
+        .btn-loading {
+            position: relative;
+            color: transparent;
+            pointer-events: none;
+        }
+
+        .btn-loading::after {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* 播放器卡片 */
+        .player-card {
+            display: none;
+        }
+
+        .player-card.active {
+            display: block;
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .player-artwork {
+            width: 48px;
+            height: 48px;
+            background: var(--ios-blue);
+            border-radius: var(--radius-item);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+        }
+
+        .player-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .player-meta h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .player-meta p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .audio-container {
+            background: var(--fill-1);
+            border-radius: var(--radius-item);
+            padding: 10px 12px;
+            margin-bottom: 12px;
+        }
+
+        audio {
+            width: 100%;
+            height: 40px;
+            display: block;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            min-height: 48px;
+            padding: 0 20px;
+            background: var(--ios-green);
+            color: #fff;
+            border-radius: var(--radius-pill);
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(52, 199, 89, 0.25);
+            transition: transform 0.2s var(--ease), background-color 0.2s var(--ease);
+        }
+
+        .download-btn:hover {
+            background: #28a745;
+        }
+
+        .download-btn:active {
+            transform: scale(0.96);
+        }
+
+        .download-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 错误提示 */
+        .error-hint {
+            display: none;
+            margin-top: 14px;
+            padding: 12px 14px;
+            background: rgba(255, 59, 48, 0.10);
+            border-radius: var(--radius-item);
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .error-hint.show {
+            display: flex;
+        }
+
+        .error-hint svg {
+            width: 18px;
+            height: 18px;
+            color: var(--ios-red);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .error-hint span {
+            font-size: 14px;
+            color: var(--ios-red);
+            line-height: 1.4;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translate(-50%, -12px);
+            background: rgba(28, 28, 30, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: var(--radius-pill);
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+            z-index: 9999;
+            white-space: nowrap;
+            max-width: calc(100vw - 32px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 0);
+        }
+
+        .toast.error {
+            background: rgba(255, 59, 48, 0.92);
+        }
+
+        /* 历史记录 */
+        .history-list {
+            max-height: 380px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-right: 2px;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .history-list::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.12);
+            border-radius: 3px;
+        }
+
+        .empty-history {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            padding: 28px 12px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: var(--fill-1);
+            border-radius: var(--radius-item);
+            transition: background-color 0.2s var(--ease);
+        }
+
+        .history-item:hover {
+            background: var(--fill-2);
+        }
+
+        .history-index {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--ios-blue);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .history-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .history-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .history-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-pill);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s var(--ease), background-color 0.2s var(--ease);
+        }
+
+        .history-action-btn.play {
+            background: var(--ios-blue);
+            color: #fff;
+        }
+
+        .history-action-btn.download {
+            background: var(--ios-green);
+            color: #fff;
+        }
+
+        .history-action-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.05);
+        }
+
+        .history-action-btn:active {
+            transform: scale(0.94);
+        }
+
+        .history-action-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* 关于列表 */
+        .about-list {
+            background: var(--fill-1);
+            border-radius: var(--radius-item);
+            overflow: hidden;
+        }
+
+        .about-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--separator);
+            cursor: pointer;
+            transition: background-color 0.2s var(--ease);
+        }
+
+        .about-item:last-child {
+            border-bottom: none;
+        }
+
+        .about-item:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .about-icon-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .about-icon-badge.blue { background: var(--ios-blue); }
+        .about-icon-badge.green { background: var(--ios-green); }
+        .about-icon-badge.purple { background: var(--ios-purple); }
+        .about-icon-badge.orange { background: var(--ios-orange); }
+
+        .about-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .about-title-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .about-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .about-chevron {
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+        }
+
+        .about-chevron svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* 弹窗 */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.25s var(--ease);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            width: 100%;
+            max-width: 420px;
+            border-radius: var(--radius-card);
+            padding: 22px;
+            box-shadow: var(--shadow-1), var(--shadow-2), 0 20px 60px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--card-border);
+            transform: translateY(8px) scale(0.98);
+            transition: transform 0.3s var(--ease);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-header-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .modal-header-sub {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .modal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .modal-list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: var(--fill-1);
+            border-radius: var(--radius-item);
+            cursor: pointer;
+            transition: background-color 0.2s var(--ease), transform 0.2s var(--ease);
+        }
+
+        .modal-list-item:hover {
+            background: var(--fill-2);
+        }
+
+        .modal-list-item:active {
+            transform: scale(0.98);
+        }
+
+        .modal-list-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .modal-list-icon.blue { background: var(--ios-blue); }
+        .modal-list-icon.green { background: var(--ios-green); }
+        .modal-list-icon.purple { background: var(--ios-purple); }
+        .modal-list-icon.orange { background: var(--ios-orange); }
+
+        .modal-list-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .modal-list-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .modal-list-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 20px 14px 36px;
+                gap: 14px;
+            }
+
+            .app-header {
+                padding: 6px 0 2px;
+            }
+
+            .app-title {
+                font-size: 24px;
+            }
+
+            .glass-card {
+                padding: 16px;
+                border-radius: 18px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .character-grid {
+                grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+                gap: 6px;
+            }
+
+            .character-item {
+                padding: 10px 12px;
+                min-height: 44px;
+            }
+
+            .character-item .name {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 页眉 -->
+        <div class="app-header">
+            <h1 class="app-title">Tsinho语音生成器</h1>
+            <p class="app-subtitle">选择角色，输入文本，即刻生成自然语音</p>
+        </div>
+
+        <!-- 角色选择卡 -->
+        <div class="glass-card">
+            <div class="card-title">
+                <span class="card-title-left">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                    配音角色
+                </span>
+            </div>
+            <div class="character-grid" id="characterGrid"></div>
+        </div>
+
+        <!-- 文本输入卡 -->
+        <div class="glass-card">
+            <div class="card-title">
+                <span class="card-title-left">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    文本内容
+                </span>
+            </div>
+            <textarea class="text-input" id="textInput" placeholder="请输入要转换为语音的文本..." oninput="updateCharCount()"></textarea>
+            <div class="char-count" id="charCount">0 字</div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" id="generateBtn" onclick="generateVoice()">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="6 4 20 12 6 20 6 4"/>
+                    </svg>
+                    生成语音
+                </button>
+                <button class="btn btn-secondary" onclick="clearAll()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    清空
+                </button>
+            </div>
+
+            <!-- 错误提示 -->
+            <div class="error-hint" id="errorHint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span id="errorText"></span>
+            </div>
+        </div>
+
+        <!-- 播放器卡片 -->
+        <div class="glass-card player-card" id="playerCard">
+            <div class="card-title">
+                <span class="card-title-left">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18V5l12-2v13"/>
+                        <circle cx="6" cy="18" r="3"/>
+                        <circle cx="18" cy="16" r="3"/>
+                    </svg>
+                    生成结果
+                </span>
+            </div>
+            <div class="player-header">
+                <div class="player-artwork">🎵</div>
+                <div class="player-meta">
+                    <h3 id="playerTitle">角色名称</h3>
+                    <p id="playerSubtitle">点击播放</p>
+                </div>
+            </div>
+            <div class="audio-container">
+                <audio id="audioPlayer" controls></audio>
+            </div>
+            <a class="download-btn" id="downloadLink" href="#" download>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                下载音频
+            </a>
+        </div>
+
+        <!-- 历史记录 -->
+        <div class="glass-card" id="historyCard">
+            <div class="card-title">
+                <span class="card-title-left">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    历史记录
+                </span>
+                <button class="card-inline-btn danger" onclick="clearHistory()">清空</button>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="empty-history">暂无历史记录</div>
+            </div>
+        </div>
+
+        <!-- 关于 -->
+        <div class="glass-card">
+            <div class="card-title">
+                <span class="card-title-left">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="16" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    关于
+                </span>
+            </div>
+            <div class="about-list">
+                <div class="about-item" onclick="openAboutModal()">
+                    <div class="about-icon-badge blue">🌐</div>
+                    <div class="about-info">
+                        <div class="about-title-text">官网</div>
+                        <div class="about-subtitle">link3.cc/Tsinho</div>
+                    </div>
+                    <span class="about-chevron">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </span>
+                </div>
+                <div class="about-item" onclick="copyContact('email')">
+                    <div class="about-icon-badge green">📧</div>
+                    <div class="about-info">
+                        <div class="about-title-text">作者邮箱</div>
+                        <div class="about-subtitle">Tsinhos@qq.com（点击复制）</div>
+                    </div>
+                    <span class="about-chevron">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </span>
+                </div>
+                <div class="about-item" onclick="copyContact('qq')">
+                    <div class="about-icon-badge purple">💬</div>
+                    <div class="about-info">
+                        <div class="about-title-text">作者 QQ</div>
+                        <div class="about-subtitle">1625862774（点击复制）</div>
+                    </div>
+                    <span class="about-chevron">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </span>
+                </div>
+                <div class="about-item" onclick="goToLink('https://qm.qq.com/q/Fi6djpbJCY')">
+                    <div class="about-icon-badge orange">👥</div>
+                    <div class="about-info">
+                        <div class="about-title-text">官方群聊</div>
+                        <div class="about-subtitle">点击跳转加入</div>
+                    </div>
+                    <span class="about-chevron">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span id="toastMsg"></span>
+    </div>
+
+    <script>
+        // 角色数据
+        const characters = [
+            { name: "曼波配音", category: "热门推荐", api: "mbAIsc" },
+            { name: "知性女声", category: "热门推荐" },
+            { name: "紫薇", category: "影视角色" },
+            { name: "容嬷嬷", category: "影视角色" },
+            { name: "女儿国王", category: "影视角色" },
+            { name: "八戒", category: "影视角色" },
+            { name: "猴哥", category: "影视角色" },
+            { name: "皇上", category: "影视角色" },
+            { name: "黛玉", category: "影视角色" },
+            { name: "武则天", category: "影视角色" },
+            { name: "顾姐", category: "影视角色" },
+            { name: "TVB女声", category: "影视角色" },
+            { name: "译制片男", category: "影视角色" },
+            { name: "佩奇猪", category: "动漫角色" },
+            { name: "樱桃丸子", category: "动漫角色" },
+            { name: "懒小羊", category: "动漫角色" },
+            { name: "熊二", category: "动漫角色" },
+            { name: "小魔童", category: "动漫角色" },
+            { name: "动漫海绵", category: "动漫角色" },
+            { name: "动漫小新", category: "动漫角色" },
+            { name: "萌娃", category: "动漫角色" },
+            { name: "小女孩", category: "动漫角色" },
+            { name: "新闻男声", category: "专业配音" },
+            { name: "新闻女声", category: "专业配音" },
+            { name: "纪录片解说", category: "专业配音" },
+            { name: "广告男声", category: "专业配音" },
+            { name: "促销男声", category: "专业配音" },
+            { name: "商务殷语", category: "专业配音" },
+            { name: "知识讲解", category: "专业配音" },
+            { name: "京腔", category: "方言特色" },
+            { name: "粤语男声", category: "方言特色" },
+            { name: "天津小哥", category: "方言特色" },
+            { name: "河南大叔", category: "方言特色" },
+            { name: "西安掌柜", category: "方言特色" },
+            { name: "台湾男生", category: "方言特色" },
+            { name: "台湾女生", category: "方言特色" },
+            { name: "东北老铁", category: "方言特色" },
+            { name: "重庆小伙", category: "方言特色" },
+            { name: "广西表哥", category: "方言特色" },
+            { name: "快板", category: "特色风格" },
+            { name: "单口相声", category: "特色风格" },
+            { name: "说唱小哥", category: "特色风格" },
+            { name: "心灵鸡汤", category: "特色风格" },
+            { name: "童话解说", category: "特色风格" },
+            { name: "网文解说", category: "特色风格" },
+            { name: "悬疑解说", category: "特色风格" },
+            { name: "电竞解说", category: "特色风格" },
+            { name: "赛事解说", category: "特色风格" },
+            { name: "乒乓解说", category: "特色风格" },
+            { name: "游戏解说男", category: "特色风格" },
+            { name: "动漫解说", category: "特色风格" },
+            { name: "舌尖解说", category: "特色风格" },
+            { name: "解说小帅", category: "特色风格" },
+            { name: "甜美解说", category: "特色风格" },
+            { name: "沉稳解说", category: "特色风格" },
+            { name: "娱乐扒妹", category: "特色风格" },
+            { name: "小品艺术家", category: "特色风格" },
+            { name: "咆哮哥", category: "特色风格" },
+            { name: "樱花小哥", category: "特色风格" },
+            { name: "甜美悦悦", category: "特色风格" },
+            { name: "强势妹", category: "特色风格" },
+            { name: "理智姐", category: "特色风格" },
+            { name: "心机御姐", category: "特色风格" },
+            { name: "上海阿姨", category: "特色风格" },
+            { name: "老婆婆", category: "特色风格" },
+            { name: "古风男主", category: "特色风格" },
+            { name: "霸总", category: "特色风格" },
+            { name: "雅痞大叔", category: "特色风格" },
+            { name: "亲切女声", category: "特色风格" },
+            { name: "温柔淑女", category: "特色风格" },
+            { name: "文艺女声", category: "特色风格" },
+            { name: "少儿故事", category: "特色风格" },
+            { name: "小姐姐", category: "特色风格" },
+            { name: "阳光男生", category: "特色风格" },
+            { name: "歌唱女王", category: "歌唱类" },
+            { name: "歌唱达人", category: "歌唱类" },
+            { name: "情歌王", category: "歌唱类" },
+            { name: "摇滚男生", category: "歌唱类" },
+            { name: "甜美女孩", category: "歌唱类" },
+            { name: "激扬男声", category: "歌唱类" },
+            { name: "春节甜妹", category: "歌唱类" },
+            { name: "春日甜妹", category: "歌唱类" },
+            { name: "清新歌手", category: "歌唱类" },
+            { name: "水果舞曲", category: "歌唱类" },
+            { name: "康康舞曲", category: "歌唱类" },
+            { name: "康定情歌", category: "歌唱类" }
+        ];
+
+        let currentSelection = null;
+        const failedCharacters = new Set();
+
+        // 初始化
+        function init() {
+            renderCharacterGrid();
+        }
+
+        // 按分类渲染角色网格
+        function renderCharacterGrid() {
+            const grid = document.getElementById('characterGrid');
+            grid.innerHTML = '';
+
+            const categories = [];
+            const seen = new Set();
+            characters.forEach(item => {
+                if (!seen.has(item.category)) {
+                    seen.add(item.category);
+                    categories.push(item.category);
+                }
+            });
+
+            categories.forEach(cat => {
+                const heading = document.createElement('div');
+                heading.className = 'category-heading';
+                heading.textContent = cat;
+                grid.appendChild(heading);
+
+                characters
+                    .filter(item => item.category === cat)
+                    .forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'character-item';
+                        if (failedCharacters.has(item.name)) {
+                            div.classList.add('failed');
+                        }
+                        div.innerHTML = `<span class="name">${item.name}</span>`;
+                        div.onclick = () => selectCharacter(item, div);
+                        grid.appendChild(div);
+                    });
+            });
+        }
+
+        // 选择角色
+        function selectCharacter(item, element) {
+            if (failedCharacters.has(item.name)) {
+                showToast(`"${item.name}" 暂时不可用`, true);
+                return;
+            }
+
+            document.querySelectorAll('.character-item').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            element.classList.add('selected');
+            currentSelection = item;
+            hideError();
+            showToast(`已选择 "${item.name}"`);
+        }
+
+        // 更新字数
+        function updateCharCount() {
+            const len = document.getElementById('textInput').value.length;
+            document.getElementById('charCount').textContent = `${len} 字`;
+        }
+
+        // 清空
+        function clearAll() {
+            document.getElementById('textInput').value = '';
+            updateCharCount();
+            hidePlayer();
+            hideError();
+            currentSelection = null;
+            document.querySelectorAll('.character-item').forEach(el => {
+                el.classList.remove('selected');
+            });
+            showToast('已清空');
+        }
+
+        // 隐藏播放器
+        function hidePlayer() {
+            document.getElementById('playerCard').classList.remove('active');
+            const audio = document.getElementById('audioPlayer');
+            audio.pause();
+            audio.src = '';
+        }
+
+        // 显示错误
+        function showError(msg) {
+            const hint = document.getElementById('errorHint');
+            document.getElementById('errorText').textContent = msg;
+            hint.classList.add('show');
+        }
+
+        // 隐藏错误
+        function hideError() {
+            document.getElementById('errorHint').classList.remove('show');
+        }
+
+        // 显示Toast
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.className = isError ? 'toast error show' : 'toast show';
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 生成语音
+        async function generateVoice() {
+            const text = document.getElementById('textInput').value.trim();
+
+            if (!currentSelection) {
+                showError('请先选择一个配音角色');
+                return;
+            }
+
+            if (!text) {
+                showError('请输入要转换的文本内容');
+                return;
+            }
+
+            const btn = document.getElementById('generateBtn');
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+
+            try {
+                let apiUrl;
+
+                if (currentSelection.api === 'mbAIsc') {
+                    apiUrl = `https://api.milorapart.top/apis/mbAIsc?text=${encodeURIComponent(text)}`;
+                } else {
+                    apiUrl = `https://api.milorapart.top/apis/AIvoice/?text=${encodeURIComponent(text)}&speaker=${encodeURIComponent(currentSelection.name)}`;
+                }
+
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+                const response = await fetch(apiUrl, { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const data = await response.json();
+
+                if (data.code === 200 && data.url && data.url.trim() !== '') {
+                    const audio = document.getElementById('audioPlayer');
+                    audio.src = data.url;
+                    document.getElementById('playerTitle').textContent = currentSelection.name;
+                    document.getElementById('playerSubtitle').textContent = '点击播放';
+                    document.getElementById('downloadLink').href = data.url;
+                    document.getElementById('downloadLink').download = `voice_${currentSelection.name}_${Date.now()}.mp3`;
+                    document.getElementById('playerCard').classList.add('active');
+
+                    hideError();
+                    showToast('语音生成成功！');
+
+                    saveToHistory(currentSelection.name, text, data.url);
+                } else if (data.code === 400 || data.code === 404 || data.msg) {
+                    throw new Error(data.msg || '该角色暂时不可用');
+                } else {
+                    throw new Error('未返回有效的音频地址');
+                }
+
+            } catch (error) {
+                if (currentSelection && (error.message.includes('不可用') || error.name === 'AbortError')) {
+                    failedCharacters.add(currentSelection.name);
+                    renderCharacterGrid();
+                }
+                showError(`生成失败: ${error.message}`);
+                showToast('生成失败，请重试', true);
+            } finally {
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+            }
+        }
+
+        // 页面加载完成后初始化
+        window.onload = () => {
+            init();
+            loadHistory();
+        };
+
+        // ESC 关闭弹窗
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAboutModal();
+            }
+        });
+
+        // 保存到历史记录
+        function saveToHistory(characterName, text, audioUrl) {
+            const history = getHistory();
+            const record = {
+                id: Date.now(),
+                characterName,
+                text: text.substring(0, 50) + (text.length > 50 ? '...' : ''),
+                fullText: text,
+                audioUrl,
+                timestamp: new Date().toLocaleString('zh-CN')
+            };
+
+            history.unshift(record);
+            if (history.length > 20) {
+                history.pop();
+            }
+
+            localStorage.setItem('voice_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        // 获取历史记录
+        function getHistory() {
+            try {
+                return JSON.parse(localStorage.getItem('voice_history') || '[]');
+            } catch {
+                return [];
+            }
+        }
+
+        // 渲染历史记录
+        function renderHistory() {
+            const history = getHistory();
+            const list = document.getElementById('historyList');
+
+            if (history.length === 0) {
+                list.innerHTML = '<div class="empty-history">暂无历史记录</div>';
+                return;
+            }
+
+            list.innerHTML = history.map((record, index) => `
+                <div class="history-item">
+                    <div class="history-index">${index + 1}</div>
+                    <div class="history-info">
+                        <div class="history-name">${record.characterName}</div>
+                        <div class="history-text">${record.text}</div>
+                    </div>
+                    <div class="history-actions">
+                        <button class="history-action-btn play" onclick="playHistoryAudio('${record.audioUrl.replace(/'/g, "\\'")}', '${record.characterName.replace(/'/g, "\\'")}')" title="播放">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="6 4 20 12 6 20 6 4"/>
+                            </svg>
+                        </button>
+                        <button class="history-action-btn download" onclick="downloadHistoryAudio('${record.audioUrl.replace(/'/g, "\\'")}', '${record.characterName.replace(/'/g, "\\'")}')" title="下载">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 播放历史记录音频
+        function playHistoryAudio(url, characterName) {
+            const audio = document.getElementById('audioPlayer');
+            audio.src = url;
+            document.getElementById('playerTitle').textContent = characterName;
+            document.getElementById('playerSubtitle').textContent = '播放历史记录';
+            document.getElementById('downloadLink').href = url;
+            document.getElementById('downloadLink').download = `voice_${characterName}_${Date.now()}.mp3`;
+            document.getElementById('playerCard').classList.add('active');
+            audio.play().catch(() => {});
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 下载历史记录音频
+        function downloadHistoryAudio(url, characterName) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `voice_${characterName}.mp3`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('下载已开始');
+        }
+
+        // 清空历史记录
+        function clearHistory() {
+            localStorage.removeItem('voice_history');
+            renderHistory();
+            showToast('历史记录已清空');
+        }
+
+        // 加载历史记录
+        function loadHistory() {
+            renderHistory();
+        }
+
+        // 打开关于弹窗
+        function openAboutModal() {
+            const existing = document.getElementById('aboutModal');
+            if (existing) return;
+            const modal = `
+                <div class="modal-overlay active" id="aboutModal" onclick="closeAboutModal()">
+                    <div class="modal-content" onclick="event.stopPropagation()">
+                        <div class="modal-header-title">关于 Tsinho</div>
+                        <div class="modal-header-sub">聚合与联系方式</div>
+                        <div class="modal-list">
+                            <div class="modal-list-item" onclick="goToLink('https://link3.cc/xakjyxgs')">
+                                <div class="modal-list-icon blue">🌐</div>
+                                <div class="modal-list-info">
+                                    <div class="modal-list-title">官网</div>
+                                    <div class="modal-list-subtitle">link3.cc/xakjyxgs</div>
+                                </div>
+                            </div>
+                            <div class="modal-list-item" onclick="copyContact('email')">
+                                <div class="modal-list-icon green">📧</div>
+                                <div class="modal-list-info">
+                                    <div class="modal-list-title">作者邮箱</div>
+                                    <div class="modal-list-subtitle">Tsinhos@qq.com</div>
+                                </div>
+                            </div>
+                            <div class="modal-list-item" onclick="copyContact('qq')">
+                                <div class="modal-list-icon purple">💬</div>
+                                <div class="modal-list-info">
+                                    <div class="modal-list-title">作者 QQ</div>
+                                    <div class="modal-list-subtitle">1625862774</div>
+                                </div>
+                            </div>
+                            <div class="modal-list-item" onclick="goToLink('https://qm.qq.com/q/Fi6djpbJCY')">
+                                <div class="modal-list-icon orange">👥</div>
+                                <div class="modal-list-info">
+                                    <div class="modal-list-title">官方群聊</div>
+                                    <div class="modal-list-subtitle">点击查看全部群聊</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modal);
+        }
+
+        // 关闭关于弹窗
+        function closeAboutModal() {
+            const modal = document.getElementById('aboutModal');
+            if (modal) {
+                modal.classList.remove('active');
+                setTimeout(() => modal.remove(), 250);
+            }
+        }
+
+        // 跳转到链接
+        function goToLink(url) {
+            window.open(url, '_blank');
+        }
+
+        // 复制联系方式（含降级）
+        function copyContact(type) {
+            let text = '';
+            switch(type) {
+                case 'email': text = 'Tsinhos@qq.com'; break;
+                case 'qq': text = '1625862774'; break;
+            }
+
+            const fallback = (txt) => {
+                try {
+                    const ta = document.createElement('textarea');
+                    ta.value = txt;
+                    ta.style.position = 'fixed';
+                    ta.style.left = '-9999px';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    showToast('已复制');
+                } catch {
+                    showToast('复制失败，请手动复制', true);
+                }
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('已复制');
+                }).catch(() => {
+                    fallback(text);
+                });
+            } else {
+                fallback(text);
+            }
+        }
+    </script>
+</body>
+</html>

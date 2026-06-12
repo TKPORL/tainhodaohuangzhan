@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Tsinho AI 测试版 · 冬日银光版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --ios-blue: #007AFF;
+            --ios-green: #34C759;
+            --ios-red: #FF3B30;
+            --ios-bg: #F2F2F7;
+            --ios-card: rgba(255, 255, 255, 0.7);
+            --ios-blur: blur(25px);
+            --text-primary: #1c1c1e;
+            --text-secondary: #8E8E93;
+            --text-tertiary: #C7C7CC;
+            --radius-card: 20px;
+            --radius-btn: 999px;
+            --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.05);
+            --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+
+        body {
+            background: var(--ios-bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 0 12px 24px;
+        }
+
+        /* ---------- App Container ---------- */
+        .app-container {
+            width: 100%;
+            max-width: 900px;
+            padding: 28px 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ---------- Header ---------- */
+        .app-header {
+            text-align: center;
+            padding: 12px 0 8px;
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+            margin-bottom: 8px;
+        }
+
+        .app-subtitle {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--ios-green);
+            border-radius: 50%;
+        }
+
+        /* ---------- Glass Card ---------- */
+        .glass-card {
+            background: var(--ios-card);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            border-radius: var(--radius-card);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: var(--shadow-md);
+            padding: 20px;
+        }
+
+        /* ---------- Section Title ---------- */
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+        }
+
+        .section-sub {
+            font-size: 12px;
+            color: var(--ios-blue);
+            font-weight: 600;
+        }
+
+        /* ---------- Mode Grid ---------- */
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .mode-card {
+            background: rgba(255, 255, 255, 0.55);
+            border: 1.5px solid transparent;
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            text-align: left;
+            transition: transform 0.18s var(--ease-ios), background 0.2s var(--ease-ios), border-color 0.2s var(--ease-ios), box-shadow 0.2s var(--ease-ios);
+        }
+
+        .mode-card:active {
+            transform: scale(0.96);
+        }
+
+        .mode-card.active {
+            background: rgba(0, 122, 255, 0.12);
+            border-color: rgba(0, 122, 255, 0.55);
+        }
+
+        .mode-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .mode-badge.global {
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+        }
+
+        .mode-badge.single {
+            background: linear-gradient(135deg, #FF9500, #FF2D55);
+        }
+
+        .mode-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .mode-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        /* ---------- Members Grid ---------- */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .member-card {
+            background: rgba(255, 255, 255, 0.55);
+            border: 1.5px solid transparent;
+            border-radius: 14px;
+            padding: 14px 6px 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.18s var(--ease-ios), background 0.2s var(--ease-ios), border-color 0.2s var(--ease-ios);
+            position: relative;
+        }
+
+        .member-card:active {
+            transform: scale(0.96);
+        }
+
+        .member-card.selected {
+            background: rgba(0, 122, 255, 0.12);
+            border-color: rgba(0, 122, 255, 0.55);
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .member-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .member-role {
+            font-size: 11px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .member-check {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--ios-blue);
+            color: #fff;
+            font-size: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 122, 255, 0.35);
+        }
+
+        .member-card.selected .member-check {
+            display: flex;
+        }
+
+        /* ---------- Chat ---------- */
+        .chat-container {
+            background: var(--ios-card);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            border-radius: var(--radius-card);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            padding: 18px 16px;
+            min-height: 420px;
+            max-height: 620px;
+            overflow-y: auto;
+            background: rgba(242, 242, 247, 0.4);
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 6px;
+        }
+
+        /* ---------- Welcome ---------- */
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .welcome-icon {
+            font-size: 40px;
+            margin-bottom: 14px;
+        }
+
+        .welcome-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .welcome-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .welcome-tips {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .tip-item {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-item .tip-emoji {
+            font-size: 14px;
+        }
+
+        /* ---------- Message Bubble ---------- */
+        .message {
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(8px);
+            animation: slideIn 0.35s var(--ease-ios) forwards;
+        }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .message-ai {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .message-body {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: calc(100% - 50px);
+        }
+
+        .message-user .message-body {
+            align-items: flex-end;
+            max-width: 100%;
+        }
+
+        .message-bubble {
+            max-width: 100%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .message-user .message-bubble {
+            background: var(--ios-blue);
+            color: #fff;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-ai .message-bubble {
+            background: #fff;
+            color: var(--text-primary);
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-system .message-bubble {
+            background: rgba(255, 59, 48, 0.1);
+            color: var(--ios-red);
+            font-size: 13px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 0 auto;
+            max-width: 80%;
+        }
+
+        .message-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .message-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            padding-left: 2px;
+        }
+
+        .message-bubble code {
+            background: rgba(0, 0, 0, 0.08);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: "SF Mono", Menlo, monospace;
+        }
+
+        .message-user .message-bubble code {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .message-bubble pre {
+            background: rgba(0, 0, 0, 0.06);
+            padding: 10px 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: "SF Mono", Menlo, monospace;
+            margin-top: 6px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* ---------- Typing Indicator ---------- */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: #fff;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+            width: fit-content;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .typing-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--text-tertiary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite var(--ease-ios);
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { opacity: 0.35; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-4px); }
+        }
+
+        .typing-name {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* ---------- Input Area ---------- */
+        .chat-input-area {
+            padding: 14px 16px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(120, 120, 128, 0.12);
+            border: none;
+            border-radius: 14px;
+            padding: 11px 16px;
+            font-size: 15px;
+            color: var(--text-primary);
+            outline: none;
+            transition: background 0.2s var(--ease-ios);
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            background: rgba(120, 120, 128, 0.18);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .chat-input:disabled {
+            opacity: 0.5;
+        }
+
+        .send-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-btn);
+            background: var(--ios-blue);
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s var(--ease-ios), opacity 0.15s var(--ease-ios), background 0.2s var(--ease-ios);
+            flex-shrink: 0;
+            box-shadow: 0 3px 10px rgba(0, 122, 255, 0.28);
+        }
+
+        .send-btn:active {
+            transform: scale(0.92);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            background: var(--text-secondary);
+            box-shadow: none;
+        }
+
+        /* ---------- Action Buttons ---------- */
+        .action-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .pill-btn {
+            border: none;
+            border-radius: var(--radius-btn);
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            transition: transform 0.15s var(--ease-ios), background 0.2s var(--ease-ios);
+        }
+
+        .pill-btn:active {
+            transform: scale(0.96);
+        }
+
+        .pill-btn.primary {
+            background: var(--ios-blue);
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(0, 122, 255, 0.25);
+        }
+
+        .pill-btn.secondary {
+            background: rgba(120, 120, 128, 0.14);
+            color: var(--text-primary);
+        }
+
+        .pill-btn.about {
+            background: rgba(120, 120, 128, 0.14);
+            color: var(--text-primary);
+            margin-left: auto;
+        }
+
+        /* ---------- Stats Bar ---------- */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.55);
+            border-radius: var(--radius-card);
+            font-size: 13px;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .stats-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .stats-item i {
+            color: var(--ios-blue);
+            font-size: 12px;
+        }
+
+        .stats-value {
+            color: var(--ios-blue);
+            font-weight: 700;
+        }
+
+        /* ---------- Modal (About) ---------- */
+        .modal-mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.2s var(--ease-ios);
+        }
+
+        .modal-mask.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal {
+            background: var(--ios-card);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+            padding: 22px 20px 18px;
+            width: 100%;
+            max-width: 420px;
+            transform: translateY(10px) scale(0.98);
+            transition: transform 0.25s var(--ease-ios);
+        }
+
+        .modal-mask.show .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .modal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-bottom: 18px;
+        }
+
+        .modal-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 4px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-item:last-child {
+            border-bottom: none;
+        }
+
+        .modal-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .modal-text {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .modal-text strong {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .modal-text span {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .modal-close {
+            width: 100%;
+            border: none;
+            border-radius: 14px;
+            background: var(--ios-blue);
+            color: #fff;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.3);
+            transition: transform 0.15s var(--ease-ios);
+        }
+
+        .modal-close:active {
+            transform: scale(0.96);
+        }
+
+        /* ---------- Toast ---------- */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(28, 28, 30, 0.88);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: var(--radius-btn);
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s var(--ease-ios), transform 0.25s var(--ease-ios);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 80%;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast i {
+            font-size: 13px;
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 768px) {
+            body {
+                padding: 0 10px 20px;
+            }
+
+            .app-container {
+                padding: 22px 0 0;
+                gap: 16px;
+            }
+
+            .app-title {
+                font-size: 24px;
+            }
+
+            .app-subtitle {
+                font-size: 12px;
+            }
+
+            .glass-card {
+                padding: 16px;
+            }
+
+            .mode-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .members-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .member-card {
+                padding: 12px 4px 10px;
+            }
+
+            .member-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+
+            .chat-messages {
+                min-height: 60vh;
+                padding: 14px 12px;
+            }
+
+            .welcome-message {
+                padding: 30px 12px;
+            }
+
+            .message-bubble {
+                font-size: 15px;
+                padding: 9px 13px;
+            }
+
+            .action-bar {
+                gap: 8px;
+            }
+
+            .pill-btn {
+                padding: 9px 14px;
+                font-size: 13px;
+            }
+
+            .stats-bar {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .send-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 15px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .members-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        /* ---------- Reduced Motion ---------- */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .message {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+<body id="app-body">
+    <div class="app-container">
+        <header class="app-header">
+            <h1 class="app-title">Tsinho AI 测试版</h1>
+            <p class="app-subtitle">
+                <span class="status-dot"></span>
+                冬日银光版 · 智谱GLM-5 · 已连接
+            </p>
+        </header>
+
+        <!-- 对话模式 -->
+        <section class="glass-card">
+            <h2 class="section-title">对话模式</h2>
+            <div class="mode-grid">
+                <div class="mode-card active" onclick="setMode('global')" id="mode-global">
+                    <div class="mode-badge global">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="mode-name">全局模式</div>
+                    <div class="mode-desc">发送消息后，所有 AI 成员同时回复</div>
+                </div>
+                <div class="mode-card" onclick="setMode('single')" id="mode-single">
+                    <div class="mode-badge single">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="mode-name">单选模式</div>
+                    <div class="mode-desc">选择特定 AI 成员进行一对一对话</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 选择 AI 成员 -->
+        <section class="glass-card" id="membersSection" style="display: none;">
+            <h2 class="section-title">
+                选择 AI 成员
+                <span class="section-sub" id="selectedCount"></span>
+            </h2>
+            <div class="members-grid" id="memberList"></div>
+        </section>
+
+        <!-- 对话 -->
+        <section class="chat-section">
+            <h2 class="section-title" style="padding: 0 4px 6px;">对话</h2>
+            <div class="chat-container">
+                <div class="chat-messages" id="chatContainer">
+                    <div class="welcome-message" id="welcomeMsg">
+                        <div class="welcome-icon">🧠</div>
+                        <div class="welcome-title">Tsinho AI 测试版</div>
+                        <div class="welcome-subtitle">冬日银光版 · 智谱 GLM-5</div>
+                        <div class="welcome-tips">
+                            <div class="tip-item">
+                                <span class="tip-emoji" style="color: #007AFF;">💡</span>
+                                <span><strong>全局模式</strong>：所有 AI 成员同时回复</span>
+                            </div>
+                            <div class="tip-item">
+                                <span class="tip-emoji" style="color: #FF9500;">🎯</span>
+                                <span><strong>单选模式</strong>：选择特定 AI 成员对话</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="messageInput" placeholder="发送消息..." onkeypress="handleKeyPress(event)">
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane" id="sendIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 操作按钮 -->
+        <section class="glass-card">
+            <div class="action-bar">
+                <button class="pill-btn primary" onclick="triggerAutoChat()">
+                    <i class="fas fa-random"></i>
+                    <span>随机话题</span>
+                </button>
+                <button class="pill-btn secondary" onclick="clearChat()">
+                    <i class="fas fa-trash"></i>
+                    <span>清空对话</span>
+                </button>
+                <button class="pill-btn about" onclick="openModal()">
+                    <i class="fas fa-info-circle"></i>
+                    <span>关于</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 统计栏 -->
+        <div class="stats-bar">
+            <div class="stats-item">
+                <i class="fas fa-comments"></i>
+                <span><span class="stats-value" id="msgCount">0</span> 条消息</span>
+            </div>
+            <div class="stats-item">
+                <i class="fas fa-clock"></i>
+                <span id="currentTime">--:--</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 关于弹窗 -->
+    <div class="modal-mask" id="aboutModal" onclick="maskClick(event)">
+        <div class="modal">
+            <h2 class="modal-title">关于 Tsinho AI</h2>
+            <p class="modal-subtitle">冬日银光版 · v1.0</p>
+            <div class="modal-list">
+                <div class="modal-item">
+                    <div class="modal-icon" style="background: #007AFF;"><i class="fas fa-robot"></i></div>
+                    <div class="modal-text">
+                        <strong>智谱 GLM-5</strong>
+                        <span>模型：glm-4-flash · temperature 0.7</span>
+                    </div>
+                </div>
+                <div class="modal-item">
+                    <div class="modal-icon" style="background: #34C759;"><i class="fas fa-users"></i></div>
+                    <div class="modal-text">
+                        <strong>10 位 AI 成员</strong>
+                        <span>从创意总监到战略顾问，各有所长</span>
+                    </div>
+                </div>
+                <div class="modal-item">
+                    <div class="modal-icon" style="background: #AF52DE;"><i class="fas fa-palette"></i></div>
+                    <div class="modal-text">
+                        <strong>iOS 液态玻璃</strong>
+                        <span>极简设计、毛玻璃卡片、柔和动效</span>
+                    </div>
+                </div>
+                <div class="modal-item">
+                    <div class="modal-icon" style="background: #FF9500;"><i class="fas fa-heart"></i></div>
+                    <div class="modal-text">
+                        <strong>由 Tsinho 聚合站 提供</strong>
+                        <span>本地单文件运行 · 无需安装</span>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-close" onclick="closeModal()">知道了</button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle" id="toastIcon" style="color: #34C759;"></i>
+        <span id="toastText">提示</span>
+    </div>
+
+    <script>
+        const API_KEY = '20252a487bf4433dae034e4607626ff6.IZtAmpkRKydep2YR';
+        const API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
+
+        const members = [
+            { id: 1, name: "小明", role: "创意总监", color: "#007AFF", emoji: "🧠", personality: "富有创意、思维活跃、善于打破常规。擅长从不同角度思考问题，提供创新解决方案。", expertise: ["创意策划", "品牌设计", "用户体验"] },
+            { id: 2, name: "小红", role: "产品经理", color: "#FF2D55", emoji: "📊", personality: "关注用户需求、注重产品可行性、善于协调资源。说话条理清晰，关注数据支撑。", expertise: ["需求分析", "产品规划", "用户研究"] },
+            { id: 3, name: "小华", role: "技术专家", color: "#5856D6", emoji: "💻", personality: "技术严谨、追求代码质量、善于架构设计。说话专业直接，关注技术可行性。", expertise: ["系统架构", "代码优化", "技术选型"] },
+            { id: 4, name: "小李", role: "设计师", color: "#FF9500", emoji: "🎨", personality: "审美敏锐、关注细节、善于视觉表达。说话富有艺术感，注重用户体验。", expertise: ["UI设计", "视觉设计", "交互设计"] },
+            { id: 5, name: "小王", role: "数据分析师", color: "#34C759", emoji: "📈", personality: "数据驱动、逻辑严密、善于发现规律。说话喜欢用数据说话，关注指标变化。", expertise: ["数据分析", "商业洞察", "报表设计"] },
+            { id: 6, name: "小张", role: "市场专家", color: "#AF52DE", emoji: "📢", personality: "市场敏感、善于营销策划、了解用户心理。说话有感染力，关注品牌传播。", expertise: ["市场推广", "品牌营销", "用户增长"] },
+            { id: 7, name: "小陈", role: "运营专家", color: "#FF3B30", emoji: "⚙️", personality: "执行力强、善于优化流程、关注用户留存。说话务实，关注运营效果。", expertise: ["用户运营", "活动策划", "社区运营"] },
+            { id: 8, name: "小林", role: "内容创作者", color: "#64D2FF", emoji: "✍️", personality: "文笔优美、善于讲故事、了解内容传播。说话有文采，注重内容质量。", expertise: ["内容创作", "文案策划", "自媒体运营"] },
+            { id: 9, name: "小赵", role: "心理学家", color: "#FFD60A", emoji: "🧩", personality: "洞察人心、善于分析行为动机、理解用户需求。说话温和有深度，关注心理层面。", expertise: ["用户心理", "行为分析", "需求挖掘"] },
+            { id: 10, name: "小周", role: "战略顾问", color: "#32ADE6", emoji: "🎯", personality: "视野开阔、善于战略规划、了解行业趋势。说话有高度，关注长期价值。", expertise: ["战略规划", "竞争分析", "商业模式"] }
+        ];
+
+        let currentMode = 'global';
+        let selectedMembers = [];
+        let messageCount = 0;
+        let isProcessing = false;
+
+        function init() {
+            renderMembers();
+            updateTime();
+            setInterval(updateTime, 30000);
+            updateTime();
+        }
+
+        function renderMembers() {
+            const container = document.getElementById('memberList');
+            container.innerHTML = members.map(member => `
+                <div class="member-card" onclick="toggleMember(${member.id})" id="member-${member.id}">
+                    <div class="member-check"><i class="fas fa-check"></i></div>
+                    <div class="member-avatar" style="background: ${member.color}">${member.emoji}</div>
+                    <div class="member-name">${member.name}</div>
+                    <div class="member-role">${member.role}</div>
+                </div>
+            `).join('');
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('mode-global').classList.toggle('active', mode === 'global');
+            document.getElementById('mode-single').classList.toggle('active', mode === 'single');
+            document.getElementById('membersSection').style.display = mode === 'single' ? '' : 'none';
+
+            if (mode === 'global') {
+                selectedMembers = [];
+                document.querySelectorAll('.member-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                document.getElementById('selectedCount').textContent = '';
+            } else {
+                showToast('已切换至单选模式，请选择 AI 成员', 'info');
+            }
+        }
+
+        function toggleMember(id) {
+            if (currentMode !== 'single') return;
+
+            const card = document.getElementById(`member-${id}`);
+            const index = selectedMembers.indexOf(id);
+
+            if (index > -1) {
+                selectedMembers.splice(index, 1);
+                card.classList.remove('selected');
+            } else {
+                selectedMembers.push(id);
+                card.classList.add('selected');
+            }
+
+            document.getElementById('selectedCount').textContent = selectedMembers.length > 0
+                ? `已选 ${selectedMembers.length} 人`
+                : '';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            if (isProcessing) return;
+
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+            const welcomeMsg = document.getElementById('welcomeMsg');
+            if (welcomeMsg) welcomeMsg.style.display = 'none';
+
+            addMessage('user', text);
+            messageCount++;
+            document.getElementById('msgCount').textContent = messageCount;
+
+            const responders = currentMode === 'global'
+                ? members
+                : members.filter(m => selectedMembers.includes(m.id));
+
+            if (responders.length === 0) {
+                addMessage('system', '请先选择至少一位 AI 成员');
+                return;
+            }
+
+            isProcessing = true;
+            setInputState(true);
+
+            try {
+                for (const member of responders) {
+                    await simulateResponse(member, text);
+                }
+            } finally {
+                isProcessing = false;
+                setInputState(false);
+                input.focus();
+            }
+        }
+
+        function setInputState(disabled) {
+            const input = document.getElementById('messageInput');
+            const btn = document.getElementById('sendBtn');
+            const icon = document.getElementById('sendIcon');
+            input.disabled = disabled;
+            btn.disabled = disabled;
+            if (disabled) {
+                icon.className = 'fas fa-spinner fa-spin';
+            } else {
+                icon.className = 'fas fa-paper-plane';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatMessage(content) {
+            return escapeHtml(content)
+                .replace(/\n/g, '<br>')
+                .replace(/```([\s\S]*?)```/g, '<pre>$1</pre>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>');
+        }
+
+        function addMessage(type, content, member = null) {
+            const container = document.getElementById('chatContainer');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message message-${type}`;
+
+            if (type === 'user') {
+                msgDiv.innerHTML = `
+                    <div class="message-body">
+                        <div class="message-bubble">${escapeHtml(content)}</div>
+                    </div>
+                `;
+            } else if (type === 'ai' && member) {
+                msgDiv.innerHTML = `
+                    <div class="message-avatar" style="background: ${member.color}">${member.emoji}</div>
+                    <div class="message-body">
+                        <div class="message-name">${member.name} · ${member.role}</div>
+                        <div class="message-bubble">${formatMessage(content)}</div>
+                    </div>
+                `;
+            } else {
+                msgDiv.innerHTML = `
+                    <div class="message-body" style="max-width:100%;align-items:center;width:100%;">
+                        <div class="message-bubble">${escapeHtml(content)}</div>
+                    </div>
+                `;
+            }
+
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function simulateResponse(member, userMessage) {
+            showTyping(member);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'glm-4-flash',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: `你是一位${member.role}，${member.personality} 你的专长是：${member.expertise.join('、')}。请用简洁专业的语言回答问题，保持回复在200字以内。`
+                            },
+                            { role: 'user', content: userMessage }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 500
+                    })
+                });
+
+                const data = await response.json();
+                hideTyping();
+
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    const content = data.choices[0].message.content;
+                    addMessage('ai', content, member);
+                    messageCount++;
+                    document.getElementById('msgCount').textContent = messageCount;
+                } else if (data.error) {
+                    addMessage('ai', `抱歉，API 返回错误：${data.error.message || '未知错误'}`, member);
+                } else {
+                    addMessage('ai', '抱歉，我暂时无法回答这个问题，请稍后再试。', member);
+                }
+            } catch (error) {
+                hideTyping();
+                console.error('API error:', error);
+                addMessage('ai', `抱歉，网络请求失败：${error.message}`, member);
+            }
+        }
+
+        function showTyping(member) {
+            const container = document.getElementById('chatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typingIndicator';
+            typingDiv.className = 'message message-ai';
+            typingDiv.innerHTML = `
+                <div class="message-avatar" style="background: ${member.color}">${member.emoji}</div>
+                <div class="message-body">
+                    <div class="message-name">${member.name} · ${member.role}</div>
+                    <div class="typing-indicator">
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                        <span class="typing-name">正在思考…</span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        function clearChat() {
+            const container = document.getElementById('chatContainer');
+            container.innerHTML = `
+                <div class="welcome-message" id="welcomeMsg">
+                    <div class="welcome-icon">🧠</div>
+                    <div class="welcome-title">Tsinho AI 测试版</div>
+                    <div class="welcome-subtitle">冬日银光版 · 智谱 GLM-5</div>
+                    <div class="welcome-tips">
+                        <div class="tip-item">
+                            <span class="tip-emoji" style="color: #007AFF;">💡</span>
+                            <span><strong>全局模式</strong>：所有 AI 成员同时回复</span>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-emoji" style="color: #FF9500;">🎯</span>
+                            <span><strong>单选模式</strong>：选择特定 AI 成员对话</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            messageCount = 0;
+            document.getElementById('msgCount').textContent = '0';
+            showToast('对话已清空', 'success');
+        }
+
+        function triggerAutoChat() {
+            const topics = [
+                "如何提高团队协作效率？",
+                "未来十年科技发展趋势是什么？",
+                "如何打造一个成功的创业项目？",
+                "人工智能会如何改变我们的生活？",
+                "如何平衡工作与生活？"
+            ];
+            const topic = topics[Math.floor(Math.random() * topics.length)];
+            document.getElementById('messageInput').value = topic;
+            sendMessage();
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${h}:${m}`;
+        }
+
+        /* ---------- Modal ---------- */
+        function openModal() {
+            document.getElementById('aboutModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('aboutModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function maskClick(event) {
+            if (event.target.id === 'aboutModal') {
+                closeModal();
+            }
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && document.getElementById('aboutModal').classList.contains('show')) {
+                closeModal();
+            }
+        });
+
+        /* ---------- Toast ---------- */
+        let toastTimer = null;
+        function showToast(text, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toastText');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastText.textContent = text;
+            if (type === 'success') {
+                toastIcon.className = 'fas fa-check-circle';
+                toastIcon.style.color = '#34C759';
+            } else if (type === 'error') {
+                toastIcon.className = 'fas fa-exclamation-circle';
+                toastIcon.style.color = '#FF3B30';
+            } else {
+                toastIcon.className = 'fas fa-info-circle';
+                toastIcon.style.color = '#007AFF';
+            }
+
+            toast.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        init();
+    </script>
+</body>
+</html>
