@@ -612,6 +612,14 @@
             border-radius: var(--radius-sm);
         }
 
+        /* ===== 弹窗说明文字 ===== */
+        .modal-tip {
+            font-size: 42px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 51px;
+        }
+
         /* ===== 密码授权样式 ===== */
         .password-auth-container {
             display: flex;
@@ -1071,6 +1079,30 @@
         <div id="toast-text"></div>
     </div>
 
+    <!-- 黄油站提示弹窗 -->
+    <div class="modal-overlay" id="huangYouModal" onclick="closeHuangYouModal(event)" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header-title">Tsinho黄油站</div>
+            <div class="modal-tip">本 APP 的桌面模式会把普通网页整体缩小，而这个站点没有做适配，直接在 APP 里打开内容会显得很小。建议先复制链接，用手机浏览器打开；也可以选择仍然访问。</div>
+            <div class="ios-list">
+                <div class="ios-list-item" onclick="copyText('https://tkporl.github.io/mrhyfx/','Tsinho黄油站链接')" role="button">
+                    <div class="list-icon blue"><i class="fas fa-copy"></i></div>
+                    <div>
+                        <div class="list-text-main">复制链接</div>
+                        <div class="list-text-sub">推荐 · 用手机浏览器打开</div>
+                    </div>
+                </div>
+                <div class="ios-list-item" onclick="go('https://tkporl.github.io/mrhyfx/')" role="button">
+                    <div class="list-icon orange"><i class="fas fa-external-link-alt"></i></div>
+                    <div>
+                        <div class="list-text-main">仍然访问</div>
+                        <div class="list-text-sub">在 APP 内打开（内容会偏小）</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="bottom-nav">
         <div class="nav-glass">
             <div class="nav-item active" id="navHome" onclick="navigateToWithId('homePage', 'navHome')">
@@ -1103,7 +1135,7 @@
     // ===== 首页按钮数据（来自 index1.html 导航站）
         const gridData = [
         { title: "资源库", items: [
-            { name: "Tsinho黄油站", tag: "自建站点", icon: "fa-gamepad", color: "orange", type: "link", url: "https://tkporl.github.io/mrhyfx/" },
+            { name: "Tsinho黄油站", tag: "自建站点", icon: "fa-gamepad", color: "orange", type: "modal", action: "openHuangYouModal" },
             { name: "看片软件", tag: "影视点播", icon: "fa-video", color: "green", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuYya" },
             { name: "实用软件", tag: "精品破解", icon: "fa-laptop-code", color: "green", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZYCq0tErl5" },
             { name: "VPN", tag: "网络加速", icon: "fa-globe-americas", color: "dark-blue", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZYCq0tEPqe" },
@@ -1280,6 +1312,7 @@
     function closeAllResModal(e) { if (e.target.id === 'allResModal') closeModalById('allResModal'); }
     function closeModal(e) { if (e.target.id === 'baiduModal') closeModalById('baiduModal'); }
     function closeQQGroupModal(e) { if (e.target.id === 'qqGroupModal') closeModalById('qqGroupModal'); }
+    function closeHuangYouModal(e) { if (e.target.id === 'huangYouModal') closeModalById('huangYouModal'); }
 
     function openAboutModal(event) { openModalGeneric('aboutModal', event ? event.currentTarget : null); }
     function openDisclaimerModal(event) { openModalGeneric('disclaimerModal', event ? event.currentTarget : null); }
@@ -1289,6 +1322,7 @@
         resetPasswordAuth();
     }
     function openQQGroupModal(event) { openModalGeneric('qqGroupModal', event ? event.currentTarget : null); }
+    function openHuangYouModal(event) { openModalGeneric('huangYouModal', event ? event.currentTarget : null); }
 
     // ===== 复制功能
     function copyContact(type) {
@@ -1315,6 +1349,32 @@
     }
 
     // ===== Toast 提示
+    function copyText(text, label) {
+        const okText = `${label}已复制<br><b>${text}</b>`;
+        const legacy = () => {
+            const input = document.createElement('textarea');
+            input.value = text;
+            input.style.position = 'fixed';
+            input.style.opacity = '0';
+            document.body.appendChild(input);
+            input.select();
+            try {
+                document.execCommand('copy');
+                showToast('fa-copy', okText, '#007AFF');
+            } catch (err) {
+                showToast('fa-exclamation-circle', '复制失败，请手动复制', '#FF3B30');
+            }
+            document.body.removeChild(input);
+        };
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('fa-copy', okText, '#007AFF');
+            }).catch(legacy);
+        } else {
+            legacy();
+        }
+    }
+
     function copyGroup(number, label) {
         const okText = `${label}群号已复制<br><b>${number}</b>`;
         const legacy = () => {
@@ -1497,7 +1557,7 @@
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                ['aboutModal', 'disclaimerModal', 'allResModal', 'baiduModal', 'qqGroupModal'].forEach(id => {
+                ['aboutModal', 'disclaimerModal', 'allResModal', 'baiduModal', 'qqGroupModal', 'huangYouModal'].forEach(id => {
                     const modal = document.getElementById(id);
                     if (modal && modal.classList.contains('active')) closeModalById(id);
                 });
