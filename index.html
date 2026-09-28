@@ -2,774 +2,736 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Tsinho导航站-全网资源合集</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>Tsinho资源库</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== iOS 系统级变量与重置 ===== */
         :root {
-            /* 固定颜色值，避免CSS变量在移动端的渲染问题 */
-            --ios-blue: #007AFF;
-            --ios-green: #34C759;
-            --ios-bg: #F2F2F7;
-            --ios-card: rgba(255, 255, 255, 0.7);
-            --ios-blur: blur(25px);
-            --radius-main: 70px;
-            --radius-inner: 45px;
-            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            --shadow-light: 0 8px 25px rgba(0,0,0,0.05);
-            --shadow-medium: 0 15px 35px rgba(0,0,0,0.1);
-            --shadow-heavy: 0 25px 50px rgba(0,0,0,0.15);
-            /* 文本颜色变量 */
-            --text-primary: #1c1c1e;
+            --bg-primary: #F2F2F7;
+            --bg-surface: #FFFFFF;
+            --bg-elevated: rgba(255, 255, 255, 0.85);
+            --accent: #000000;
+            --text-primary: #000000;
             --text-secondary: #8E8E93;
+            --text-tertiary: #C7C7CC;
+            --border: #E5E5EA;
+            --radius-sm: 17px;
+            --radius-md: 30px;
+            --radius-lg: 43px;
+            --radius-xl: 61px;
+            --radius-full: 21664px;
+            --shadow-resting: 0 2px 26px rgba(0, 0, 0, 0.04);
+            --shadow-lifted: 0 9px 43px rgba(0, 0, 0, 0.08);
+            --shadow-floating: 0 17px 69px rgba(0, 0, 0, 0.12);
+            --space-xs: 9px;
+            --space-sm: 17px;
+            --space-md: 26px;
+            --space-lg: 35px;
+            --space-xl: 43px;
+            --space-2xl: 52px;
+            --space-3xl: 69px;
+            --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .dark-mode {
+            --bg-primary: #000000;
+            --bg-surface: #1C1C1E;
+            --bg-elevated: rgba(28, 28, 30, 0.85);
+            --accent: #FFFFFF;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8E8E93;
+            --text-tertiary: #545458;
+            --border: #38383A;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-        }
-        
-        body {
-            /* 使用固定颜色值而不是CSS变量 */
-            background-color: #F2F2F7;
-            /* 使用固定的背景渐变，避免变量在移动端的问题 */
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(175, 82, 222, 0.08) 0px, transparent 50%);
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            color: #000;
-            overflow-x: hidden;
-            /* 确保在所有环境下都是浅色主题 */
-            background-attachment: fixed;
         }
 
-        .app-container {
-            width: 96%; 
-            max-width: 1300px; 
-            padding: 100px 30px;
-            display: flex;
-            flex-direction: column;
+        body {
+            background-color: var(--bg-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding-bottom: 217px;
+            min-height: 100vh;
+            transition: background-color 0.3s;
         }
-        
-        /* ===== iOS 风格页眉 ===== */
-        .app-header {
-            text-align: left;
-            padding-left: 30px;
-            margin-bottom: 80px;
+
+        .page {
+            display: none;
         }
-        
-        .app-title {
-            font-size: 110px; 
-            font-weight: 800;
-            letter-spacing: -4px;
-            color: #1c1c1e;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, #1c1c1e, #3a3a3c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        .page.active {
+            display: block;
         }
-        
-        .app-subtitle {
-            font-size: 42px;
-            color: #8E8E93;
-            font-weight: 500;
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-lg) 0;
         }
-        
-        /* ===== 搜索框 - 极简 iOS 风格 ===== */
-        .search-container {
-            margin: 0 auto 100px;
-            width: 100%;
-        }
-        
-        .search-box {
-            background: rgba(118, 118, 128, 0.12);
-            border-radius: 40px;
-            padding: 35px 50px;
+
+        .avatar {
+            width: 208px;
+            height: 208px;
+            border-radius: var(--radius-full);
+            margin: 0 auto var(--space-lg);
+            box-shadow: var(--shadow-resting);
             display: flex;
             align-items: center;
-            gap: 30px;
-            border: none;
-            transition: all var(--transition-normal);
-            position: relative;
+            justify-content: center;
+            font-size: 104px;
+            transition: transform 0.2s var(--ease-spring);
             overflow: hidden;
+            background: var(--bg-surface);
         }
-        
-        .search-box:focus-within {
-            background: rgba(118, 118, 128, 0.2);
-            box-shadow: var(--shadow-light);
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
-        
-        .search-icon { 
-            font-size: 45px; 
-            color: #8E8E93; 
-            transition: all var(--transition-fast);
-        }
-        
-        .search-input {
-            flex: 1;
-            border: none;
-            outline: none;
-            background: transparent;
-            font-size: 42px;
-            color: #000;
-            font-weight: 400;
-        }
-        
-        .search-input::placeholder {
-            color: #8E8E93;
-            font-weight: 400;
+        .avatar:active { transform: scale(0.96); }
+
+        .name {
+            font-size: 61px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: -0.3px;
+            margin-bottom: var(--space-xs);
         }
 
-        /* ===== 分类与网格 ===== */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            padding: 0 var(--space-xl);
+            height: 95px;
+            margin-bottom: var(--space-3xl);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .search-icon {
+            width: 39px;
+            height: 39px;
+            margin-right: var(--space-md);
+            stroke: var(--text-tertiary);
+        }
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 35px;
+            color: var(--text-primary);
+        }
+        .search-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .links-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            height: 113px;
+            padding: 0 var(--space-xl);
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 37px;
+            transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease-spring), background-color 0.3s, border-color 0.3s;
+            cursor: pointer;
+            box-shadow: var(--shadow-resting);
+        }
+        .link-btn:active {
+            transform: scale(0.96);
+            box-shadow: var(--shadow-lifted);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 52px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+            padding: 0 var(--space-lg);
+        }
+        .nav-glass {
+            background: var(--bg-elevated);
+            backdrop-filter: blur(43px);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-floating);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 17px 52px;
+            position: relative;
+            border: 0.5px solid rgba(255,255,255,0.2);
+            transition: background-color 0.3s;
+        }
+        .nav-glass::before {
+            content: '';
+            position: absolute;
+            inset: -1.5px;
+            background: linear-gradient(90deg, #ff7e5e, #feb47b, #6a11cb, #2575fc, #ff7e5e);
+            background-size: 200% 100%;
+            border-radius: var(--radius-full);
+            z-index: -2;
+            filter: blur(6px);
+            opacity: 0.5;
+        }
+        .nav-glass::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--bg-elevated);
+            backdrop-filter: blur(43px);
+            border-radius: var(--radius-full);
+            z-index: -1;
+            transition: background-color 0.3s;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            padding: 13px 0;
+            cursor: pointer;
+            min-width: 121px;
+            transition: transform 0.2s;
+        }
+        .nav-item:active {
+            transform: scale(0.9);
+        }
+        .nav-icon {
+            width: 52px;
+            height: 52px;
+            fill: none;
+            stroke: var(--text-secondary);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            margin-bottom: 9px;
+            transition: stroke 0.2s;
+        }
+        .nav-item.active .nav-icon {
+            stroke: var(--accent);
+        }
+        .nav-label {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+        .nav-item.active .nav-label {
+            color: var(--text-primary);
+        }
+        .nav-divider {
+            width: 1px;
+            height: 52px;
+            background: var(--border);
+            margin: 0 17px;
+            transition: background-color 0.3s;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .avatar, .name, .link-btn {
+            animation: fadeSlideUp 0.4s var(--ease-spring) forwards;
+            opacity: 0;
+        }
+        .avatar { animation-delay: 0.05s; }
+        .name { animation-delay: 0.1s; }
+        .link-btn:nth-child(1) { animation-delay: 0.15s; }
+        .link-btn:nth-child(2) { animation-delay: 0.2s; }
+        .link-btn:nth-child(3) { animation-delay: 0.25s; }
+        .link-btn:nth-child(4) { animation-delay: 0.3s; }
+        .link-btn:nth-child(5) { animation-delay: 0.35s; }
+        .link-btn:nth-child(6) { animation-delay: 0.4s; }
+        .link-btn:nth-child(7) { animation-delay: 0.45s; }
+
+        .profile-section {
+            background: var(--bg-surface);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-xl);
+            box-shadow: var(--shadow-resting);
+            transition: background-color 0.3s;
+        }
+        .profile-info {
+            text-align: center;
+        }
+        .profile-name {
+            font-size: 43px;
+            font-weight: 600;
+            margin-top: var(--space-md);
+        }
+
+        .settings-group {
+            background: var(--bg-surface);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-resting);
+            transition: background-color 0.3s;
+        }
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-xl);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.3s;
+        }
+        .settings-item:active {
+            background: var(--bg-primary);
+        }
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        .settings-icon {
+            width: 43px;
+            height: 43px;
+            stroke: var(--text-secondary);
+            margin-right: var(--space-md);
+        }
+        .settings-label {
+            flex: 1;
+            font-size: 35px;
+            font-weight: 500;
+        }
+        .settings-arrow {
+            font-size: 35px;
+            color: var(--text-tertiary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 95px;
+            height: 52px;
+            background: var(--text-tertiary);
+            border-radius: var(--radius-full);
+            transition: background 0.3s;
+        }
+        .toggle-switch.active {
+            background: #007AFF;
+        }
+        .toggle-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 43px;
+            height: 43px;
+            background: white;
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-resting);
+            transition: transform 0.3s;
+        }
+        .toggle-switch.active .toggle-thumb {
+            transform: translateX(43px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--space-3xl) 0;
+            color: var(--text-secondary);
+        }
+        .empty-icon {
+            width: 139px;
+            height: 139px;
+            stroke: var(--text-tertiary);
+            margin-bottom: var(--space-lg);
+        }
+        .empty-title {
+            font-size: 39px;
+            font-weight: 500;
+            margin-bottom: var(--space-sm);
+        }
+        .empty-desc {
+            font-size: 30px;
+        }
+
+        .page-title {
+            font-size: 43px;
+            font-weight: 600;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .about-item {
+            display: flex;
+            align-items: center;
+            padding: var(--space-lg) 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .about-item:last-child {
+            border-bottom: none;
+        }
+        .about-label {
+            width: 173px;
+            font-size: 30px;
+            color: var(--text-secondary);
+        }
+        .about-value {
+            flex: 1;
+            font-size: 35px;
+            color: var(--text-primary);
+        }
+        .about-link {
+            color: #007AFF;
+            text-decoration: none;
+        }
+
+        /* ===== 分类标题 ===== */
         .card-title {
-            font-size: 56px;
-            font-weight: 700;
-            margin-bottom: 45px;
-            padding-left: 20px;
+            font-size: 37px;
+            font-weight: 600;
+            margin: 52px 0 26px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
-
         .card-count {
-            font-size: 38px;
-            color: var(--ios-blue);
-            font-weight: 600;
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 40px; 
-            margin-bottom: 90px;
-        }
-        
-        /* ===== iOS 玻璃按钮 ===== */
-        .big-button {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 70px;
-            padding: 80px 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: 1px solid rgba(255,255,255,0.5);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            will-change: transform;
-            /* 去掉所有 outline */
-            outline: none !important;
-        }
-
-        .big-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
-
-        .big-button:active {
-            transform: scale(0.95) translateY(2px);
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .button-icon {
-            width: 170px;
-            height: 170px;
-            border-radius: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 80px;
-            margin-bottom: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            z-index: 2;
-        }
-        
-        .big-button:hover .button-icon {
-            transform: scale(1.05) rotate(2deg);
-        }
-        
-        .button-name {
-            font-size: 48px;
-            font-weight: 700;
-            color: #1c1c1e;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .button-tag {
             font-size: 30px;
             color: #8E8E93;
             font-weight: 500;
-            position: relative;
-            z-index: 2;
         }
 
-        .blue { 
-            background: linear-gradient(135deg, #5AC8FA, #007AFF);
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease-in-out infinite;
-        }
-        
-        .green { 
-            background: linear-gradient(135deg, #66D482, #34C759);
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease-in-out infinite reverse;
-        }
-        
-        .orange { 
-            background: linear-gradient(135deg, #FFB340, #FF9500);
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease-in-out infinite;
-        }
-        
-        .purple { 
-            background: linear-gradient(135deg, #BF5AF2, #AF52DE);
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease-in-out infinite reverse;
-        }
-        
-        .pink { 
-            background: linear-gradient(135deg, #FF6482, #FF2D55);
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease-in-out infinite;
-        }
-        
-        .dark-blue { 
-            background: linear-gradient(135deg, #7D7AFF, #5856D6);
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease-in-out infinite reverse;
-        }
-        
-        .red { 
-            background: linear-gradient(135deg, #FF6961, #FF3B30);
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease-in-out infinite;
-        }
-        
-        .cyan { 
-            background: linear-gradient(135deg, #70D7FF, #32D5D9);
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease-in-out infinite reverse;
+        /* ===== 双列按钮网格 ===== */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 26px;
+            margin-bottom: 26px;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        /* ===== iOS 底部大卡片 ===== */
-        .app-footer {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 70px;
-            padding: 80px 60px;
-            border: 1px solid rgba(255,255,255,0.5);
-            margin-top: 20px;
-            margin-bottom: 100px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .app-footer:hover {
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
-        }
-
-        .footer-title {
-            font-size: 54px;
-            font-weight: 800;
-            margin-bottom: 60px;
-            text-align: center;
-        }
-
-        .footer-highlight { color: #007AFF; }
-
-        .footer-info-box {
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 45px;
-            padding: 10px 0;
-            margin-bottom: 60px;
-        }
-
-        .info-row {
-            padding: 40px 50px;
+        .big-button {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 35px 22px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 40px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease-spring), background-color 0.3s, border-color 0.3s;
+            box-shadow: var(--shadow-resting);
+            text-decoration: none;
+            outline: none;
+            will-change: transform;
+            animation: fadeSlideUp 0.5s var(--ease-spring) both;
         }
-        
-        .info-row:hover {
-            background: rgba(255, 255, 255, 0.3);
+        .big-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lifted);
         }
-        
-        .info-row:last-child { border-bottom: none; }
-
-        .info-row i { 
-            font-size: 45px; 
-            color: #007AFF; 
-            width: 60px; 
-            text-align: center;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .info-row:hover i {
-            transform: scale(1.1);
-        }
-        
-        .info-row span { 
-            font-size: 38px; 
-            color: #1c1c1e; 
-            font-weight: 500;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        .big-button:active {
+            transform: scale(0.96);
         }
 
-        .ios-btn-main {
-            background: #007AFF;
-            color: white;
-            width: 100%;
-            padding: 45px;
-            border-radius: 40px;
-            font-size: 42px;
-            font-weight: 700;
-            border: none;
+        .button-icon {
+            width: 104px;
+            height: 104px;
+            border-radius: var(--radius-lg);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-            /* 去掉所有 outline */
-            outline: none !important;
+            color: #fff;
+            font-size: 48px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow-resting);
+            transition: transform 0.2s var(--ease-spring);
         }
-        
-        .ios-btn-main:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        .big-button:hover .button-icon {
+            transform: scale(1.05) rotate(2deg);
         }
-        
-        .ios-btn-main:active { 
-            transform: scale(0.98); 
-            opacity: 0.9; 
+        .button-name {
+            font-size: 30px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+            text-align: center;
+        }
+        .button-tag {
+            font-size: 24px;
+            color: var(--text-secondary);
+            text-align: center;
         }
 
-        /* ===== iOS 苹果风格弹窗 (从触发位置出现/消失) ===== */
+        .blue { background: linear-gradient(135deg, #5AC8FA, #007AFF); }
+        .green { background: linear-gradient(135deg, #66D482, #34C759); }
+        .orange { background: linear-gradient(135deg, #FFB340, #FF9500); }
+        .purple { background: linear-gradient(135deg, #BF5AF2, #AF52DE); }
+        .pink { background: linear-gradient(135deg, #FF6482, #FF2D55); }
+        .dark-blue { background: linear-gradient(135deg, #7D7AFF, #5856D6); }
+        .red { background: linear-gradient(135deg, #FF6961, #FF3B30); }
+        .cyan { background: linear-gradient(135deg, #70D7FF, #32D5D9); }
+
+        /* ===== 苹果风格弹窗 ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0, 0, 0, 0.25);
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px;
+            padding: 43px;
             z-index: 9999;
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.3s var(--ease-spring), visibility 0.3s var(--ease-spring);
         }
-        .modal-overlay.active { 
-            opacity: 1; 
-            visibility: visible; 
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
             pointer-events: auto;
-            display: flex; 
         }
-
         .modal-overlay.closing {
             opacity: 0;
         }
 
         .modal-content {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(54px);
+            -webkit-backdrop-filter: blur(54px);
             width: 100%;
-            max-width: 1000px;
-            border-radius: 70px;
-            padding: 70px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            max-width: 953px;
+            border-radius: 43px;
+            padding: 52px;
+            box-shadow: 0 17px 54px rgba(0, 0, 0, 0.08);
             max-height: 85vh;
             overflow-y: auto;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform, opacity;
-            transform: scale(0.5);
+            transform: scale(0.9);
             opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s var(--ease-spring);
         }
-        
         .modal-overlay.active .modal-content {
-            animation: appleModalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform: scale(1);
+            opacity: 1;
         }
-        
         .modal-overlay.closing .modal-content {
-            animation: appleModalOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        @keyframes appleModalIn {
-            0% { 
-                opacity: 0; 
-                transform: scale(0.3) translate(var(--start-x, 0), var(--start-y, 0));
-            }
-            100% { 
-                opacity: 1; 
-                transform: scale(1) translate(0, 0);
-            }
-        }
-
-        @keyframes appleModalOut {
-            0% { 
-                opacity: 1; 
-                transform: scale(1) translate(0, 0);
-            }
-            100% { 
-                opacity: 0; 
-                transform: scale(0.3) translate(var(--end-x, 0), var(--end-y, 0));
-            }
+            transform: scale(0.9);
+            opacity: 0;
         }
 
         .modal-header-title {
-            font-size: 60px;
-            font-weight: 800;
+            font-size: 39px;
+            font-weight: 700;
             text-align: center;
-            margin-bottom: 60px;
-            background: linear-gradient(135deg, #1c1c1e, #007AFF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 39px;
+            color: var(--text-primary);
         }
 
         .ios-list {
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 45px;
+            background: transparent;
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            margin-bottom: 40px;
+            margin-bottom: 9px;
         }
-
         .ios-list-item {
-            padding: 50px;
+            padding: 30px;
             display: flex;
             align-items: center;
-            gap: 45px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            gap: 30px;
             cursor: pointer;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            /* 去掉所有 outline */
-            outline: none !important;
+            transition: background 0.15s var(--ease-spring);
+            outline: none;
+            border-radius: 26px;
         }
-        
         .ios-list-item:hover {
-            background: rgba(0, 122, 255, 0.05);
-            transform: translateX(8px);
+            background: rgba(0, 122, 255, 0.06);
         }
-        
-        .ios-list-item:active { 
+        .ios-list-item:active {
             background: rgba(0, 122, 255, 0.1);
-            transform: translateX(4px);
+            transform: scale(0.98);
         }
-        
-        .ios-list-item:last-child { border-bottom: none; }
 
         .list-icon {
-            width: 110px; 
-            height: 110px;
-            border-radius: 28px;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-size: 55px; 
-            color: white;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .ios-list-item:hover .list-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .list-text-main { 
-            font-size: 46px; 
-            font-weight: 700; 
-            margin-bottom: 8px;
-            color: #1c1c1e;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .list-text-sub { 
-            font-size: 32px; 
-            color: #8E8E93;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .ios-list-item:hover .list-text-main {
-            color: #007AFF;
-        }
-
-        /* HUD 提示 (Apple Style) - 改到底部中间 */
-        #toast {
-            position: fixed;
-            /* 改为底部定位 */
-            bottom: 150px;
-            left: 50%;
-            top: auto;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            padding: 50px 80px;
-            border-radius: 50px;
-            display: none;
-            flex-direction: column;
+            width: 95px;
+            height: 95px;
+            border-radius: 26px;
+            display: flex;
             align-items: center;
-            z-index: 10000;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-            min-width: 500px;
-            will-change: transform, opacity;
-            /* 去掉所有 outline */
-            outline: none !important;
+            justify-content: center;
+            color: #fff;
+            font-size: 39px;
+            flex-shrink: 0;
         }
-        
-        #toast-icon { 
-            font-size: 80px; 
-            color: #34C759; 
-            margin-bottom: 25px;
-            animation: toastIconPulse 0.3s ease-out;
+        .list-text-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            color: var(--text-primary);
+            transition: color 0.15s var(--ease-spring);
         }
-        
-        #toast-text { 
-            font-size: 36px; 
-            font-weight: 700; 
-            text-align: center; 
-            line-height: 1.4;
-            color: #1c1c1e;
-        }
-        
-        .show-toast { 
-            display: flex !important; 
-            animation: iosHudBottom 2.2s ease-in-out forwards; 
+        .list-text-sub {
+            font-size: 26px;
+            color: var(--text-secondary);
         }
 
-        @keyframes toastIconPulse {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        /* 底部出现的动画 */
-        @keyframes iosHudBottom {
-            0% { 
-                opacity: 0; 
-                transform: translateX(-50%) translateY(50px) scale(0.8); 
-            }
-            15% { 
-                opacity: 1; 
-                transform: translateX(-50%) translateY(0) scale(1); 
-            }
-            85% { 
-                opacity: 1; 
-                transform: translateX(-50%) translateY(0) scale(1); 
-            }
-            100% { 
-                opacity: 0; 
-                transform: translateX(-50%) translateY(20px) scale(0.9); 
-            }
-        }
-
-        .disclaimer-body { 
-            font-size: 34px; 
-            line-height: 1.6; 
-            color: #3A3A3C; 
+        /* ===== 免责声明 ===== */
+        .disclaimer-body {
+            font-size: 28px;
+            line-height: 1.7;
+            color: var(--text-secondary);
             text-align: justify;
         }
-        
-        .disclaimer-body p { 
-            margin-bottom: 30px;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        .disclaimer-body p {
+            margin-bottom: 22px;
         }
-        
         .disclaimer-body p:hover {
-            background: rgba(255, 255, 255, 0.5);
-            padding: 15px;
-            border-radius: 15px;
-        }
-        
-        .disclaimer-body a { 
-            color: #007AFF; 
-            text-decoration: none;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .disclaimer-body a:hover {
-            text-decoration: underline;
-            opacity: 0.8;
+            background: var(--bg-primary);
+            padding: 17px;
+            border-radius: var(--radius-sm);
         }
 
         /* ===== 密码授权样式 ===== */
         .password-auth-container {
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 30px;
             text-align: center;
             align-items: center;
         }
-
         .password-input-group {
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 22px;
             align-items: center;
-        }
-
-        .password-input {
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid #e5e5e7;
-            border-radius: 20px;
-            padding: 30px 40px;
-            font-size: 36px;
             width: 100%;
-            max-width: 500px;
-            text-align: center;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 600;
-            letter-spacing: 2px;
-            /* 去掉所有 outline */
-            outline: none !important;
         }
-
+        .password-input {
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 22px 35px;
+            font-size: 32px;
+            width: 100%;
+            max-width: 693px;
+            text-align: center;
+            transition: all 0.2s var(--ease-spring);
+            font-weight: 600;
+            letter-spacing: 1px;
+            outline: none;
+            color: var(--text-primary);
+        }
         .password-input:focus {
             border-color: #007AFF;
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+            box-shadow: 0 0 0 6px rgba(0, 122, 255, 0.1);
             transform: scale(1.02);
         }
-
         .password-input.error {
-            border-color: #ff3b30;
-            box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.1);
+            border-color: #FF3B30;
+            box-shadow: 0 0 0 6px rgba(255, 59, 48, 0.1);
             animation: shake 0.5s ease-in-out;
         }
-
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+            25% { transform: translateX(-13px); }
+            75% { transform: translateX(13px); }
         }
 
         .auth-btn {
             background: #007AFF;
             color: white;
             border: none;
-            border-radius: 25px;
-            padding: 25px 50px;
-            font-size: 32px;
+            border-radius: var(--radius-md);
+            padding: 22px 52px;
+            font-size: 30px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            min-width: 200px;
-            /* 去掉所有 outline */
-            outline: none !important;
+            transition: all 0.2s var(--ease-spring);
+            box-shadow: var(--shadow-resting);
+            min-width: 303px;
+            outline: none;
         }
-
         .auth-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lifted);
         }
-
-        .auth-btn:active {
-            transform: scale(0.98);
-        }
-
-        .auth-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .auth-btn:active { transform: scale(0.98); }
+        .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         .get-password-btn {
             background: #34C759;
             color: white;
             border: none;
-            border-radius: 25px;
-            padding: 25px 40px;
-            font-size: 30px;
+            border-radius: var(--radius-md);
+            padding: 22px 43px;
+            font-size: 28px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.2s var(--ease-spring);
+            box-shadow: var(--shadow-resting);
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 17px;
             text-decoration: none;
             justify-content: center;
             width: 100%;
-            max-width: 400px;
+            max-width: 607px;
             margin: 0 auto;
-            /* 去掉所有 outline */
-            outline: none !important;
+            outline: none;
         }
-
         .get-password-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lifted);
         }
-
-        .get-password-btn:active {
-            transform: scale(0.98);
-        }
-
-        .get-password-btn i {
-            font-size: 28px;
-        }
+        .get-password-btn:active { transform: scale(0.98); }
+        .get-password-btn i { font-size: 26px; }
 
         .auth-error-message {
-            color: #ff3b30;
-            font-size: 28px;
+            color: #FF3B30;
+            font-size: 26px;
             font-weight: 600;
-            margin-top: 20px;
+            margin-top: 9px;
             display: none;
         }
-
         .auth-error-message.show {
             display: block;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeInMsg 0.3s ease-in-out;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+        @keyframes fadeInMsg {
+            from { opacity: 0; transform: translateY(-13px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .auth-content {
             display: none;
         }
-
         .auth-content.show {
             display: block;
-            animation: slideDown 0.4s ease-out;
+            animation: slideDownPanel 0.4s ease-out;
         }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
+        @keyframes slideDownPanel {
+            from { opacity: 0; transform: translateY(-22px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -777,770 +739,558 @@
             background: #8e8e93;
             color: white;
             border: none;
-            border-radius: 20px;
-            padding: 15px 25px;
-            font-size: 20px;
+            border-radius: var(--radius-sm);
+            padding: 17px 30px;
+            font-size: 26px;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s var(--ease-spring);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 13px;
             justify-content: center;
             width: 100%;
-            max-width: 200px;
-            margin: 20px auto 0;
+            max-width: 347px;
+            margin: 26px auto 0;
             opacity: 0.8;
-            /* 去掉所有 outline */
-            outline: none !important;
+            outline: none;
         }
-
         .clear-auth-btn:hover {
-            background: #ff3b30;
+            background: #FF3B30;
             transform: translateY(-1px);
-            opacity: 1;
         }
 
-        .clear-auth-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* ===== 响应式优化 ===== */
-        @media (max-width: 768px) {
-            .app-container {
-                padding: 60px 20px;
-            }
-            
-            .app-title {
-                font-size: 80px;
-                letter-spacing: -2px;
-            }
-            
-            .app-subtitle {
-                font-size: 32px;
-            }
-            
-            .search-box {
-                padding: 25px 30px;
-            }
-            
-            .search-input {
-                font-size: 32px;
-            }
-            
-            .big-button {
-                padding: 60px 30px;
-            }
-            
-            .button-icon {
-                width: 140px;
-                height: 140px;
-                font-size: 65px;
-                margin-bottom: 30px;
-            }
-            
-            .button-name {
-                font-size: 40px;
-            }
-            
-            .button-tag {
-                font-size: 26px;
-            }
-            
-            .grid-layout {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .modal-content {
-                padding: 50px 40px;
-            }
-            
-            .modal-header-title {
-                font-size: 48px;
-            }
-            
-            .ios-list-item {
-                padding: 40px;
-            }
-            
-            .list-text-main {
-                font-size: 38px;
-            }
-            
-            .list-text-sub {
-                font-size: 28px;
-            }
-            
-            .password-auth-container {
-                gap: 30px;
-            }
-            
-            .password-input {
-                font-size: 32px;
-                padding: 25px 30px;
-                max-width: 100%;
-            }
-            
-            .auth-btn {
-                font-size: 28px;
-                padding: 20px 40px;
-            }
-            
-            .get-password-btn {
-                font-size: 26px;
-                padding: 20px 35px;
-                width: 100%;
-                max-width: 100%;
-                margin: 0 auto;
-            }
-            
-            .auth-error-message {
-                font-size: 24px;
-            }
-            
-            .clear-auth-btn {
-                font-size: 18px;
-                padding: 12px 20px;
-                max-width: 180px;
-            }
-
-            /* 移动端 Toast 尺寸调整 */
-            #toast {
-                bottom: 100px;
-                padding: 40px 60px;
-                min-width: 400px;
-            }
-            
-            #toast-icon {
-                font-size: 60px;
-                margin-bottom: 20px;
-            }
-            
-            #toast-text {
-                font-size: 30px;
-            }
-        }
-
-        /* 完全去掉 focus 时的 outline */
-        *:focus {
-            outline: none !important;
-        }
-
-        /* ===== 性能优化 ===== */
-        .big-button,
-        .button-icon,
-        .ios-list-item,
-        .list-icon,
-        .modal-content,
-        .modal-overlay {
-            contain: layout style paint;
-        }
-
-        /* ===== 移动端强制浅色模式 ===== */
-        @media screen and (max-width: 768px) {
-            body {
-                /* 强制使用浅色背景 */
-                background-color: #F2F2F7 !important;
-                /* 强制使用浅色卡片背景 */
-                background-image: 
-                    radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.08) 0px, transparent 50%),
-                    radial-gradient(at 100% 100%, rgba(175, 82, 222, 0.08) 0px, transparent 50%) !important;
-            }
-        }
-
-        /* ===== 减少动画（用户偏好） ===== */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* ===== 版权信息区域 ===== */
-        .copyright-footer {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 50px;
-            padding: 40px 50px;
-            margin-top: 40px;
-            margin-bottom: 60px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .copyright-footer:hover {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .copyright-content {
-            display: flex;
+        /* ===== 底部Toast ===== */
+        #toast {
+            position: fixed;
+            bottom: 260px;
+            left: 50%;
+            top: auto;
+            transform: translateX(-50%);
+            background: var(--bg-surface);
+            backdrop-filter: blur(43px);
+            -webkit-backdrop-filter: blur(43px);
+            padding: 35px 61px;
+            border-radius: var(--radius-xl);
+            display: none;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
+            z-index: 10000;
+            box-shadow: var(--shadow-floating);
+            min-width: 520px;
+            border: 1px solid var(--border);
+            will-change: transform, opacity;
+            outline: none;
         }
-
-        .copyright-text {
-            font-size: 32px;
-            color: #8E8E93;
-            font-weight: 500;
+        #toast-icon {
+            font-size: 61px;
+            color: #34C759;
+            margin-bottom: 17px;
         }
-
-        .copyright-text strong {
-            color: #007AFF;
-            font-weight: 700;
-        }
-
-        .official-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: linear-gradient(135deg, #007AFF, #5856D6);
-            color: white;
-            padding: 18px 35px;
-            border-radius: 25px;
-            font-size: 30px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 25px rgba(0, 122, 255, 0.25);
-        }
-
-        .official-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 122, 255, 0.35);
-        }
-
-        .official-link:active {
-            transform: scale(0.98);
-        }
-
-        .official-link i {
+        #toast-text {
             font-size: 28px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.5;
+            color: var(--text-primary);
         }
-
-        @media (max-width: 768px) {
-            .copyright-footer {
-                padding: 30px 35px;
-                margin-bottom: 40px;
-            }
-
-            .copyright-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .copyright-text {
-                font-size: 26px;
-                text-align: center;
-            }
-
-            .official-link {
-                font-size: 26px;
-                padding: 15px 30px;
-            }
+        .show-toast {
+            display: flex !important;
+            animation: iosHudBottom 2.2s ease-in-out forwards;
+        }
+        @keyframes iosHudBottom {
+            0% { opacity: 0; transform: translateX(-50%) translateY(65px) scale(0.85); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(26px) scale(0.95); }
         }
     </style>
 </head>
 <body>
-
-<div class="app-container">
-    <div class="app-header">
-        <h1 class="app-title">Tsinho</h1>
-        <p class="app-subtitle">全网优质资源 · 极速直达</p>
-    </div>
-
-    <div class="search-container">
-        <div class="search-box">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="搜索资源、软件或教程...">
-        </div>
-    </div>
-    
-    <h2 class="card-title">资源库 <span class="card-count">9</span></h2>
-    <div class="grid-layout">
-        <div class="big-button" onclick="openAllResModal(event)" tabindex="0" role="button" aria-label="查看全资源分类合集">
-            <div class="button-icon blue"><i class="fas fa-archive"></i></div>
-            <div class="button-name">全资源</div>
-            <div class="button-tag">分类合集</div>
-        </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZYCq0tErl5')" tabindex="0" role="button" aria-label="实用软件精品破解">
-            <div class="button-icon green"><i class="fas fa-laptop-code"></i></div>
-            <div class="button-name">实用软件</div>
-            <div class="button-tag">精品破解</div>
-        </div>
-        <div class="big-button" onclick="openLaoSiJiModal(event)" tabindex="0" role="button" aria-label="老司机黄色小玩意">
-            <div class="button-icon orange"><i class="fas fa-gamepad"></i></div>
-            <div class="button-name">老司机</div>
-            <div class="button-tag">黄色小玩意</div>
-        </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZYCq0tEPqe')" tabindex="0" role="button" aria-label="VPN网络加速">
-            <div class="button-icon dark-blue"><i class="fas fa-globe-americas"></i></div>
-            <div class="button-name">VPN</div>
-            <div class="button-tag">网络加速</div>
-        </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvtWww')" tabindex="0" role="button" aria-label="绅士壁纸绅士图片">
-            <div class="button-icon pink"><i class="fas fa-image"></i></div>
-            <div class="button-name">绅士壁纸</div>
-            <div class="button-tag">绅士图片</div>
-        </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXSmDnDp67')" tabindex="0" role="button" aria-label="影音娱乐影视音乐">
-            <div class="button-icon purple"><i class="fas fa-film"></i></div>
-            <div class="button-name">影音娱乐</div>
-            <div class="button-tag">影视音乐</div>
-        </div>
-        <!-- 大小型游戏 - 链接已更新 -->
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZZesFZFmhv')" tabindex="0" role="button" aria-label="大小型游戏游戏合集">
-            <div class="button-icon cyan"><i class="fas fa-dice"></i></div>
-            <div class="button-name">大小型游戏</div>
-            <div class="button-tag">游戏合集</div>
-        </div>
-        <!-- iOS签名证书 - 链接已更新 -->
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZYZryXDsry')" tabindex="0" role="button" aria-label="iOS签名证书签名工具">
-            <div class="button-icon blue"><i class="fas fa-signature"></i></div>
-            <div class="button-name">iOS签名证书</div>
-            <div class="button-tag">签名工具</div>
+    <div id="homePage" class="page active">
+        <div class="container">
+            <div class="avatar"><img src="https://img.cdn1.vip/i/6a2a87eb3fdb2_1781172203.webp" alt="头像"></div>
+            <div class="name">Tsinho资源库</div>
+            <div id="gridContainer"></div>
         </div>
     </div>
 
-    <h2 class="card-title">网盘提速 <span class="card-count">4</span></h2>
-    <div class="grid-layout">
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXyki8UVu8')" tabindex="0" role="button" aria-label="网盘工具必备增强">
-            <div class="button-icon orange"><i class="fas fa-wrench"></i></div>
-            <div class="button-name">网盘工具</div>
-            <div class="button-tag">必备增强</div>
-        </div>
-        <div class="big-button" onclick="openModal(event)" tabindex="0" role="button" aria-label="百度解析站高速直链">
-            <div class="button-icon red"><i class="fas fa-link"></i></div>
-            <div class="button-name">百度解析站</div>
-            <div class="button-tag">高速直链</div>
-        </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCsUd2v')" tabindex="0" role="button" aria-label="网盘教程避坑指南">
-            <div class="button-icon green"><i class="fas fa-book"></i></div>
-            <div class="button-name">网盘教程</div>
-            <div class="button-tag">避坑指南</div>
-        </div>
-        <div class="big-button" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuw2l')" tabindex="0" role="button" aria-label="各大网盘帮下载帮下载">
-            <div class="button-icon purple"><i class="fas fa-download"></i></div>
-            <div class="button-name">各大网盘帮下载</div>
-            <div class="button-tag">帮下载</div>
-        </div>
-    </div>
-
-    <h2 class="card-title">其他 <span class="card-count">4</span></h2>
-    <div class="grid-layout">
-        <div class="big-button" onclick="go('豆包-Tsinho去水印版.html')" tabindex="0" role="button" aria-label="豆包去水印">
-            <div class="button-icon blue"><i class="fas fa-image"></i></div>
-            <div class="button-name">豆包去水印</div>
-            <div class="button-tag">无水印提取</div>
-        </div>
-        <div class="big-button" onclick="go('身份证随机提供器.html')" tabindex="0" role="button" aria-label="随机身份证生成器">
-            <div class="button-icon orange"><i class="fas fa-id-card"></i></div>
-            <div class="button-name">随机身份证</div>
-            <div class="button-tag">生成器</div>
-        </div>
-        <div class="big-button" onclick="go('Tsinho语音生成器.html')" tabindex="0" role="button" aria-label="语音生成器">
-            <div class="button-icon green"><i class="fas fa-microphone"></i></div>
-            <div class="button-name">语音生成器</div>
-            <div class="button-tag">语音合成</div>
-        </div>
-        <div class="big-button" onclick="go('index_winte1.html')" tabindex="0" role="button" aria-label="AI对话测试版">
-            <div class="button-icon purple"><i class="fas fa-robot"></i></div>
-            <div class="button-name">AI对话</div>
-            <div class="button-tag">测试版</div>
-        </div>
-    </div>
-
-    <div class="app-footer">
-        <div class="footer-title">关于 <span class="footer-highlight">Tsinho导航站</span></div>
-        <div class="footer-info-box">
-            <div class="info-row">
-                <i class="fas fa-shield-alt"></i>
-                <span>由 Tsinho 独立维护并提供安全支持</span>
+    <div id="searchPage" class="page">
+        <div class="container">
+            <div class="search-bar">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索链接..." onkeyup="handleSearch()">
             </div>
-            <div class="info-row">
-                <i class="fas fa-sync"></i>
-                <span>资源全天候实时同步，极致体验</span>
-            </div>
+            <div id="searchResults" class="links-group"></div>
         </div>
-        <button class="ios-btn-main" onclick="openAboutModal(event)" tabindex="0" role="button" aria-label="查看关于Tsinho导航站的详细信息">
-            <i class="fas fa-info-circle"></i> 查看详细信息
-        </button>
     </div>
 
-    <footer class="copyright-footer">
-        <div class="copyright-content">
-            <span class="copyright-text">© 2025 <strong>Tsinho</strong>. All rights reserved.</span>
-            <a href="https://link3.cc/xakjyxgs" class="official-link" target="_blank" rel="noopener noreferrer">
-                <i class="fas fa-globe"></i> 官网
-            </a>
-        </div>
-    </footer>
-</div>
-
-<div class="modal-overlay" id="aboutModal" onclick="closeAboutModal(event)" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
-    <div class="modal-content">
-        <div class="modal-header-title" id="aboutModalTitle">详细信息</div>
-        <div class="ios-list">
-            <div class="ios-list-item" onclick="go('https://link3.cc/xakjyxgs')" tabindex="0" role="button" aria-label="官网地址link3.cc xakjyxgs">
-                <div class="list-icon dark-blue"><i class="fas fa-globe"></i></div>
-                <div>
-                    <div class="list-text-main">官网地址</div>
-                    <div class="list-text-sub">link3.cc/xakjyxgs</div>
+    <div id="profilePage" class="page">
+        <div class="container">
+            <div class="profile-section">
+                <div class="profile-info">
+                    <div class="avatar"><img src="https://img.cdn1.vip/i/6a2a87eb3fdb2_1781172203.webp" alt="头像"></div>
+                    <div class="profile-name">Tsinho</div>
                 </div>
             </div>
-            <div class="ios-list-item" onclick="copyContact('email')" tabindex="0" role="button" aria-label="复制作者邮箱">
-                <div class="list-icon blue"><i class="fas fa-envelope"></i></div>
-                <div>
-                    <div class="list-text-main">作者邮箱</div>
-                    <div class="list-text-sub">Tsinhos@qq.com</div>
+            <div class="settings-group">
+                <div class="settings-item" onclick="toggleTheme()">
+                    <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="settings-label" id="themeLabel">深色模式</span>
+                    <div id="themeToggle" class="toggle-switch" onclick="event.stopPropagation(); toggleTheme();">
+                        <div class="toggle-thumb"></div>
+                    </div>
                 </div>
-            </div>
-            <div class="ios-list-item" onclick="copyContact('qq')" tabindex="0" role="button" aria-label="复制作者QQ号">
-                <div class="list-icon green"><i class="fas fa-comment"></i></div>
-                <div>
-                    <div class="list-text-main">作者 QQ</div>
-                    <div class="list-text-sub">1625862774</div>
-                </div>
-            </div>
-            <div class="ios-list-item" onclick="openQQGroupModal(event)" tabindex="0" role="button" aria-label="访问官方群聊">
-                <div class="list-icon purple"><i class="fas fa-users"></i></div>
-                <div>
-                    <div class="list-text-main">官方群聊</div>
-                    <div class="list-text-sub">点击查看全部群聊</div>
-                </div>
-            </div>
-            <div class="ios-list-item" onclick="openDisclaimerModal(event)" tabindex="0" role="button" aria-label="查看免责声明法律条款">
-                <div class="list-icon orange"><i class="fas fa-file-contract"></i></div>
-                <div>
-                    <div class="list-text-main">免责声明</div>
-                    <div class="list-text-sub">点击阅读法律条款</div>
+                <div class="settings-item" onclick="showAbout()">
+                    <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <span class="settings-label">关于我们</span>
+                    <span class="settings-arrow">›</span>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal-overlay" id="disclaimerModal" onclick="closeDisclaimerModal(event)" role="dialog" aria-modal="true" aria-labelledby="disclaimerModalTitle">
-    <div class="modal-content">
-        <div class="modal-header-title" id="disclaimerModalTitle">免责声明</div>
-        <div class="disclaimer-body">
-            <p>根据《计算机软件保护条例》(2002年1月1日实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。鉴于此，用户必须在研究该文件时，遵循上述法规，不得将上述内容用于二次传播或者非法用途，否则，一切后果请用户自负。</p>
-            <p>本软件信息来自网络，版权争议与本软件无关，您必须在下载后的24个小时之内，从您的设备中彻底删除上述内容。访问和下载本软件内容，说明您已同意上述条款。</p>
-            <p>Tsinho导航站作为软件转载方，不保证软件在所有设备上一定可用，精力有限也不会在每个机型上做测试，修改的会员也不能保证一直有效，所有软件会随着官方修复及软件升级而失效，无法接受请卸载。</p>
-            <p>本软件为非盈利性APP，本软件不贩卖软件，所有内容不作为商业行为。</p>
-        </div>
-    </div>
-</div>
-
-<div class="modal-overlay" id="allResModal" onclick="closeAllResModal(event)" role="dialog" aria-modal="true" aria-labelledby="allResModalTitle">
-    <div class="modal-content">
-        <div class="modal-header-title" id="allResModalTitle">资源类别</div>
-        <div class="ios-list">
-            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZWof8pjtb3')" tabindex="0" role="button" aria-label="软件分享聚合全网优质工具软件">
-                <div class="list-icon green"><i class="fas fa-laptop"></i></div>
-                <div>
-                    <div class="list-text-main">软件分享</div>
-                    <div class="list-text-sub">聚合全网优质工具软件</div>
+    <div id="aboutPage" class="page">
+        <div class="container">
+            <div class="page-title">关于我们</div>
+            <div class="profile-section">
+                <div class="about-item">
+                    <span class="about-label">作者</span>
+                    <span class="about-value">Tsinho</span>
+                </div>
+                <div class="about-item">
+                    <span class="about-label">官网</span>
+                    <span class="about-value"><a href="https://link3.cc/Tsinho" target="_blank" class="about-link">link3.cc/Tsinho</a></span>
                 </div>
             </div>
-            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZWNgWHfNwr')" tabindex="0" role="button" aria-label="网盘工具提升网盘使用体验的神器">
-                <div class="list-icon blue"><i class="fas fa-tools"></i></div>
-                <div>
-                    <div class="list-text-main">网盘工具</div>
-                    <div class="list-text-sub">提升网盘使用体验的神器</div>
+            <div class="settings-group" style="margin-top: var(--space-xl);">
+                <div class="settings-item" onclick="navigateToWithId('profilePage', 'navProfile')">
+                    <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    <span class="settings-label">返回</span>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal-overlay" id="baiduModal" onclick="closeModal(event)" role="dialog" aria-modal="true" aria-labelledby="baiduModalTitle">
-    <div class="modal-content">
-        <div class="modal-header-title" id="baiduModalTitle">选择线路</div>
-        
-        <!-- 密码授权界面 -->
-        <div class="password-auth-container" id="passwordAuth">
-            <div class="password-input-group">
-                <h3 style="font-size: 42px; font-weight: 700; margin-bottom: 20px; color: #1c1c1e;">访问授权</h3>
-                <input 
-                    type="password" 
-                    id="passwordInput" 
-                    class="password-input" 
-                    placeholder="请输入访问密码"
-                    maxlength="20"
-                    autocomplete="off"
-                >
-                <button class="auth-btn" onclick="verifyPassword()" id="authBtn">验证密码</button>
-                <div class="auth-error-message" id="authError">密码错误，请重试</div>
-            </div>
-            
-            <a href="https://yun.139.com/shareweb/#/w/i/2vMBMFCpcASnf" class="get-password-btn" target="_blank" rel="noopener noreferrer">
-                <i class="fas fa-key"></i>
-                获取访问密码
-            </a>
-            
-            <button class="clear-auth-btn" onclick="clearLocalAuthorization()" style="background: #8e8e93; color: white; border: none; border-radius: 20px; padding: 15px 25px; font-size: 20px; cursor: pointer; transition: all 0.3s; margin-top: 20px;">
-                <i class="fas fa-trash"></i>
-                清除本地授权
-            </button>
-        </div>
-
-        <!-- 授权成功后的线路选择界面 -->
-        <div class="auth-content" id="authContent">
+    <!-- 关于弹窗 -->
+    <div class="modal-overlay" id="aboutModal" onclick="closeAboutModal(event)" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header-title">详细信息</div>
             <div class="ios-list">
-                <div class="ios-list-item" onclick="go('https://analysis.icy6.cn')" tabindex="0" role="button" aria-label="线路01推荐使用稳定高速">
-                    <div class="list-icon blue"><i class="fas fa-rocket"></i></div>
+                <div class="ios-list-item" onclick="go('https://link3.cc/Tsinho')" role="button">
+                    <div class="list-icon dark-blue"><i class="fas fa-globe"></i></div>
                     <div>
-                        <div class="list-text-main">线路 01</div>
-                        <div class="list-text-sub">推荐使用 · 稳定高速</div>
+                        <div class="list-text-main">官网地址</div>
+                        <div class="list-text-sub">link3.cc/Tsinho</div>
                     </div>
                 </div>
-                <div class="ios-list-item" onclick="go('https://kdown.moiu.cn/free/#/index')" tabindex="0" role="button" aria-label="线路02备用线路支持大文件">
-                    <div class="list-icon orange"><i class="fas fa-bolt"></i></div>
+                <div class="ios-list-item" onclick="copyContact('email')" role="button">
+                    <div class="list-icon blue"><i class="fas fa-envelope"></i></div>
                     <div>
-                        <div class="list-text-main">线路 02</div>
-                        <div class="list-text-sub">备用线路 · 支持大文件</div>
+                        <div class="list-text-main">作者邮箱</div>
+                        <div class="list-text-sub">Tsinhos@qq.com</div>
                     </div>
                 </div>
-                <div class="ios-list-item" onclick="go('https://jx.yoxi.eu.org/')" tabindex="0" role="button" aria-label="线路03">
-                    <div class="list-icon green"><i class="fas fa-globe"></i></div>
+                <div class="ios-list-item" onclick="copyContact('qq')" role="button">
+                    <div class="list-icon green"><i class="fas fa-comment"></i></div>
                     <div>
-                        <div class="list-text-main">线路 03</div>
-                        <div class="list-text-sub">在线解析</div>
+                        <div class="list-text-main">作者 QQ</div>
+                        <div class="list-text-sub">1625862774</div>
                     </div>
                 </div>
-                <div class="ios-list-item" onclick="go('https://www.nccnxta.cn/pan')" tabindex="0" role="button" aria-label="线路04">
-                    <div class="list-icon purple"><i class="fas fa-cloud"></i></div>
+                <div class="ios-list-item" onclick="openQQGroupModal(event)" role="button">
+                    <div class="list-icon purple"><i class="fas fa-users"></i></div>
                     <div>
-                        <div class="list-text-main">线路 04</div>
-                        <div class="list-text-sub">网盘直连</div>
+                        <div class="list-text-main">官方群聊</div>
+                        <div class="list-text-sub">点击查看全部群聊</div>
                     </div>
                 </div>
-                <div class="ios-list-item" onclick="go('https://mf.dg22.top/user/parse')" tabindex="0" role="button" aria-label="线路05">
-                    <div class="list-icon dark-blue"><i class="fas fa-file-alt"></i></div>
+                <div class="ios-list-item" onclick="openDisclaimerModal(event)" role="button">
+                    <div class="list-icon orange"><i class="fas fa-file-contract"></i></div>
                     <div>
-                        <div class="list-text-main">线路 05</div>
-                        <div class="list-text-sub">文件解析</div>
+                        <div class="list-text-main">免责声明</div>
+                        <div class="list-text-sub">点击阅读法律条款</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal-overlay" id="laoSiJiModal" onclick="closeLaoSiJiModal(event)" role="dialog" aria-modal="true" aria-labelledby="laoSiJiModalTitle">
-    <div class="modal-content">
-        <div class="modal-header-title" id="laoSiJiModalTitle">选择频道</div>
-        <div class="ios-list">
-            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuYya')" tabindex="0" role="button" aria-label="看片软件直接访问">
-                <div class="list-icon green"><i class="fas fa-video"></i></div>
-                <div>
-                    <div class="list-text-main">看片软件</div>
-                    <div class="list-text-sub">直接访问</div>
-                </div>
+    <!-- 免责声明弹窗 -->
+    <div class="modal-overlay" id="disclaimerModal" onclick="closeDisclaimerModal(event)" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header-title">免责声明</div>
+            <div class="disclaimer-body">
+                <p>根据《计算机软件保护条例》(2002年1月1日实施)的第十七条规定：为了学习和研究软件内含的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。鉴于此，用户必须在研究该文件时，遵循上述法规，不得将上述内容用于二次传播或者非法用途，否则，一切后果请用户自负。</p>
+                <p>本软件信息来自网络，版权争议与本软件无关，您必须在下载后的24个小时之内，从您的设备中彻底删除上述内容。访问和下载本软件内容，说明您已同意上述条款。</p>
+                <p>Tsinho资源库作为软件转载方，不保证软件在所有设备上一定可用，精力有限也不会在每个机型上做测试，修改的会员也不能保证一直有效，所有软件会随着官方修复及软件升级而失效，无法接受请关闭。</p>
             </div>
-            <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2uR1zzgWrrPy9')" tabindex="0" role="button" aria-label="黄游游戏直接访问">
-                <div class="list-icon orange"><i class="fas fa-gamepad"></i></div>
-                <div>
-                    <div class="list-text-main">黄游游戏</div>
-                    <div class="list-text-sub">直接访问</div>
+        </div>
+    </div>
+
+    <!-- 全资源弹窗 -->
+    <div class="modal-overlay" id="allResModal" onclick="closeAllResModal(event)" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header-title">资源类别</div>
+            <div class="ios-list">
+                <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZWof8pjtb3')" role="button">
+                    <div class="list-icon green"><i class="fas fa-laptop"></i></div>
+                    <div>
+                        <div class="list-text-main">软件分享</div>
+                        <div class="list-text-sub">聚合全网优质工具软件</div>
+                    </div>
+                </div>
+                <div class="ios-list-item" onclick="go('https://yun.139.com/shareweb/#/w/i/2sNZXyki94Dgr')" role="button">
+                    <div class="list-icon blue"><i class="fas fa-tools"></i></div>
+                    <div>
+                        <div class="list-text-main">网盘工具</div>
+                        <div class="list-text-sub">提升网盘使用体验的神器</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal-overlay" id="qqGroupModal" onclick="closeQQGroupModal(event)" role="dialog" aria-modal="true" aria-labelledby="qqGroupModalTitle">
-    <div class="modal-content">
-        <div class="modal-header-title" id="qqGroupModalTitle">官方QQ群</div>
-        <div class="ios-list">
-            <div class="ios-list-item" onclick="go('https://qm.qq.com/q/Fi6djpbJCY')" tabindex="0" role="button" aria-label="加入QQ群1065975237">
-                <div class="list-icon blue"><i class="fab fa-qq"></i></div>
-                <div>
-                    <div class="list-text-main">砖站群</div>
-                    <div class="list-text-sub">群号：1065975237</div>
+    <!-- 百度解析站弹窗（含卡密验证） -->
+    <div class="modal-overlay" id="baiduModal" onclick="closeModal(event)" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header-title">选择线路</div>
+
+            <!-- 密码授权界面 -->
+            <div class="password-auth-container" id="passwordAuth">
+                <div class="password-input-group">
+                    <div style="font-size:15px;font-weight:700;margin-bottom:10px;color:var(--text-primary)">访问授权</div>
+                    <input type="password" id="passwordInput" class="password-input" placeholder="请输入访问密码" maxlength="20" autocomplete="off">
+                    <button class="auth-btn" onclick="verifyPassword()" id="authBtn">验证密码</button>
+                    <div class="auth-error-message" id="authError">密码错误，请重试</div>
                 </div>
+                <a href="https://yun.139.com/shareweb/#/w/i/2vMBMFCpcASnf" class="get-password-btn" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-key"></i>
+                    获取访问密码
+                </a>
+                <button class="clear-auth-btn" onclick="clearLocalAuthorization()">
+                    <i class="fas fa-trash"></i>
+                    清除本地授权
+                </button>
             </div>
-            <div class="ios-list-item" onclick="go('https://qm.qq.com/q/3yTAp3yuVq')" tabindex="0" role="button" aria-label="加入QQ群906813427">
-                <div class="list-icon green"><i class="fab fa-qq"></i></div>
-                <div>
-                    <div class="list-text-main">软件园群</div>
-                    <div class="list-text-sub">群号：906813427</div>
-                </div>
-            </div>
-            <div class="ios-list-item" onclick="go('https://qm.qq.com/q/bWoDGE3Sdq')" tabindex="0" role="button" aria-label="加入QQ群1081159850">
-                <div class="list-icon purple"><i class="fab fa-qq"></i></div>
-                <div>
-                    <div class="list-text-main">资源库群</div>
-                    <div class="list-text-sub">群号：1081159850</div>
+
+            <!-- 授权成功后的线路选择界面 -->
+            <div class="auth-content" id="authContent">
+                <div class="ios-list">
+                    <div class="ios-list-item" onclick="go('https://analysis.icy6.cn')" role="button">
+                        <div class="list-icon blue"><i class="fas fa-rocket"></i></div>
+                        <div>
+                            <div class="list-text-main">线路 01</div>
+                            <div class="list-text-sub">推荐使用 · 稳定高速</div>
+                        </div>
+                    </div>
+                    <div class="ios-list-item" onclick="go('https://kdown.moiu.cn/free/#/index')" role="button">
+                        <div class="list-icon orange"><i class="fas fa-bolt"></i></div>
+                        <div>
+                            <div class="list-text-main">线路 02</div>
+                            <div class="list-text-sub">备用线路 · 支持大文件</div>
+                        </div>
+                    </div>
+                    <div class="ios-list-item" onclick="go('https://jx.yoxi.eu.org/')" role="button">
+                        <div class="list-icon green"><i class="fas fa-globe"></i></div>
+                        <div>
+                            <div class="list-text-main">线路 03</div>
+                            <div class="list-text-sub">在线解析</div>
+                        </div>
+                    </div>
+                    <div class="ios-list-item" onclick="go('https://www.nccnxta.cn/pan')" role="button">
+                        <div class="list-icon purple"><i class="fas fa-cloud"></i></div>
+                        <div>
+                            <div class="list-text-main">线路 04</div>
+                            <div class="list-text-sub">网盘直连</div>
+                        </div>
+                    </div>
+                    <div class="ios-list-item" onclick="go('https://mf.dg22.top/user/parse')" role="button">
+                        <div class="list-icon dark-blue"><i class="fas fa-file-alt"></i></div>
+                        <div>
+                            <div class="list-text-main">线路 05</div>
+                            <div class="list-text-sub">文件解析</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="toast" role="alert" aria-live="polite">
-    <i id="toast-icon" class="fas fa-check-circle"></i>
-    <div id="toast-text"></div>
-</div>
+    <!-- QQ群弹窗 -->
+    <div class="modal-overlay" id="qqGroupModal" onclick="closeQQGroupModal(event)" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header-title">官方QQ群</div>
+            <div class="ios-list">
+                <div class="ios-list-item" onclick="copyGroup('1065985313','官方1群')" role="button">
+                    <div class="list-icon blue"><i class="fab fa-qq"></i></div>
+                    <div>
+                        <div class="list-text-main">官方1群</div>
+                        <div class="list-text-sub">点击复制群号：1065985313</div>
+                    </div>
+                </div>
+                <div class="ios-list-item" onclick="copyGroup('1081159850','官方2群')" role="button">
+                    <div class="list-icon green"><i class="fab fa-qq"></i></div>
+                    <div>
+                        <div class="list-text-main">官方2群</div>
+                        <div class="list-text-sub">点击复制群号：1081159850</div>
+                    </div>
+                </div>
+                <div class="ios-list-item" onclick="copyGroup('1063428520','聊天群')" role="button">
+                    <div class="list-icon purple"><i class="fab fa-qq"></i></div>
+                    <div>
+                        <div class="list-text-main">聊天群</div>
+                        <div class="list-text-sub">点击复制群号：1063428520</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 提示 -->
+    <div id="toast" role="alert" aria-live="polite">
+        <i id="toast-icon" class="fas fa-check-circle"></i>
+        <div id="toast-text"></div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-glass">
+            <div class="nav-item active" id="navHome" onclick="navigateToWithId('homePage', 'navHome')">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span class="nav-label">首页</span>
+            </div>
+            <div class="nav-divider"></div>
+            <div class="nav-item" id="navSearch" onclick="navigateToWithId('searchPage', 'navSearch')">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span class="nav-label">搜索</span>
+            </div>
+            <div class="nav-divider"></div>
+            <div class="nav-item" id="navProfile" onclick="navigateToWithId('profilePage', 'navProfile')">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="nav-label">我的</span>
+            </div>
+        </div>
+    </div>
 
 <script>
-    // ===== 苹果风格弹窗系统 =====
-    
-    let modalTriggerElements = new Map();
-    
-    function getTriggerPosition(element) {
-        if (!element) return { x: 0, y: 0 };
-        const rect = element.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const windowCenterX = window.innerWidth / 2;
-        const windowCenterY = window.innerHeight / 2;
-        return {
-            x: centerX - windowCenterX,
-            y: centerY - windowCenterY
-        };
+    // ===== 首页按钮数据（来自 index1.html 导航站）
+        const gridData = [
+        { title: "资源库", items: [
+            { name: "Tsinho黄油站", tag: "自建站点", icon: "fa-gamepad", color: "orange", type: "link", url: "https://tkporl.github.io/mrhyfx/" },
+            { name: "看片软件", tag: "影视点播", icon: "fa-video", color: "green", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuYya" },
+            { name: "实用软件", tag: "精品破解", icon: "fa-laptop-code", color: "green", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZYCq0tErl5" },
+            { name: "VPN", tag: "网络加速", icon: "fa-globe-americas", color: "dark-blue", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZYCq0tEPqe" },
+            { name: "绅士壁纸", tag: "绅士图片", icon: "fa-image", color: "pink", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZXpjCvtWww" },
+            { name: "影音娱乐", tag: "影视音乐", icon: "fa-film", color: "purple", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZXSmDnDp67" },
+            { name: "大小型游戏", tag: "游戏合集", icon: "fa-dice", color: "cyan", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZZesFZFmhv" },
+            { name: "节点搭建教程", tag: "免费", icon: "fa-server", color: "cyan", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2uh93dUP2tWw5" }
+        ]},
+        { title: "网盘提速", items: [
+            { name: "网盘工具", tag: "必备增强", icon: "fa-wrench", color: "orange", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZXyki8UVu8" },
+            { name: "百度解析站", tag: "高速直链", icon: "fa-link", color: "red", type: "modal", action: "openModal" },
+            { name: "网盘教程", tag: "避坑指南", icon: "fa-book", color: "green", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZXpjCsUd2v" },
+            { name: "各大网盘帮下载", tag: "帮下载", icon: "fa-download", color: "purple", type: "link", url: "https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuw2l" }
+        ]},
+        { title: "其他", items: [
+            { name: "豆包去水印", tag: "无水印提取", icon: "fa-image", color: "blue", type: "link", url: "豆包-Tsinho去水印版.html" },
+            { name: "随机身份证", tag: "生成器", icon: "fa-id-card", color: "orange", type: "link", url: "身份证随机提供器.html" },
+            { name: "语音生成器", tag: "语音合成", icon: "fa-microphone", color: "green", type: "link", url: "Tsinho语音生成器.html" },
+            { name: "AI对话", tag: "测试版", icon: "fa-robot", color: "purple", type: "link", url: "index_winte1.html" }
+        ]}
+    ];
+
+    // 搜索页面扁平数据
+        const linksData = [
+        { name: "Tsinho黄油站", url: "https://tkporl.github.io/mrhyfx/" },
+        { name: "看片软件", url: "https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuYya" },
+        { name: "实用软件", url: "https://yun.139.com/shareweb/#/w/i/2sNZYCq0tErl5" },
+        { name: "VPN网络加速", url: "https://yun.139.com/shareweb/#/w/i/2sNZYCq0tEPqe" },
+        { name: "绅士壁纸", url: "https://yun.139.com/shareweb/#/w/i/2sNZXpjCvtWww" },
+        { name: "影音娱乐", url: "https://yun.139.com/shareweb/#/w/i/2sNZXSmDnDp67" },
+        { name: "大小型游戏", url: "https://yun.139.com/shareweb/#/w/i/2sNZZesFZFmhv" },
+        { name: "节点搭建教程", url: "https://yun.139.com/shareweb/#/w/i/2uh93dUP2tWw5" },
+        { name: "网盘工具", url: "https://yun.139.com/shareweb/#/w/i/2sNZXyki8UVu8" },
+        { name: "百度解析站", url: "https://analysis.icy6.cn" },
+        { name: "网盘教程", url: "https://yun.139.com/shareweb/#/w/i/2sNZXpjCsUd2v" },
+        { name: "各大网盘帮下载", url: "https://yun.139.com/shareweb/#/w/i/2sNZXpjCvuw2l" },
+        { name: "豆包去水印", url: "豆包-Tsinho去水印版.html" },
+        { name: "随机身份证", url: "身份证随机提供器.html" },
+        { name: "语音生成器", url: "Tsinho语音生成器.html" },
+        { name: "AI对话", url: "index_winte1.html" }
+    ];
+
+    // ===== 页面导航
+    function navigateToWithId(pageId, navId) {
+        document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        document.getElementById(navId).classList.add('active');
     }
-    
-    function closeModalById(modalId) {
-        const modal = document.getElementById(modalId);
-        if (!modal) return;
-        
-        const content = modal.querySelector('.modal-content');
-        const triggerElement = modalTriggerElements.get(modalId);
-        const pos = getTriggerPosition(triggerElement);
-        
-        if (content) {
-            content.style.setProperty('--end-x', `${pos.x}px`);
-            content.style.setProperty('--end-y', `${pos.y}px`);
+
+    function showAbout() {
+        // 改为弹出关于弹窗
+        openAboutModal();
+    }
+
+    // ===== 渲染首页按钮网格
+    function renderGrid() {
+        const container = document.getElementById('gridContainer');
+        if (!container) return;
+
+        container.innerHTML = gridData.map(section => `
+            <div class="card-title">${section.title}</div>
+            <div class="grid-layout">
+                ${section.items.map((item, idx) => {
+                    const clickAttr = item.type === 'modal'
+                        ? `onclick="${item.action}(event)" role="button" tabindex="0"`
+                        : `onclick="go('${item.url}')" role="button" tabindex="0"`;
+                    return `
+                    <div class="big-button" ${clickAttr} style="animation-delay:${idx * 0.04}s">
+                        <div class="button-icon ${item.color}"><i class="fas ${item.icon}"></i></div>
+                        <div class="button-name">${item.name}</div>
+                        <div class="button-tag">${item.tag}</div>
+                    </div>
+                    `;
+                }).join('')}
+            </div>
+        `).join('');
+    }
+
+    // ===== 搜索页面链接渲染（保持原风格）
+    function renderLinks(containerId, data = linksData) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        if (!data || data.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <div class="empty-title">暂无内容</div>
+                    <div class="empty-desc">没有找到匹配的链接</div>
+                </div>
+            `;
+            return;
         }
-        
-        modal.classList.add('closing');
-        
-        setTimeout(() => {
-            modal.classList.remove('active', 'closing');
-            modal.style.display = '';
-            document.body.style.overflow = '';
-            modalTriggerElements.delete(modalId);
-        }, 300);
+
+        container.innerHTML = data.map((link, idx) => `
+            <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="link-btn" style="animation-delay:${idx * 0.04}s">
+                ${escapeHtml(link.name)}
+            </a>
+        `).join('');
     }
 
-    function openModalGeneric(modalId, triggerElement) {
-        const modal = document.getElementById(modalId);
-        if (!modal) return;
-        
-        modalTriggerElements.set(modalId, triggerElement);
-        
-        const content = modal.querySelector('.modal-content');
-        const pos = getTriggerPosition(triggerElement);
-        
-        if (content) {
-            content.style.setProperty('--start-x', `${pos.x}px`);
-            content.style.setProperty('--start-y', `${pos.y}px`);
+    function handleSearch() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const filtered = linksData.filter(link =>
+            link.name.toLowerCase().includes(query)
+        );
+        renderLinks('searchResults', filtered);
+    }
+
+    function toggleTheme(event) {
+        if (event) {
+            event.stopPropagation();
         }
-        
-        modal.style.display = 'flex';
-        void modal.offsetWidth;
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        const toggle = document.getElementById('themeToggle');
+        const label = document.getElementById('themeLabel');
+        const isActive = toggle.classList.toggle('active');
+
+        if (isActive) {
+            document.body.classList.add('dark-mode');
+            label.textContent = '浅色模式';
+        } else {
+            document.body.classList.remove('dark-mode');
+            label.textContent = '深色模式';
+        }
+        localStorage.setItem('darkMode', isActive.toString());
     }
 
-    function closeAboutModal(e) { 
-        if(e.target.id === 'aboutModal') { 
-            closeModalById('aboutModal');
-        } 
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
 
-    function closeDisclaimerModal(e) { 
-        if(e.target.id === 'disclaimerModal') { 
-            closeModalById('disclaimerModal');
-        } 
-    }
-
-    function closeAllResModal(e) { 
-        if(e.target.id === 'allResModal') { 
-            closeModalById('allResModal');
-        } 
-    }
-
-    function closeModal(e) { 
-        if(e.target.id === 'baiduModal') { 
-            closeModalById('baiduModal');
-        } 
-    }
-
-    function closeLaoSiJiModal(e) { 
-        if(e.target.id === 'laoSiJiModal') { 
-            closeModalById('laoSiJiModal');
-        } 
-    }
-
-    function openAboutModal(event) { 
-        openModalGeneric('aboutModal', event ? event.currentTarget : null);
-    }
-
-    function openDisclaimerModal(event) { 
-        openModalGeneric('disclaimerModal', event ? event.currentTarget : null);
-    }
-
-    function openAllResModal(event) { 
-        openModalGeneric('allResModal', event ? event.currentTarget : null);
-    }
-
-    function openModal(event) { 
-        openModalGeneric('baiduModal', event ? event.currentTarget : null);
-        resetPasswordAuth();
-    }
-
-    function openLaoSiJiModal(event) { 
-        openModalGeneric('laoSiJiModal', event ? event.currentTarget : null);
-    }
-
-    function closeQQGroupModal(e) { 
-        if(e.target.id === 'qqGroupModal') { 
-            closeModalById('qqGroupModal');
-        } 
-    }
-
-    function openQQGroupModal(event) { 
-        openModalGeneric('qqGroupModal', event ? event.currentTarget : null);
-    }
-
+    // ===== 跳转函数（移动端当前页打开，PC新标签）
     function go(url) {
         if (navigator.userAgent.includes('Mobile')) {
-            setTimeout(() => { 
-                window.location.href = url; 
-            }, 150);
+            setTimeout(() => { window.location.href = url; }, 150);
         } else {
             window.open(url, '_blank');
         }
     }
 
-    function copyLink(url) {
-        const input = document.createElement('textarea');
-        input.value = url;
-        input.style.position = 'fixed';
-        input.style.opacity = '0';
-        document.body.appendChild(input);
-        input.select();
-        
-        try {
-            document.execCommand('copy');
-            showToast('fa-link', '链接已复制<br>请自行打开浏览器搜索', '#007AFF');
-        } catch (err) {
-            showToast('fa-exclamation-circle', '复制失败', '#FF3B30');
-        }
-        
-        document.body.removeChild(input);
+    // ===== 苹果风格弹窗系统
+    let modalTriggerElements = new Map();
+
+    function closeModalById(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal || !modal.classList.contains('active')) return;
+        modal.classList.add('closing');
+        setTimeout(() => {
+            modal.classList.remove('active', 'closing');
+            document.body.style.overflow = '';
+        }, 320);
     }
 
+    function openModalGeneric(modalId, triggerElement) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        void modal.offsetWidth;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAboutModal(e) { if (e.target.id === 'aboutModal') closeModalById('aboutModal'); }
+    function closeDisclaimerModal(e) { if (e.target.id === 'disclaimerModal') closeModalById('disclaimerModal'); }
+    function closeAllResModal(e) { if (e.target.id === 'allResModal') closeModalById('allResModal'); }
+    function closeModal(e) { if (e.target.id === 'baiduModal') closeModalById('baiduModal'); }
+    function closeQQGroupModal(e) { if (e.target.id === 'qqGroupModal') closeModalById('qqGroupModal'); }
+
+    function openAboutModal(event) { openModalGeneric('aboutModal', event ? event.currentTarget : null); }
+    function openDisclaimerModal(event) { openModalGeneric('disclaimerModal', event ? event.currentTarget : null); }
+    function openAllResModal(event) { openModalGeneric('allResModal', event ? event.currentTarget : null); }
+    function openModal(event) {
+        openModalGeneric('baiduModal', event ? event.currentTarget : null);
+        resetPasswordAuth();
+    }
+    function openQQGroupModal(event) { openModalGeneric('qqGroupModal', event ? event.currentTarget : null); }
+
+    // ===== 复制功能
     function copyContact(type) {
         let text = '', name = '', icon = 'fa-check-circle';
         switch(type) {
@@ -1548,80 +1298,96 @@
             case 'qq': text = '1625862774'; name = 'QQ号'; icon = 'fa-comment'; break;
             case 'qqgroup': text = '1065975237'; name = 'QQ群号'; icon = 'fa-users'; break;
         }
-        
+
         const input = document.createElement('textarea');
         input.value = text;
         document.body.appendChild(input);
         input.select();
-        
+
         try {
             document.execCommand('copy');
             showToast(icon, `${name}已复制<br><b>${text}</b>`, '#007AFF');
         } catch (err) {
             showToast('fa-exclamation-circle', '复制失败', '#FF3B30');
         }
-        
+
         document.body.removeChild(input);
+    }
+
+    // ===== Toast 提示
+    function copyGroup(number, label) {
+        const okText = `${label}群号已复制<br><b>${number}</b>`;
+        const legacy = () => {
+            const input = document.createElement('textarea');
+            input.value = number;
+            input.style.position = 'fixed';
+            input.style.opacity = '0';
+            document.body.appendChild(input);
+            input.select();
+            try {
+                document.execCommand('copy');
+                showToast('fa-users', okText, '#007AFF');
+            } catch (err) {
+                showToast('fa-exclamation-circle', '复制失败，请手动复制', '#FF3B30');
+            }
+            document.body.removeChild(input);
+        };
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(number).then(() => {
+                showToast('fa-users', okText, '#007AFF');
+            }).catch(legacy);
+        } else {
+            legacy();
+        }
     }
 
     function showToast(iconClass, text, iconColor) {
         const toast = document.getElementById('toast');
         const toastText = document.getElementById('toast-text');
         const toastIcon = document.getElementById('toast-icon');
-        
+
         toast.classList.remove('show-toast');
         void toast.offsetWidth;
-        
+
         toastIcon.className = `fas ${iconClass}`;
         toastIcon.style.color = iconColor || '#34C759';
         toastText.innerHTML = text;
-        
+
         toast.classList.add('show-toast');
-        
-        setTimeout(() => {
-            toast.classList.remove('show-toast');
-        }, 2200);
+
+        setTimeout(() => { toast.classList.remove('show-toast'); }, 2200);
     }
 
-    // ===== 密码授权功能 =====
-    
+    // ===== 密码授权功能（卡密验证）
     const PASSWORD_VERSION = '2.0';
     let failedAttempts = 0;
     let lockTimer = null;
-    
-    function getPasswordVersion() {
-        return localStorage.getItem('tsinho_password_version') || '1.0';
-    }
-    
-    function setPasswordVersion(version) {
-        localStorage.setItem('tsinho_password_version', version);
-    }
-    
+
     function isPasswordAuthorized() {
         const authorized = localStorage.getItem('tsinho_authorized') === 'true';
-        const version = getPasswordVersion();
+        const version = localStorage.getItem('tsinho_password_version') || '1.0';
         return authorized && version === PASSWORD_VERSION;
     }
-    
+
     function setPasswordAuthorized() {
         localStorage.setItem('tsinho_authorized', 'true');
         localStorage.setItem('tsinho_authorized_time', new Date().getTime().toString());
-        setPasswordVersion(PASSWORD_VERSION);
+        localStorage.setItem('tsinho_password_version', PASSWORD_VERSION);
     }
-    
+
     function clearPasswordAuthorization() {
         localStorage.removeItem('tsinho_authorized');
         localStorage.removeItem('tsinho_authorized_time');
         localStorage.removeItem('tsinho_password_version');
     }
-    
+
     function resetPasswordAuth() {
         const passwordInput = document.getElementById('passwordInput');
         const passwordAuth = document.getElementById('passwordAuth');
         const authContent = document.getElementById('authContent');
         const authError = document.getElementById('authError');
         const authBtn = document.getElementById('authBtn');
-        
+
         passwordInput.value = '';
         passwordInput.classList.remove('error');
         authError.classList.remove('show');
@@ -1629,19 +1395,14 @@
         authBtn.textContent = '验证密码';
         failedAttempts = 0;
         clearTimeout(lockTimer);
-        
+
         if (isPasswordAuthorized()) {
             passwordAuth.style.display = 'none';
             authContent.classList.add('show');
-            
             const authorizedTime = localStorage.getItem('tsinho_authorized_time');
             if (authorizedTime) {
                 const date = new Date(parseInt(authorizedTime));
-                const timeStr = date.toLocaleDateString('zh-CN', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
+                const timeStr = date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
                 showToast('fa-clock', `欢迎回来！<br>授权日期：${timeStr}`, '#34C759');
             }
         } else {
@@ -1662,19 +1423,18 @@
         const authError = document.getElementById('authError');
         const passwordAuth = document.getElementById('passwordAuth');
         const authContent = document.getElementById('authContent');
-        
+
         const inputPassword = passwordInput.value.trim();
-        
+
+        // 与 index1.html 保持一致的密码：tsinho2255
+        const validEncoded = btoa(unescape(encodeURIComponent('tsinho2255')));
         const encoded = btoa(unescape(encodeURIComponent(inputPassword)));
-        const validEncoded = 'VHNpbmhvMjI1NQ==';
-        
+
         if (encoded === validEncoded || inputPassword.toLowerCase() === 'tsinho2255') {
             setPasswordAuthorized();
             failedAttempts = 0;
-            
             authBtn.disabled = true;
             authBtn.textContent = '验证成功';
-            
             setTimeout(() => {
                 passwordAuth.style.display = 'none';
                 authContent.classList.add('show');
@@ -1684,11 +1444,9 @@
             failedAttempts++;
             passwordInput.classList.add('error');
             authError.classList.add('show');
-            
             if (failedAttempts >= 5) {
                 authBtn.disabled = true;
                 showToast('fa-lock', '尝试次数过多，请30秒后重试', '#FF3B30');
-                
                 lockTimer = setTimeout(() => {
                     failedAttempts = 0;
                     authBtn.disabled = false;
@@ -1701,7 +1459,6 @@
                     authError.classList.remove('show');
                 }, 3000);
             }
-            
             passwordInput.value = '';
             passwordInput.focus();
         }
@@ -1713,16 +1470,25 @@
         showToast('fa-trash', '已清除本地授权<br>请重新输入密码', '#FF9500');
     }
 
+    // ===== 初始化
+    renderGrid();
+    renderLinks('searchResults');
+
+    // 深色模式初始化
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (savedDarkMode) {
+        document.getElementById('themeToggle').classList.add('active');
+        document.getElementById('themeLabel').textContent = '浅色模式';
+        document.body.classList.add('dark-mode');
+    }
+
+    // 键盘支持
     document.addEventListener('DOMContentLoaded', () => {
         const passwordInput = document.getElementById('passwordInput');
         if (passwordInput) {
             passwordInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    verifyPassword();
-                }
+                if (e.key === 'Enter') { e.preventDefault(); verifyPassword(); }
             });
-            
             passwordInput.addEventListener('input', (e) => {
                 e.target.classList.remove('error');
                 document.getElementById('authError').classList.remove('show');
@@ -1731,153 +1497,13 @@
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                ['aboutModal', 'disclaimerModal', 'allResModal', 'baiduModal', 'laoSiJiModal', 'qqGroupModal'].forEach(id => {
+                ['aboutModal', 'disclaimerModal', 'allResModal', 'baiduModal', 'qqGroupModal'].forEach(id => {
                     const modal = document.getElementById(id);
-                    if (modal && modal.classList.contains('active')) {
-                        closeModalById(id);
-                    }
+                    if (modal && modal.classList.contains('active')) closeModalById(id);
                 });
             }
         });
     });
-
-    let searchTimeout;
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            const val = e.target.value.toLowerCase().trim();
-            const buttons = document.querySelectorAll('.big-button');
-            
-            if (val === '') {
-                buttons.forEach(btn => {
-                    btn.style.display = 'flex';
-                    btn.style.opacity = '1';
-                });
-                return;
-            }
-            
-            buttons.forEach(btn => {
-                const buttonName = btn.querySelector('.button-name').textContent.toLowerCase();
-                const buttonTag = btn.querySelector('.button-tag').textContent.toLowerCase();
-                
-                if ((buttonName + ' ' + buttonTag).includes(val)) {
-                    btn.style.display = 'flex';
-                    btn.style.opacity = '1';
-                } else {
-                    btn.style.display = 'none';
-                }
-            });
-        }, 300);
-    });
-
-    function generateRandomID() {
-        const provinces = ['11', '12', '13', '14', '15', '21', '22', '23', '31', '32', '33', '34', '35', '36', '37', '41', '42', '43', '44', '45', '46', '50', '51', '52', '53', '54', '61', '62', '63', '64', '65'];
-        const provinceNames = ['北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆'];
-        
-        const province = provinces[Math.floor(Math.random() * provinces.length)];
-        const city = String(Math.floor(Math.random() * 100)).padStart(2, '0');
-        const district = String(Math.floor(Math.random() * 100)).padStart(2, '0');
-        
-        const year = String(1950 + Math.floor(Math.random() * 75)).padStart(4, '0');
-        const month = String(1 + Math.floor(Math.random() * 12)).padStart(2, '0');
-        const day = String(1 + Math.floor(Math.random() * 28)).padStart(2, '0');
-        
-        const seq = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
-        
-        const idWithoutCheck = province + city + district + year + month + day + seq;
-        const checkCode = calculateCheckCode(idWithoutCheck);
-        
-        const fullID = idWithoutCheck + checkCode;
-        
-        const provinceIndex = provinces.indexOf(province);
-        const provinceName = provinceIndex >= 0 ? provinceNames[provinceIndex] : '未知';
-        
-        const gender = parseInt(seq) % 2 === 0 ? '女' : '男';
-        
-        const idCardInfo = {
-            id: fullID,
-            province: provinceName,
-            birthday: year + '-' + month + '-' + day,
-            gender: gender
-        };
-        
-        showIDCardModal(idCardInfo);
-    }
-    
-    function calculateCheckCode(id) {
-        const weights = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
-        const checkCodes = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'];
-        
-        let sum = 0;
-        for (let i = 0; i < id.length; i++) {
-            sum += parseInt(id[i]) * weights[i];
-        }
-        
-        return checkCodes[sum % 11];
-    }
-    
-    function showIDCardModal(info) {
-        const modalContent = `
-            <div class="modal-overlay active" id="idCardModal" onclick="closeIDCardModal()" role="dialog" aria-modal="true" aria-labelledby="idCardModalTitle">
-                <div class="modal-content">
-                    <div class="modal-header-title" id="idCardModalTitle">随机身份证</div>
-                    <div style="margin-top: 30px;">
-                        <div style="background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%); border-radius: 30px; padding: 40px; color: white;">
-                            <div style="font-size: 48px; font-weight: 700; letter-spacing: 8px; text-align: center; margin-bottom: 30px;">${info.id}</div>
-                        </div>
-                        <div style="display: flex; justify-content: space-around; margin-top: 40px;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 32px; color: #8E8E93; margin-bottom: 10px;">户籍</div>
-                                <div style="font-size: 36px; font-weight: 600; color: #1c1c1e;">${info.province}</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 32px; color: #8E8E93; margin-bottom: 10px;">生日</div>
-                                <div style="font-size: 36px; font-weight: 600; color: #1c1c1e;">${info.birthday}</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 32px; color: #8E8E93; margin-bottom: 10px;">性别</div>
-                                <div style="font-size: 36px; font-weight: 600; color: #1c1c1e;">${info.gender}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="ios-btn-main" onclick="copyIDCard('${info.id}'); closeIDCardModal()" style="margin-top: 40px;">
-                        <i class="fas fa-copy"></i> 复制身份证号
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', modalContent);
-    }
-    
-    function closeIDCardModal() {
-        const modal = document.getElementById('idCardModal');
-        if (modal) {
-            modal.classList.add('closing');
-            setTimeout(() => {
-                modal.remove();
-            }, 300);
-        }
-    }
-    
-    function copyIDCard(id) {
-        const input = document.createElement('textarea');
-        input.value = id;
-        input.style.position = 'fixed';
-        input.style.opacity = '0';
-        document.body.appendChild(input);
-        input.select();
-        
-        try {
-            document.execCommand('copy');
-            showToast('fa-check-circle', '身份证号已复制', '#34C759');
-        } catch (err) {
-            showToast('fa-exclamation-circle', '复制失败', '#FF3B30');
-        }
-        
-        document.body.removeChild(input);
-    }
 </script>
-
 </body>
 </html>
